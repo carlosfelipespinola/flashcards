@@ -14,6 +14,7 @@ class Flashcard {
   String get definition => _definition;
   DateTime get lastSeenAt => _lastSeenAt; 
   Category get category => _category;
+  int get strength => _strength;
 
   Flashcard({
     required this.id,
