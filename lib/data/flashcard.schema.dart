@@ -3,12 +3,12 @@ import 'package:flashcards/data/category.schema.dart';
 
 class FlashcardSchema {
   static String tableName = 'flashcard';
-  static String id = 'id';
-  static String term = 'term';
-  static String definition = 'definition';
-  static String strength = 'strength';
-  static String lastSeenAt = 'last_seen_at';
-  static String category = 'category';
+  static String id = 'flashcard_id';
+  static String term = 'flashcard_term';
+  static String definition = 'flashcard_definition';
+  static String strength = 'flashcard_strength';
+  static String lastSeenAt = 'flashcard_last_seen_at';
+  static String category = 'flashcard_category';
 
    static String get createTableSql => 'CREATE TABLE $tableName('
     ' $id INTEGER PRIMARY KEY NOT NULL,'
