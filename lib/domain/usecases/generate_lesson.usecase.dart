@@ -2,7 +2,7 @@
 import 'package:flashcards/domain/interfaces/flashcard.repository.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
 import 'package:flashcards/domain/models/sort.dart';
-import 'package:flashcards/domain/models/tag.dart';
+import 'package:flashcards/domain/models/category.dart';
 
 class GenerateLessonUseCase {
 
@@ -11,9 +11,9 @@ class GenerateLessonUseCase {
     required this.flashcardRepository,
   });
 
-  Future<List<Flashcard>> call(List<Tag> tags, int limit) async {
+  Future<List<Flashcard>> call(Category category, int limit) async {
     return await this.flashcardRepository.query(
-      tags: tags,
+      category: category,
       sortBy: [
         Sort(field: FlashcardSortableFields.strength, type: SortType.asc),
         Sort(field: FlashcardSortableFields.lastSeentAt, type: SortType.asc)

@@ -1,5 +1,4 @@
-
-import 'package:flashcards/domain/models/tag.dart';
+import 'package:flashcards/domain/models/category.dart';
 
 enum FlashcardSortableFields { lastSeentAt, strength }
 
@@ -9,12 +8,12 @@ class Flashcard {
   String _definition;
   DateTime _lastSeenAt;
   int _strength;
-  List<Tag> _tags;
+  Category _category;
 
   String get term => _term;
   String get definition => _definition;
   DateTime get lastSeenAt => _lastSeenAt; 
-  List<Tag> get tags => _tags;
+  Category get category => _category;
 
   Flashcard({
     required this.id,
@@ -22,10 +21,10 @@ class Flashcard {
     required String definition,
     required DateTime lastSeenAt,
     required int strength,
-    required List<Tag> tags,
+    required Category category,
   }) : 
     _term = term, _definition = definition, 
-    _lastSeenAt = lastSeenAt, _strength = strength, _tags = tags;
+    _lastSeenAt = lastSeenAt, _strength = strength, _category = category;
 
   void increaseStrength() {
     _strength = _strength >= 5 ? 5 : _strength++;

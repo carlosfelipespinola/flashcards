@@ -1,7 +1,7 @@
 
 import 'package:flashcards/domain/interfaces/flashcard.repository.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
-import 'package:flashcards/domain/models/tag.dart';
+import 'package:flashcards/domain/models/category.dart';
 import 'package:flashcards/domain/models/sort.dart';
 
 class FlashcardRepository implements IFlashcardRepository {
@@ -16,7 +16,7 @@ class FlashcardRepository implements IFlashcardRepository {
     }
   
     @override
-    Future<List<Flashcard>> query({List<Tag>? tags, List<Sort<FlashcardSortableFields>>? sortBy, int? limit, bool? randomize = false}) {
+    Future<List<Flashcard>> query({Category? category, List<Sort<FlashcardSortableFields>>? sortBy, int? limit, bool? randomize = false}) {
       throw UnimplementedError();
     }
   

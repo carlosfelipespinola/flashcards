@@ -1,8 +1,8 @@
 
-class Tag {
+class Category {
   String? id;
   String name;
-  Tag({
+  Category({
     this.id,
     required this.name,
   });

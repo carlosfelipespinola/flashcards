@@ -1,20 +1,20 @@
 
-import 'package:flashcards/domain/interfaces/tag.repository.dart';
-import 'package:flashcards/domain/models/tag.dart';
+import 'package:flashcards/domain/interfaces/category.repository.dart';
+import 'package:flashcards/domain/models/category.dart';
 
-class TagRepository implements ITagRepository {
+class CategoryRepository implements ICategoryRepository {
   @override
-  Future<Tag> delete(Tag tag) {
+  Future<Category> delete(Category tag) {
     throw UnimplementedError();
   }
 
   @override
-  Future<List<Tag>> findAll() {
+  Future<List<Category>> findAll() {
     throw UnimplementedError();
   }
 
   @override
-  Future<Tag> save(Tag tag) {
+  Future<Category> save(Category tag) {
     throw UnimplementedError();
   }
 
