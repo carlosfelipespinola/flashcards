@@ -3,10 +3,10 @@ import 'package:flashcards/domain/interfaces/flashcard.repository.dart';
 import 'package:flashcards/domain/models/failure.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
 
-class SaveFlashcardUseCase {
+class AnswerFlashcard {
 
   final IFlashcardRepository flashcardRepository;
-  SaveFlashcardUseCase({
+  AnswerFlashcard({
     required this.flashcardRepository,
   });
 
