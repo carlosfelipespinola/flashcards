@@ -11,8 +11,20 @@ class CategoryRepository implements ICategoryRepository {
   DatabaseExecutor get dbe => throw UnimplementedError();
 
   @override
-  Future<Category> delete(Category category) {
-    throw UnimplementedError();
+  Future<Category> delete(Category category) async {
+    try {
+      int deletedRows = await dbe.delete(
+        CategorySchema.tableName,
+        where: '${CategorySchema.id} = ?',
+        whereArgs: [category.id]
+      );
+      if (deletedRows == 0) {
+        throw Failure();
+      }
+      return category;
+    } catch (_) {
+      throw Failure();
+    }
   }
 
   @override
