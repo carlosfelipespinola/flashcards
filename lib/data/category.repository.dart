@@ -5,7 +5,6 @@ import 'package:flashcards/domain/interfaces/category.repository.dart';
 import 'package:flashcards/domain/models/category.dart';
 import 'package:flashcards/domain/models/failure.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:uuid/uuid.dart';
 
 class CategoryRepository implements ICategoryRepository {
 
