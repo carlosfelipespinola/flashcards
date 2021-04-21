@@ -1,13 +1,12 @@
 
 import 'package:flashcards/data/category.mapper.dart';
-import 'package:flashcards/data/category.schema.dart';
 import 'package:flashcards/data/flashcard.schema.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
 
 class FlashcardMapper {
   static Flashcard fromMap(Map<String, dynamic> map) {
     return Flashcard(
-      id: map[FlashcardSchema.id],
+      id: map[FlashcardSchema.id] as int,
       term: map[FlashcardSchema.term] as String,
       definition: map[FlashcardSchema.definition] as String,
       lastSeenAt: DateTime.parse(map[FlashcardSchema.lastSeenAt]),

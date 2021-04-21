@@ -3,7 +3,7 @@ import 'package:flashcards/domain/models/category.dart';
 enum FlashcardSortableFields { lastSeentAt, strength }
 
 class Flashcard {
-  String? id;
+  int? id;
   String _term;
   String _definition;
   DateTime _lastSeenAt;

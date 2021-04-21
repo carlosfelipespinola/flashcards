@@ -11,7 +11,7 @@ class FlashcardSchema {
   static String category = 'flashcard_category';
 
    static String get createTableSql => 'CREATE TABLE $tableName('
-    ' $id INTEGER PRIMARY KEY NOT NULL,'
+    ' $id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,'
     ' $term TEXT NOT NULL,'
     ' $definition TEXT NOT NULL,'
     ' $lastSeenAt DATETIME NOT NULL,'
