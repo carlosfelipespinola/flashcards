@@ -1,5 +1,6 @@
 
 import 'package:flashcards/data/category.mapper.dart';
+import 'package:flashcards/data/category.schema.dart';
 import 'package:flashcards/data/flashcard.schema.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
 
@@ -11,7 +12,7 @@ class FlashcardMapper {
       definition: map[FlashcardSchema.definition] as String,
       lastSeenAt: DateTime.parse(map[FlashcardSchema.lastSeenAt]),
       strength: map[FlashcardSchema.strength] as int,
-      category: CategoryMapper.fromMap(map)
+      category: map[CategorySchema.id] != null ? CategoryMapper.fromMap(map) : null
     );
   }
 
@@ -22,7 +23,7 @@ class FlashcardMapper {
       FlashcardSchema.definition: flashcard.definition,
       FlashcardSchema.lastSeenAt: flashcard.lastSeenAt.toIso8601String(),
       FlashcardSchema.strength: flashcard.strength,
-      FlashcardSchema.category: flashcard.category.id
+      FlashcardSchema.category: flashcard.category != null ? flashcard.category!.id : null
     };
   }
 }

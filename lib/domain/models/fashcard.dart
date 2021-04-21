@@ -8,12 +8,12 @@ class Flashcard {
   String _definition;
   DateTime _lastSeenAt;
   int _strength;
-  Category _category;
+  Category? _category;
 
   String get term => _term;
   String get definition => _definition;
   DateTime get lastSeenAt => _lastSeenAt; 
-  Category get category => _category;
+  Category? get category => _category;
   int get strength => _strength;
 
   Flashcard({
@@ -22,7 +22,7 @@ class Flashcard {
     required String definition,
     required DateTime lastSeenAt,
     required int strength,
-    required Category category,
+    Category? category,
   }) : 
     _term = term, _definition = definition, 
     _lastSeenAt = lastSeenAt, _strength = strength, _category = category;

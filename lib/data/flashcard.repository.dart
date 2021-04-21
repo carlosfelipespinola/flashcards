@@ -1,4 +1,5 @@
 
+import 'package:flashcards/data/category.schema.dart';
 import 'package:flashcards/data/flashcard.mapper.dart';
 import 'package:flashcards/data/flashcard.schema.dart';
 import 'package:flashcards/domain/interfaces/flashcard.repository.dart';
@@ -32,7 +33,11 @@ class FlashcardRepository implements IFlashcardRepository {
   @override
   Future<List<Flashcard>> findAll() async {
     try {
-      final flashcardsMap = await dbe.query(FlashcardSchema.tableName);
+      final sql = 'SELECT * FROM ${FlashcardSchema.tableName}'
+        ' LEFT JOIN ${CategorySchema.tableName}'
+        ' ON ${FlashcardSchema.id} = ${CategorySchema.id}'
+      ;
+      final flashcardsMap = await dbe.rawQuery(sql);
       return flashcardsMap.map((map) => FlashcardMapper.fromMap(map)).toList();
     } catch (_) {
       throw Failure();
