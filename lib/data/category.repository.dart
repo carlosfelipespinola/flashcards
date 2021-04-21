@@ -28,8 +28,13 @@ class CategoryRepository implements ICategoryRepository {
   }
 
   @override
-  Future<List<Category>> findAll() {
-    throw UnimplementedError();
+  Future<List<Category>> findAll() async {
+    try {
+      final categoriesMap = await dbe.query(CategorySchema.tableName);
+      return categoriesMap.map((map) => CategoryMapper.fromMap(map)).toList();
+    } catch (_) {
+      throw Failure();
+    }
   }
 
   @override
