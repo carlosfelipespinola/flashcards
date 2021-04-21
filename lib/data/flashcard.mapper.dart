@@ -15,7 +15,7 @@ class FlashcardMapper {
     );
   }
 
-  static Map<String, dynamic> toJson(Flashcard flashcard) {
+  static Map<String, dynamic> toMap(Flashcard flashcard) {
     return <String, dynamic>{
       FlashcardSchema.id: flashcard.id,
       FlashcardSchema.term: flashcard.term,
