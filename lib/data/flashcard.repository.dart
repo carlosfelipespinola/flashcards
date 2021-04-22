@@ -7,16 +7,23 @@ import 'package:flashcards/domain/models/failure.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
 import 'package:flashcards/domain/models/category.dart';
 import 'package:flashcards/domain/models/sort.dart';
+import 'package:flashcards/services/database.dart';
 import 'package:sqflite/sqflite.dart';
 
 class FlashcardRepository implements IFlashcardRepository {
 
-  DatabaseExecutor get dbe => throw UnimplementedError();
+  DatabaseProvider databaseProvider;
+
+  FlashcardRepository({required this.databaseProvider});  
+
+  Future<DatabaseExecutor> get dbe async {
+    return await databaseProvider.db;
+  }
 
   @override
   Future<Flashcard> delete(Flashcard flashcard) async {
     try {
-      int deletedRows = await dbe.delete(
+      int deletedRows = await (await dbe).delete(
         FlashcardSchema.tableName,
         where: '${FlashcardSchema.id} = ?',
         whereArgs: [flashcard.id]
@@ -37,7 +44,7 @@ class FlashcardRepository implements IFlashcardRepository {
         ' LEFT JOIN ${CategorySchema.tableName}'
         ' ON ${FlashcardSchema.id} = ${CategorySchema.id}'
       ;
-      final flashcardsMap = await dbe.rawQuery(sql);
+      final flashcardsMap = await (await dbe).rawQuery(sql);
       return flashcardsMap.map((map) => FlashcardMapper.fromMap(map)).toList();
     } catch (_) {
       throw Failure();
@@ -61,7 +68,7 @@ class FlashcardRepository implements IFlashcardRepository {
 
   Future<Flashcard> _insertFlashcard(Flashcard flashcard) async {
     try {
-      final id = await dbe.insert(
+      final id = await (await dbe).insert(
         FlashcardSchema.tableName,
         FlashcardMapper.toMap(flashcard),
         conflictAlgorithm: ConflictAlgorithm.abort
@@ -78,7 +85,7 @@ class FlashcardRepository implements IFlashcardRepository {
 
   Future<Flashcard> _updateFlashcard(Flashcard flashcard) async {
     try {
-      int rowsUpdated = await dbe.update(
+      int rowsUpdated = await (await dbe).update(
         FlashcardSchema.tableName,
         FlashcardMapper.toMap(flashcard),
         where: '${FlashcardSchema.id} = ?',
