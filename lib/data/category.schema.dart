@@ -5,7 +5,7 @@ class CategorySchema {
   static String name = 'category_name';
 
   static String get createTable => 'CREATE TABLE $tableName('
-    ' $id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,'
+    ' $id INTEGER PRIMARY KEY NOT NULL,'
     ' $name TEXT NOT NULL'
   ');';
 }

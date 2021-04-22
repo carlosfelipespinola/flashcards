@@ -4,16 +4,23 @@ import 'package:flashcards/data/category.schema.dart';
 import 'package:flashcards/domain/interfaces/category.repository.dart';
 import 'package:flashcards/domain/models/category.dart';
 import 'package:flashcards/domain/models/failure.dart';
+import 'package:flashcards/services/database.dart';
 import 'package:sqflite/sqflite.dart';
 
 class CategoryRepository implements ICategoryRepository {
 
-  DatabaseExecutor get dbe => throw UnimplementedError();
+  DatabaseProvider databaseProvider;
+
+  CategoryRepository({required this.databaseProvider});
+
+  Future<DatabaseExecutor> get dbe async {
+    return await databaseProvider.db;
+  }
 
   @override
   Future<Category> delete(Category category) async {
     try {
-      int deletedRows = await dbe.delete(
+      int deletedRows = await (await dbe).delete(
         CategorySchema.tableName,
         where: '${CategorySchema.id} = ?',
         whereArgs: [category.id]
@@ -30,7 +37,7 @@ class CategoryRepository implements ICategoryRepository {
   @override
   Future<List<Category>> findAll() async {
     try {
-      final categoriesMap = await dbe.query(CategorySchema.tableName);
+      final categoriesMap = await (await dbe).query(CategorySchema.tableName);
       return categoriesMap.map((map) => CategoryMapper.fromMap(map)).toList();
     } catch (_) {
       throw Failure();
@@ -49,7 +56,7 @@ class CategoryRepository implements ICategoryRepository {
 
   Future<Category> _insertCategory(Category category) async {
     try {
-      final id = await dbe.insert(
+      final id = await (await dbe).insert(
         CategorySchema.tableName,
         CategoryMapper.toMap(category),
         conflictAlgorithm: ConflictAlgorithm.abort
@@ -66,7 +73,7 @@ class CategoryRepository implements ICategoryRepository {
 
   Future<Category> _updateCategory(Category category) async {
     try {
-      int rowsUpdated = await dbe.update(
+      int rowsUpdated = await (await dbe).update(
         CategorySchema.tableName,
         CategoryMapper.toMap(category),
         where: '${CategorySchema.id} = ?',
