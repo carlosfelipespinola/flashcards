@@ -4,28 +4,24 @@ enum FlashcardSortableFields { lastSeentAt, strength }
 
 class Flashcard {
   int? id;
-  String _term;
-  String _definition;
+  String term;
+  String definition;
   DateTime _lastSeenAt;
   int _strength;
-  Category? _category;
+  Category? category;
 
-  String get term => _term;
-  String get definition => _definition;
-  DateTime get lastSeenAt => _lastSeenAt; 
-  Category? get category => _category;
+  DateTime get lastSeenAt => _lastSeenAt;
   int get strength => _strength;
 
   Flashcard({
-    required this.id,
-    required String term,
-    required String definition,
+    this.id,
+    required this.term,
+    required this.definition,
     required DateTime lastSeenAt,
     required int strength,
-    Category? category,
-  }) : 
-    _term = term, _definition = definition, 
-    _lastSeenAt = lastSeenAt, _strength = strength, _category = category;
+    this.category,
+  }) :
+    _lastSeenAt = lastSeenAt, _strength = strength;
 
   void increaseStrength() {
     _strength = _strength >= 5 ? 5 : _strength++;
