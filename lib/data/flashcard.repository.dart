@@ -52,8 +52,26 @@ class FlashcardRepository implements IFlashcardRepository {
   }
 
   @override
-  Future<List<Flashcard>> query({Category? category, List<Sort<FlashcardSortableFields>>? sortBy, int? limit, bool? randomize = false}) {
-    throw UnimplementedError();
+  Future<List<Flashcard>> query({Category? category, List<Sort<FlashcardSortableFields>>? sortBy, int? limit, bool randomize = false}) async {
+    var query = 'SELECT * FROM ${FlashcardSchema.tableName}'
+      ' LEFT JOIN ${CategorySchema.tableName}'
+      ' ON ${FlashcardSchema.id} = ${CategorySchema.id}'
+      ' WHERE 1'
+    ;
+    if (category != null) {
+      query += ' AND ${CategorySchema.id} = ${category.id}';
+    }
+    if (sortBy != null && sortBy.length > 0) {
+      query += ' ORDER BY ${sortBy.map((sort) => FlashcardMapper.mapSortToSql(sort)).join(", ")}';
+    }
+    if (randomize) {
+      query += ' , RANDOM()';
+    }
+    if (limit != null) {
+      query += ' LIMIT $limit';
+    }
+    final rawFlashcards = await (await dbe).rawQuery(query);
+    return rawFlashcards.map((map) => FlashcardMapper.fromMap(map)).toList();
   }
 
   @override

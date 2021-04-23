@@ -13,6 +13,6 @@ abstract class IFlashcardRepository {
     Category category,
     List<Sort<FlashcardSortableFields>>? sortBy,
     int? limit,
-    bool? randomize = false
+    bool randomize = false
   });
 }
