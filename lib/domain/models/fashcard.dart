@@ -23,6 +23,17 @@ class Flashcard {
   }) :
     _lastSeenAt = lastSeenAt, _strength = strength;
 
+  factory Flashcard.create() {
+    return Flashcard(
+      term: '',
+      definition: '',
+      lastSeenAt: DateTime.now(),
+      strength: 1,
+      category: null,
+      id: null
+    );
+  }
+
   void increaseStrength() {
     _strength = _strength >= 5 ? 5 : _strength++;
   }
@@ -38,6 +49,27 @@ class Flashcard {
   bool isValid() {
     if (_strength < 1 || _strength > 5)
       return false;
+    if (term.length < 1 || definition.length < 1) {
+      return false;
+    }
     return true;
+  }
+
+  Flashcard copyWith({
+    int? id,
+    String? term,
+    String? definition,
+    DateTime? lastSeenAt,
+    int? strength,
+    Category? category,
+  }) {
+    return Flashcard(
+      id: id ?? this.id,
+      term: term ?? this.term,
+      definition: definition ?? this.definition,
+      lastSeenAt: lastSeenAt ?? this._lastSeenAt,
+      strength: strength ?? this._strength,
+      category: category ?? this.category,
+    );
   }
 }

@@ -1,9 +1,53 @@
 import 'package:flashcards/domain/models/fashcard.dart';
+import 'package:flashcards/domain/usecases/find_flashcards.usecase.dart';
+import 'package:flashcards/router.dart';
 import 'package:flashcards/ui/widgets/flashcard.dart';
+import 'package:flashcards/ui/widgets/try_again.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:get_it/get_it.dart';
 
-class FlashcardsPage extends StatelessWidget {
+class FlashcardsPage extends StatefulWidget {
+  @override
+  _FlashcardsPageState createState() => _FlashcardsPageState();
+}
+
+class _FlashcardsPageState extends State<FlashcardsPage> {
+  late FindFlashcardsUseCase findFlashcardsUseCase;
+  List<Flashcard> flashcards = [];
+  bool fetchFlashcardsFailed = false;
+  bool isFetchingFlashcards = false;
+
+  @override
+  void initState() {
+    findFlashcardsUseCase = GetIt.I.get<FindFlashcardsUseCase>();
+    fetchFlashcards();
+    super.initState();
+  }
+
+  void fetchFlashcards() async {
+    try {
+      this.isFetchingFlashcards = true;
+      final foundFlashcards = await findFlashcardsUseCase();
+      setState(() {
+        this.flashcards = foundFlashcards;
+        this.fetchFlashcardsFailed = false;
+        this.isFetchingFlashcards = false;
+      });
+    } catch (error) {
+      this.isFetchingFlashcards = false;
+      this.fetchFlashcardsFailed = true;
+    }
+    
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,23 +56,37 @@ class FlashcardsPage extends StatelessWidget {
         title: Text('My Flashcards'.toUpperCase(), style: Theme.of(context).appBarTheme.textTheme!.headline6, overflow: TextOverflow.ellipsis, maxLines: 1,),
       ),
       body: SafeArea(
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 300),
-          itemCount: 10,
-          itemBuilder: (context, index) {
-            return LayoutBuilder(
-              builder: (context, constraints) {
-                return FlashcardTile(
-                  maxSize: constraints.maxWidth, 
-                  size: constraints.maxWidth,
-                  flashcard: Flashcard(
-                    id: null,
-                    term: 'Qual é a menor nota que podemos encontrar na musica?',
-                    definition: 'Teste 2',
-                    lastSeenAt: DateTime.now(),
-                    strength: 2,
-                    category: null
-                  )
+        child: Builder(
+          builder: (context) {
+            if (isFetchingFlashcards) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (fetchFlashcardsFailed) {
+              return Center(
+                child: TryAgain(
+                  message: 'Algo deu errado, tente novamente.',
+                  onPressed: fetchFlashcards
+                ),
+              );
+            }
+            if (flashcards.length == 0) {
+              return Center(
+                child: Text('Você ainda não tem nenhum flashcard cadastrado'),
+              );
+            }
+            return GridView.builder(
+              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 300),
+              itemCount: flashcards.length,
+              itemBuilder: (context, index) {
+                final flashcard = flashcards.elementAt(index);
+                return LayoutBuilder(
+                  builder: (context, constraints) {
+                    return FlashcardTile(
+                      maxSize: constraints.maxWidth, 
+                      size: constraints.maxWidth,
+                      flashcard: flashcard
+                    );
+                  }
                 );
               }
             );
@@ -45,7 +103,10 @@ class FlashcardsPage extends StatelessWidget {
           SpeedDialChild(
             elevation: 2,
             child: Icon(Icons.add),
-            onTap: () async {},
+            onTap: () async {
+              await Navigator.of(context).pushNamed(RoutesPaths.flashcardEditor);
+              fetchFlashcards();
+            },
             backgroundColor: Theme.of(context).primaryColor,
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),

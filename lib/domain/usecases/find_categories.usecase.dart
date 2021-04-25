@@ -8,7 +8,7 @@ class FindCategoriesUseCase {
     required this.categoryRepository,
   });
 
-  Future<List<Category>> call(Category tag) async {
+  Future<List<Category>> call() async {
     return await categoryRepository.findAll();
   }
 
