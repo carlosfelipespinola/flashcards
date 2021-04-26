@@ -39,8 +39,8 @@ class _CategoryPickerState extends State<CategoryPicker> {
       ),
       context: context, 
       builder: (context) {
-        return Container(
-          margin: EdgeInsets.only(top: 40),
+        return Padding(
+          padding: EdgeInsets.only(top: 44),
           child: CategoryPickerDialog(selectedCategory: selectedCategory,));
       }
     );

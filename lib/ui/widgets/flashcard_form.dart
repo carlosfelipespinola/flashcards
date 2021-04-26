@@ -25,6 +25,7 @@ class _FlashcardFormState extends State<FlashcardForm> {
   final _backFocusNode = FocusNode();
   final SaveFlashcardUseCase saveFlashcardUseCase = GetIt.I();
   var state = FlashcardFormSaveState.unset;
+  Category? selectedCategory;
 
   @override
   void initState() {
@@ -65,7 +66,10 @@ class _FlashcardFormState extends State<FlashcardForm> {
               maxLength: 100,
             ),
             SizedBox(height: 12,),
-            CategoryPicker(onChange: onCategoryChanged),
+            CategoryPicker(
+              selectedCategory: selectedCategory,
+              onChange: onCategoryChanged
+            ),
             SizedBox(height: 12,),
             ElevatedButton.icon(
               onPressed: widget.flashcard.isValid() ? () {} : null,
@@ -91,7 +95,11 @@ class _FlashcardFormState extends State<FlashcardForm> {
     }
   }
 
-  void onCategoryChanged(Category? category) {}
+  void onCategoryChanged(Category? category) {
+    setState(() {
+      selectedCategory = category;
+    });
+  }
 
   void onTermChanged(String term) {}
 
