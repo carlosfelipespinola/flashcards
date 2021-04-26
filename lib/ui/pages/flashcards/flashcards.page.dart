@@ -137,22 +137,6 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
           ),
           SpeedDialChild(
             elevation: 2,
-            child: Icon(Icons.filter_alt),
-            onTap: () async {},
-            backgroundColor: Theme.of(context).primaryColor,
-            labelWidget: Container(
-              margin: EdgeInsets.only(right: 12),
-              child: Text(
-                'Filter Flashcards'.toUpperCase(),
-                style: TextStyle(
-                  color: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black, 
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-            )
-          ),
-          SpeedDialChild(
-            elevation: 2,
             child: Icon(Icons.label),
             onTap: () async {},
             backgroundColor: Theme.of(context).primaryColor,
