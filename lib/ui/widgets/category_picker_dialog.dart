@@ -1,6 +1,5 @@
 import 'package:flashcards/domain/models/category.dart';
 import 'package:flashcards/domain/usecases/find_categories.usecase.dart';
-import 'package:flashcards/domain/usecases/save_category.usecase.dart';
 import 'package:flashcards/ui/widgets/category_form.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -15,89 +14,79 @@ class CategoryPickerDialog extends StatefulWidget {
 
 class _CategoryPickerDialogState extends State<CategoryPickerDialog> {
   late FindCategoriesUseCase findCategoriesUseCase;
-  late SaveCategoryUseCase saveCategoryUseCase;
+  late Future<List<Category>> findCategoriesFuture;
+  bool isShowingList = true;
 
   @override
   void initState() {
     findCategoriesUseCase = GetIt.I.get<FindCategoriesUseCase>();
-    saveCategoryUseCase = GetIt.I.get<SaveCategoryUseCase>();
+    findCategoriesFuture = findCategoriesUseCase();
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Center(
-            child: Container(
-              width: 62,
-              height: 8,
-              decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.circular(25.0)
-              ),
-            ),
-          ),
-          TabBar(
-            tabs: [
-              Tab(text: 'Select category',),
-              Tab(text: 'Create category',)
-            ],
-          ),
-          Flexible(
-            fit: FlexFit.loose,
-            child: TabBarView(
-              children: [
-                FutureBuilder<List<Category>>(
-                  future: findCategoriesUseCase(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator(),);
-                    }
-                    if (snapshot.hasError) {
-                      return Center(child: Text('Algo deu errado, tente novamente mais tarde!'),);
-                    }
-                    if (!snapshot.hasData) {
-                      return Container();
-                    }
-                    if (snapshot.requireData.length == 0) {
-                      return Center(child: Text('Você ainda não tem nenhuma categoria cadastrada'),);
-                    }
-                    return ListView.builder(
-                      itemCount: snapshot.requireData.length,
-                      itemBuilder: (context, index) {
-                        final category = snapshot.requireData.elementAt(index);
-                        return ListTile(
-                          title: Text(category.name),
-                          trailing: widget.selectedCategory?.id == category.id ? Icon(Icons.check) : null,
-                          onTap: () {
-                            if (widget.selectedCategory?.id != category.id) {
-                              Navigator.of(context).pop(category);
-                            }
-                          },
-                        );
-                      }
-                    );
-                  }
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: SingleChildScrollView(
-                    child: CategoryForm(
-                      onCategorySaved: (category) {
-                        if (ModalRoute.of(context)!.isCurrent) {
-                          Navigator.of(context).pop(category);
-                        }
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.5,
+      child: FutureBuilder<List<Category>>(
+        future: findCategoriesFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator(),);
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Algo deu errado, tente novamente mais tarde!'),);
+          }
+          if (!snapshot.hasData) {
+            return Container();
+          }
+          if (snapshot.requireData.length == 0) {
+            return Center(child: Text('Você ainda não tem nenhuma categoria cadastrada'),);
+          }
+          if (isShowingList) {
+            return ListView.builder(
+              itemCount: snapshot.requireData.length + 1,
+              itemBuilder: (context, index) {
+                if (index == snapshot.requireData.length) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        setState(() {
+                          isShowingList = false;
+                        });
                       },
-                    )
-                  ),
-                )
-              ]
+                      icon: Icon(Icons.add), 
+                      label: Text('Criar Nova categoria'.toUpperCase())
+                    ),
+                  );
+                }
+                final category = snapshot.requireData.elementAt(index);
+                return ListTile(
+                  title: Text(category.name),
+                  trailing: widget.selectedCategory?.id == category.id ? Icon(Icons.check) : null,
+                  onTap: () {
+                    if (widget.selectedCategory?.id != category.id) {
+                      Navigator.of(context).pop(category);
+                    }
+                  },
+                );
+              }
+            );
+          }
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
+            child: SingleChildScrollView(
+              child: CategoryForm(
+                onCategorySaved: (category) {
+                  if (ModalRoute.of(context)!.isCurrent) {
+                    Navigator.of(context).pop(category);
+                  }
+                },
+              )
             ),
-          )
-        ],
+          );
+          
+        }
       ),
     );
   }

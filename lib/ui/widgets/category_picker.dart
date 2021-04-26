@@ -34,14 +34,9 @@ class _CategoryPickerState extends State<CategoryPicker> {
       isScrollControlled: true,
       enableDrag: true,
       isDismissible: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0))
-      ),
       context: context, 
       builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(top: 44),
-          child: CategoryPickerDialog(selectedCategory: selectedCategory,));
+        return CategoryPickerDialog(selectedCategory: selectedCategory,);
       }
     );
     if (category != null) {
