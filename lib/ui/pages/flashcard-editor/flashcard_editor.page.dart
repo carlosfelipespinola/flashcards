@@ -18,10 +18,10 @@ class FlashcardEditorPage extends StatelessWidget {
           child: FlashcardForm(
             flashcard: arguments.flashcard ?? Flashcard.create(),
             onFlashcardSaved: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Flashcard cadastrado com sucesso'))
+              );
               if(ModalRoute.of(context)!.isCurrent) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Flashcard cadastrado com sucesso'))
-                );
                 Navigator.of(context).pop();
               }
             },

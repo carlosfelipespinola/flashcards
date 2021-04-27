@@ -42,7 +42,7 @@ class FlashcardRepository implements IFlashcardRepository {
     try {
       final sql = 'SELECT * FROM ${FlashcardSchema.tableName}'
         ' LEFT JOIN ${CategorySchema.tableName}'
-        ' ON ${FlashcardSchema.id} = ${CategorySchema.id}'
+        ' ON ${CategorySchema.id} = ${FlashcardSchema.category}'
       ;
       final flashcardsMap = await (await dbe).rawQuery(sql);
       return flashcardsMap.map((map) => FlashcardMapper.fromMap(map)).toList();
@@ -55,7 +55,7 @@ class FlashcardRepository implements IFlashcardRepository {
   Future<List<Flashcard>> query({Category? category, List<Sort<FlashcardSortableFields>>? sortBy, int? limit, bool randomize = false}) async {
     var query = 'SELECT * FROM ${FlashcardSchema.tableName}'
       ' LEFT JOIN ${CategorySchema.tableName}'
-      ' ON ${FlashcardSchema.id} = ${CategorySchema.id}'
+      ' ON ${FlashcardSchema.category} = ${CategorySchema.id}'
       ' WHERE 1'
     ;
     if (category != null) {

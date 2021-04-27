@@ -7,7 +7,7 @@ import 'package:flashcards/ui/widgets/text_area_card.dart';
 import 'package:get_it/get_it.dart';
 
 class FlashcardForm extends StatefulWidget {
-  final Flashcard flashcard;
+  final Flashcard? flashcard;
   final Function? onFlashcardSaved;
 
   const FlashcardForm({Key? key, required this.flashcard, this.onFlashcardSaved}) : super(key: key);
@@ -21,17 +21,36 @@ enum FlashcardFormSaveState { unset, pending, saved, error }
 class _FlashcardFormState extends State<FlashcardForm> {
   late TextEditingController _termController;
   late TextEditingController _definitionController;
+  Category? _selectedCategory;
   final _frontFocusNode = FocusNode();
   final _backFocusNode = FocusNode();
   final SaveFlashcardUseCase saveFlashcardUseCase = GetIt.I();
   var state = FlashcardFormSaveState.unset;
-  Category? selectedCategory;
+  late Flashcard _flashcard;
+  bool _isValid = false;
 
   @override
   void initState() {
-    _termController = TextEditingController(text:  widget.flashcard.term);
-    _definitionController = TextEditingController(text: widget.flashcard.definition);
+    _flashcard = widget.flashcard?.copyWith() ?? Flashcard.create(); 
+    _termController = TextEditingController(text:  _flashcard.term);
+    _definitionController = TextEditingController(text: _flashcard.definition);
+    _selectedCategory = _flashcard.category?.copyWith();
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant FlashcardForm oldWidget) {
+    if (oldWidget.flashcard?.id != widget.flashcard?.id) {
+      _flashcard = widget.flashcard?.copyWith() ?? Flashcard.create(); 
+      _selectedCategory = _flashcard.category?.copyWith();
+      _termController.text = _flashcard.term;
+      _definitionController.text = _flashcard.definition;
+      _termController.selection = TextSelection.fromPosition(TextPosition(offset: _termController.text.length));
+      _definitionController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _definitionController.text.length)
+      );
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -50,7 +69,7 @@ class _FlashcardFormState extends State<FlashcardForm> {
               focusNode: _frontFocusNode,
               textInputAction: _definitionController.text.isNotEmpty ? TextInputAction.done : TextInputAction.next,
               controller: _termController,
-              onChange: onTermChanged,
+              onChange: (_) => validate(),
               onEditingComplete: _definitionController.text.isNotEmpty ? null : () {
                 FocusScope.of(context).requestFocus(_backFocusNode);
               },
@@ -61,18 +80,18 @@ class _FlashcardFormState extends State<FlashcardForm> {
               label: 'Trás',
               textInputAction: TextInputAction.done,
               controller: _definitionController,
-              onChange: onDefinitionChanged,
+              onChange: (_) => validate(),
               focusNode: _backFocusNode,
               maxLength: 100,
             ),
             SizedBox(height: 12,),
             CategoryPicker(
-              selectedCategory: selectedCategory,
+              selectedCategory: _selectedCategory,
               onChange: onCategoryChanged
             ),
             SizedBox(height: 12,),
             ElevatedButton.icon(
-              onPressed: widget.flashcard.isValid() ? () {} : null,
+              onPressed: canSave ? save : null,
               icon: Icon(Icons.save),
               label: Text('Salvar'.toUpperCase())
             )
@@ -85,7 +104,13 @@ class _FlashcardFormState extends State<FlashcardForm> {
   void save() async {
     try {
       setState(() { state = FlashcardFormSaveState.pending; });
-      await saveFlashcardUseCase.call(widget.flashcard);
+      _flashcard = await saveFlashcardUseCase.call(
+        _flashcard.copyWith(
+          category: _selectedCategory,
+          definition: _definitionController.text,
+          term: _termController.text
+        )
+      );
       setState(() { state = FlashcardFormSaveState.saved; });
       if (widget.onFlashcardSaved != null) {
         widget.onFlashcardSaved!();
@@ -97,13 +122,27 @@ class _FlashcardFormState extends State<FlashcardForm> {
 
   void onCategoryChanged(Category? category) {
     setState(() {
-      selectedCategory = category;
+      _selectedCategory = category;
     });
+    validate();
   }
 
-  void onTermChanged(String term) {}
+  bool get canSave => hasChanges && _isValid && isNotSaving;
 
-  void onDefinitionChanged(String definition) {}
+  bool get isNotSaving => state != FlashcardFormSaveState.pending;
+
+  bool get hasChanges {
+    if (_termController.text != _flashcard.term) return true;
+    if (_definitionController.text != _flashcard.definition) return true;
+    if (_selectedCategory?.id != _flashcard.category?.id) return true;
+    return false;
+  }
+
+  void validate() {
+    setState(() {
+      _isValid = _termController.text.length > 0 && _definitionController.text.length > 0;
+    });
+  }
 
   @override
   void setState(fn) {

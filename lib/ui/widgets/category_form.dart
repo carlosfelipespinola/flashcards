@@ -17,16 +17,16 @@ enum CategoryFormSaveState { unitialized, pending, error, success }
 class _CategoryFormState extends State<CategoryForm> {
   SaveCategoryUseCase saveCategoryUseCase = GetIt.I();
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController _controller;
   var isValid = false;
   var state = CategoryFormSaveState.unitialized;
+  var _name = '';
   late Category category;
 
 
   @override
   void initState() {
     category = widget.category?.copyWith() ?? Category(name: '');
-    _controller = TextEditingController(text: category.name);
+    _name = category.name;
     super.initState();
   }
 
@@ -34,8 +34,7 @@ class _CategoryFormState extends State<CategoryForm> {
   void didUpdateWidget(covariant CategoryForm oldWidget) {
     if (oldWidget.category?.id != widget.category?.id) {
       category = widget.category?.copyWith() ?? Category(name: '');
-      _controller.text = category.name;
-      _controller.selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));
+      _name = category.name;
       _formKey.currentState?.reset();
     }
     super.didUpdateWidget(oldWidget);
@@ -47,12 +46,16 @@ class _CategoryFormState extends State<CategoryForm> {
       ignoring: state == CategoryFormSaveState.pending,
       child: Form(
         key: _formKey,
-        onChanged: validate,
+        autovalidateMode: AutovalidateMode.disabled,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextFormField(
-              controller: _controller,
+              initialValue: _name,
+              onChanged: (value) {
+                setState(() { _name = value; });
+                validate();
+              },
               decoration: InputDecoration(
                 labelText: 'Nome',
                 border: OutlineInputBorder()
@@ -76,11 +79,8 @@ class _CategoryFormState extends State<CategoryForm> {
   void submit() async {
     setState(() { state = CategoryFormSaveState.pending; });
     try {
-      final categorySaved = await saveCategoryUseCase(category.copyWith(name: _controller.text));
-      setState(() { 
-        state = CategoryFormSaveState.success;
-        category = categorySaved;
-      });
+      category = await saveCategoryUseCase(category.copyWith(name: _name));
+      setState(() { state = CategoryFormSaveState.success; });
       if (widget.onCategorySaved != null) {
         widget.onCategorySaved!(category);
       }
@@ -93,11 +93,11 @@ class _CategoryFormState extends State<CategoryForm> {
 
   bool get isNotSaving => state != CategoryFormSaveState.pending;
 
-  bool get hasChanges => _controller.text != category.name;
+  bool get hasChanges => _name != category.name;
 
   void validate() {
     setState(() {
-      isValid = _controller.text.length > 0;
+      isValid = _name.length > 0;
     });
   }
 

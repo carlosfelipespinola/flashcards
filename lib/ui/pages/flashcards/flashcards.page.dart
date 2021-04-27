@@ -74,21 +74,25 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
                 child: Text('Você ainda não tem nenhum flashcard cadastrado'),
               );
             }
-            return GridView.builder(
-              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 300),
-              itemCount: flashcards.length,
-              itemBuilder: (context, index) {
-                final flashcard = flashcards.elementAt(index);
-                return LayoutBuilder(
-                  builder: (context, constraints) {
-                    return FlashcardTile(
-                      maxSize: constraints.maxWidth, 
-                      size: constraints.maxWidth,
-                      flashcard: flashcard
-                    );
-                  }
-                );
-              }
+            return RefreshIndicator(
+              onRefresh: () async => fetchFlashcards(),
+              child: GridView.builder(
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 300),
+                itemCount: flashcards.length,
+                itemBuilder: (context, index) {
+                  final flashcard = flashcards.elementAt(index);
+                  return LayoutBuilder(
+                    builder: (context, constraints) {
+                      return FlashcardTile(
+                        maxSize: constraints.maxWidth, 
+                        size: constraints.maxWidth,
+                        flashcard: flashcard
+                      );
+                    }
+                  );
+                }
+              ),
             );
           }
         ),
