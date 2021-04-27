@@ -9,6 +9,7 @@ ThemeData generateLightTheme() {
       centerTitle: true,
       iconTheme: IconThemeData(color: Colors.black),
       color: Colors.blueGrey[50],
+      elevation: 1,
       textTheme: TextTheme(
         headline6: TextStyle(
           fontSize: 24,

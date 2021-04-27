@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../router.dart';
+
 class FlashcardsPage extends StatefulWidget {
   @override
   _FlashcardsPageState createState() => _FlashcardsPageState();
@@ -142,7 +144,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
           SpeedDialChild(
             elevation: 2,
             child: Icon(Icons.label),
-            onTap: () async {},
+            onTap: () => Navigator.of(context).pushNamed(RoutesPaths.categoryManager),
             backgroundColor: Theme.of(context).primaryColor,
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),

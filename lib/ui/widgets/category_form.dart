@@ -6,8 +6,9 @@ import 'package:get_it/get_it.dart';
 class CategoryForm extends StatefulWidget {
   final Category? category;
   final Function(Category)? onCategorySaved;
+  final bool autoFocus;
 
-  const CategoryForm({Key? key, this.category, this.onCategorySaved}) : super(key: key);
+  const CategoryForm({Key? key, this.category, this.onCategorySaved, this.autoFocus = false}) : super(key: key);
   @override
   _CategoryFormState createState() => _CategoryFormState();
 }
@@ -49,8 +50,10 @@ class _CategoryFormState extends State<CategoryForm> {
         autovalidateMode: AutovalidateMode.disabled,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
           children: [
             TextFormField(
+              autofocus: widget.autoFocus,
               initialValue: _name,
               onChanged: (value) {
                 setState(() { _name = value; });
