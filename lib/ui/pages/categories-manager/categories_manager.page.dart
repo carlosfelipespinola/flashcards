@@ -57,13 +57,19 @@ class _CategoriesManagerPageState extends State<CategoriesManagerPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextButton.icon(
-                    onPressed: () => showCategoryDeleteConfirmDialog(category), 
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      showCategoryDeleteConfirmDialog(category);
+                    }, 
                     icon: Icon(Icons.delete), label: Text('Delete'.toUpperCase())
                   ),
                   SizedBox(width: 12,),
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(elevation: 0),
-                    onPressed: () => showCategoryFormBottomDialog(category), 
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      showCategoryFormBottomDialog(category);
+                    }, 
                     icon: Icon(Icons.edit), label: Text('Edit'.toUpperCase())
                   )
                 ],
@@ -85,7 +91,7 @@ class _CategoriesManagerPageState extends State<CategoriesManagerPage> {
           title: 'Deletar categoria',
           text: 'Você tem certeza que deseja deletar a categoria ${category.name}?',
           onConfirm: () => Navigator.of(context).pop(true),
-          onCancel: () => Navigator.of(context).pop(true)
+          onCancel: () => Navigator.of(context).pop(false)
         );
       }
     ) ?? false;
@@ -103,15 +109,19 @@ class _CategoriesManagerPageState extends State<CategoriesManagerPage> {
     try {
       categoriesBeingDeleted.add(category);
       await deleteCategoryUseCase(category);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ocorreu um erro ao deletar ${category.name}'))
-      );
+      showMessage('Categoria "${category.name}" deletada com secesso');
     } catch (_) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ocorreu um erro ao deletar ${category.name}'))
-      );
+      showMessage('Ocorreu um erro ao deletar "${category.name}"');
     } finally {
       categoriesBeingDeleted.remove(category);
+    }
+  }
+
+  void showMessage(String message) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message))
+      );
     }
   }
 
