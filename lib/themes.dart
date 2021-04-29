@@ -34,6 +34,6 @@ ThemeData generateLightTheme() {
         borderRadius: BorderRadius.only(topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0))
       ),
     ),
-    primarySwatch: Colors.blueGrey,
+    primarySwatch: Colors.blueGrey
   );
 }

@@ -11,7 +11,7 @@ class FlashcardEditorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Create flashcard'.toUpperCase())),
+      appBar: AppBar(title: Text(title.toUpperCase())),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -19,7 +19,7 @@ class FlashcardEditorPage extends StatelessWidget {
             flashcard: arguments.flashcard ?? Flashcard.create(),
             onFlashcardSaved: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Flashcard cadastrado com sucesso'))
+                SnackBar(content: Text(successMessage))
               );
               if(ModalRoute.of(context)!.isCurrent) {
                 Navigator.of(context).pop();
@@ -29,5 +29,17 @@ class FlashcardEditorPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  bool get isEditing => arguments.flashcard != null;
+
+  String get title {
+    if (isEditing) return 'Atualizar Flashcard';
+    return 'Criar Flashcard';
+  }
+
+  String get successMessage {
+    if (isEditing) return 'Flashcard atualizado com sucesso';
+    return 'Flashcard cadastrado com sucesso';
   }
 }

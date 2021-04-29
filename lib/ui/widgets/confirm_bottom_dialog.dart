@@ -20,7 +20,7 @@ class ConfirmBottomDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 16.0, right: 16.0, bottom: 32.0, left: 16.0),
+      padding: const EdgeInsets.only(top: 8.0, right: 16.0, bottom: 8.0, left: 16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[

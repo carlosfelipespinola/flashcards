@@ -61,7 +61,8 @@ class _CategoriesManagerPageState extends State<CategoriesManagerPage> {
                       Navigator.of(context).pop();
                       showCategoryDeleteConfirmDialog(category);
                     }, 
-                    icon: Icon(Icons.delete), label: Text('Delete'.toUpperCase())
+                    icon: Icon(Icons.delete, color: Theme.of(context).errorColor),
+                    label: Text('Deletar'.toUpperCase(), style: TextStyle(color: Theme.of(context).errorColor),)
                   ),
                   SizedBox(width: 12,),
                   ElevatedButton.icon(
@@ -70,7 +71,7 @@ class _CategoriesManagerPageState extends State<CategoriesManagerPage> {
                       Navigator.of(context).pop();
                       showCategoryFormBottomDialog(category);
                     }, 
-                    icon: Icon(Icons.edit), label: Text('Edit'.toUpperCase())
+                    icon: Icon(Icons.edit), label: Text('Editar'.toUpperCase())
                   )
                 ],
               )

@@ -46,6 +46,8 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
         visible: true,
         curve: Curves.bounceIn,
         backgroundColor: Theme.of(context).primaryColor,
+        foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
+        overlayColor: Colors.black,
         children: [
           SpeedDialChild(
             elevation: 2,
@@ -55,15 +57,10 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
               _flashcardsGridKey.currentState?.fetchFlashcards();
             },
             backgroundColor: Theme.of(context).primaryColor,
+            foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
-              child: Text(
-                'Create Flashcard'.toUpperCase(),
-                style: TextStyle(
-                  color: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black, 
-                  fontWeight: FontWeight.bold
-                ),
-              ),
+              child: Text('Criar Flashcard'.toUpperCase(), style: speedDialChildTextStyle),
             )
           ),
           SpeedDialChild(
@@ -71,15 +68,10 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
             child: Icon(Icons.play_arrow),
             onTap: () async {},
             backgroundColor: Theme.of(context).primaryColor,
+            foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
-              child: Text(
-                'Start Lesson'.toUpperCase(),
-                style: TextStyle(
-                  color: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black, 
-                  fontWeight: FontWeight.bold
-                ),
-              ),
+              child: Text('Praticar'.toUpperCase(), style: speedDialChildTextStyle),
             )
           ),
           SpeedDialChild(
@@ -87,15 +79,10 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
             child: Icon(Icons.label),
             onTap: () => Navigator.of(context).pushNamed(RoutesPaths.categoryManager),
             backgroundColor: Theme.of(context).primaryColor,
+            foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
-              child: Text(
-                'Manage Categories'.toUpperCase(),
-                style: TextStyle(
-                  color: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black, 
-                  fontWeight: FontWeight.bold
-                ),
-              ),
+              child: Text('Gerenciar categorias'.toUpperCase(), style: speedDialChildTextStyle),
             )
           ),
           SpeedDialChild(
@@ -103,21 +90,18 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
             child: Icon(Icons.info_outline),
             onTap: () async => showLicensePage(context: context),
             backgroundColor: Theme.of(context).primaryColor,
+            foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
-              child: Text(
-                'About the app'.toUpperCase(),
-                style: TextStyle(
-                  color: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black, 
-                  fontWeight: FontWeight.bold
-                ),
-              ),
+              child: Text('About the app'.toUpperCase(), style: speedDialChildTextStyle),
             )
           ),
         ],
       ),
     );
   }
+
+  TextStyle get speedDialChildTextStyle => TextStyle(fontWeight: FontWeight.bold, color: Colors.white);
 
   void showFlashcardBottomDialog(Flashcard flashcard) async {
     await showModalBottomSheet(
