@@ -9,12 +9,14 @@ class FlashcardTile extends StatelessWidget {
   final double maxSize;
   final double size;
   final Flashcard flashcard;
+  final void Function()? onLongPress;
 
   const FlashcardTile({
     Key? key,
     required this.maxSize,
     required this.size,
-    required this.flashcard
+    required this.flashcard,
+    this.onLongPress
   }) : super(key: key);
 
   @override
@@ -22,9 +24,7 @@ class FlashcardTile extends StatelessWidget {
     return TurnableCard(
       maxSize: maxSize,
       size: size,
-      longPress: () {
-        showBottomSheetWithDetails(context);
-      },
+      longPress: onLongPress,
       builder: (context, isShowingFront) {
         if ( isShowingFront ) {
           return Center(
@@ -44,47 +44,6 @@ class FlashcardTile extends StatelessWidget {
           );
         }
       },
-    );
-  }
-
-  void showBottomSheetWithDetails(BuildContext context) {
-    showModalBottomSheet(
-      context: context, 
-      builder: (context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListView(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              children: [
-                ListTile(
-                  leading: Text('Strength'),
-                  trailing: Text(flashcard.strength.toString()),
-                ),
-                ListTile(
-                  leading: Text('Category'),
-                  trailing: Text(flashcard.category?.name ?? '-'),
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () {}, 
-                  icon: Icon(Icons.delete), label: Text('Delete')
-                ),
-                SizedBox(width: 12,),
-                ElevatedButton.icon(
-                  onPressed: () {}, 
-                  icon: Icon(Icons.edit), label: Text('Edit')
-                )
-              ],
-            )
-          ],
-        );
-      }
     );
   }
 }

@@ -9,7 +9,6 @@ class DeleteCategoryUseCase {
   });
 
   Future<Category> call(Category tag) async {
-    await Future.delayed(Duration(seconds: 5));
     return await categoryRepository.delete(tag);
   }
 

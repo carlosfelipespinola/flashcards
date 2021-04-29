@@ -35,6 +35,7 @@ class ConfirmBottomDialog extends StatelessWidget {
                 child: Text('Cancelar'.toUpperCase(), style: TextStyle(color: Theme.of(context).errorColor),),
                 onPressed: onCancel
               ),
+              SizedBox(width: 12),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(elevation: 0),
                 child: Text('Confirmar'.toUpperCase(), textAlign: TextAlign.center,),

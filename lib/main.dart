@@ -10,6 +10,13 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  // TODO
+  // Texto "Flashcard atualizado com sucesso"
+  // Lesson
+  // Lesson Result
+  // Text "Atualizar Flashcard" no editor de flashcard
+  // Padding confirm bottom dialog
+  // Permitir remover categoria de um flashcard
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

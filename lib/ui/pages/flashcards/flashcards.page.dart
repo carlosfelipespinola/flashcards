@@ -1,8 +1,10 @@
 import 'package:flashcards/domain/models/fashcard.dart';
-import 'package:flashcards/domain/usecases/find_flashcards.usecase.dart';
+import 'package:flashcards/domain/usecases/delete_flashcard.usecase.dart';
 import 'package:flashcards/router.dart';
-import 'package:flashcards/ui/widgets/flashcard.dart';
-import 'package:flashcards/ui/widgets/try_again.dart';
+import 'package:flashcards/ui/pages/flashcard-editor/flashcard_editor.page.arguments.dart';
+import 'package:flashcards/ui/widgets/confirm_bottom_dialog.dart';
+import 'package:flashcards/ui/widgets/flashcard_details_bottom_dialog.dart';
+import 'package:flashcards/ui/widgets/flashcards_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get_it/get_it.dart';
@@ -15,89 +17,28 @@ class FlashcardsPage extends StatefulWidget {
 }
 
 class _FlashcardsPageState extends State<FlashcardsPage> {
-  late FindFlashcardsUseCase findFlashcardsUseCase;
-  List<Flashcard> flashcards = [];
-  bool fetchFlashcardsFailed = false;
-  bool isFetchingFlashcards = false;
 
-  @override
-  void initState() {
-    findFlashcardsUseCase = GetIt.I.get<FindFlashcardsUseCase>();
-    fetchFlashcards();
-    super.initState();
-  }
-
-  void fetchFlashcards() async {
-    try {
-      this.isFetchingFlashcards = true;
-      final foundFlashcards = await findFlashcardsUseCase();
-      setState(() {
-        this.flashcards = foundFlashcards;
-        this.fetchFlashcardsFailed = false;
-        this.isFetchingFlashcards = false;
-      });
-    } catch (error) {
-      this.isFetchingFlashcards = false;
-      this.fetchFlashcardsFailed = true;
-    }
-    
-  }
-
-  @override
-  void setState(fn) {
-    if (mounted) {
-      super.setState(fn);
-    }
-  }
+  GlobalKey<FlashcardGridState> _flashcardsGridKey = GlobalKey();
+  final DeleteFlashcardUseCase deleteFlashcardUseCase = GetIt.I();
+  Set<Flashcard> flashcardsBeingDeleted = {};
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
-        title: Text('My Flashcards'.toUpperCase(), style: Theme.of(context).appBarTheme.textTheme!.headline6, overflow: TextOverflow.ellipsis, maxLines: 1,),
+        title: Text(
+          'Meus Flashcards'.toUpperCase(),
+          style: Theme.of(context).appBarTheme.textTheme!.headline6,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
       ),
       body: SafeArea(
-        child: Builder(
-          builder: (context) {
-            if (isFetchingFlashcards) {
-              return Center(child: CircularProgressIndicator());
-            }
-            if (fetchFlashcardsFailed) {
-              return Center(
-                child: TryAgain(
-                  message: 'Algo deu errado, tente novamente.',
-                  onPressed: fetchFlashcards
-                ),
-              );
-            }
-            if (flashcards.length == 0) {
-              return Center(
-                child: Text('Você ainda não tem nenhum flashcard cadastrado'),
-              );
-            }
-            return RefreshIndicator(
-              onRefresh: () async => fetchFlashcards(),
-              child: GridView.builder(
-                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 300),
-                itemCount: flashcards.length,
-                itemBuilder: (context, index) {
-                  final flashcard = flashcards.elementAt(index);
-                  return LayoutBuilder(
-                    builder: (context, constraints) {
-                      return FlashcardTile(
-                        maxSize: constraints.maxWidth, 
-                        size: constraints.maxWidth,
-                        flashcard: flashcard
-                      );
-                    }
-                  );
-                }
-              ),
-            );
-          }
-        ),
+        child: FlashcardGrid(
+          key: _flashcardsGridKey,
+          onFlashcardLongPress: (flashcard) => showFlashcardBottomDialog(flashcard),
+        )
       ),
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,
@@ -111,7 +52,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
             child: Icon(Icons.add),
             onTap: () async {
               await Navigator.of(context).pushNamed(RoutesPaths.flashcardEditor);
-              fetchFlashcards();
+              _flashcardsGridKey.currentState?.fetchFlashcards();
             },
             backgroundColor: Theme.of(context).primaryColor,
             labelWidget: Container(
@@ -160,9 +101,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
           SpeedDialChild(
             elevation: 2,
             child: Icon(Icons.info_outline),
-            onTap: () async {
-              showLicensePage(context: context);
-            },
+            onTap: () async => showLicensePage(context: context),
             backgroundColor: Theme.of(context).primaryColor,
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
@@ -178,5 +117,80 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
         ],
       ),
     );
+  }
+
+  void showFlashcardBottomDialog(Flashcard flashcard) async {
+    await showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return FlashcardDetailsBottomDialog(
+          flashcard: flashcard,
+          onEdit: () async {
+            if (ModalRoute.of(context)!.isCurrent) {
+              Navigator.of(context).pop();
+            }
+            await Navigator.of(context).pushNamed(
+              RoutesPaths.flashcardEditor,
+              arguments: FlashcardEditorPageArguments(flashcard: flashcard)
+            );
+            _flashcardsGridKey.currentState?.fetchFlashcards();
+            
+          },
+          onDelete: () {
+            if (ModalRoute.of(context)!.isCurrent) {
+              Navigator.of(context).pop();
+            }
+            showFlashcardDeletionConfirmDialog(flashcard);
+          }
+        );
+      }
+    );
+  }
+
+  void showFlashcardDeletionConfirmDialog(Flashcard flashcard) async {
+    if (flashcardsBeingDeleted.contains(flashcard)) return;
+    final shouldDelete = await showModalBottomSheet<bool?>(
+      isScrollControlled: false,
+      context: context,
+      builder: (context) {
+        return ConfirmBottomDialog(
+          title: 'Deletar Flashcard',
+          text: 'Você tem certeza que deseja deletar esse flashcard?',
+          onConfirm: () => Navigator.of(context).pop(true),
+          onCancel: () => Navigator.of(context).pop(false)
+        );
+      }
+    ) ?? false;
+    if (shouldDelete) {
+      await deleteFlashcard(flashcard);
+      _flashcardsGridKey.currentState?.fetchFlashcards();
+    }
+  }
+
+  Future<void> deleteFlashcard(Flashcard flashcard) async {
+    try {
+      flashcardsBeingDeleted.add(flashcard);
+      await deleteFlashcardUseCase(flashcard);
+      showMessage('Flashcard deletado com sucesso');
+    } catch(_) {
+      showMessage('Erro ao deletar flashcard');
+    } finally {
+      flashcardsBeingDeleted.remove(flashcard);
+    }
+  }
+
+  void showMessage(String message) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message))
+      );
+    }
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
   }
 }

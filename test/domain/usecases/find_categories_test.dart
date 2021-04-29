@@ -1,7 +1,6 @@
 import 'package:flashcards/data/category.repository.dart';
 import 'package:flashcards/data/category.schema.dart';
 import 'package:flashcards/domain/models/category.dart';
-import 'package:flashcards/domain/usecases/delete_category.usecase.dart';
 import 'package:flashcards/domain/usecases/save_category.usecase.dart';
 import 'package:flashcards/services/database.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,7 +10,6 @@ void main() async {
   var database = await dbProvider.db;
   var categoryRepository = CategoryRepository(databaseProvider: dbProvider);
   var saveCategoryUseCase = SaveCategoryUseCase(categoryRepository: categoryRepository);
-  var deleteCategoryUseCase = DeleteCategoryUseCase(categoryRepository: categoryRepository);
   
   tearDown(() async {
     await database.delete(CategorySchema.tableName);
