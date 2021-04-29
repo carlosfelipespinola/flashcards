@@ -10,7 +10,7 @@ abstract class IFlashcardRepository {
   Future<Flashcard> save(Flashcard flashcard);
   Future<Flashcard> delete(Flashcard flashcard);
   Future<List<Flashcard>> query({
-    Category category,
+    Category? category,
     List<Sort<FlashcardSortableFields>>? sortBy,
     int? limit,
     bool randomize = false
