@@ -3,7 +3,6 @@ import 'package:flashcards/domain/models/fashcard.dart';
 import 'package:flashcards/domain/usecases/answer_flashcard.dart';
 import 'package:flashcards/ui/pages/lesson/lesson.page.arguments.dart';
 import 'package:flashcards/ui/widgets/flashcard.dart';
-import 'package:flashcards/ui/widgets/progress_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 

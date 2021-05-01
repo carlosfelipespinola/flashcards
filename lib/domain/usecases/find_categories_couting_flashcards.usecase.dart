@@ -1,6 +1,5 @@
 import 'package:flashcards/domain/interfaces/category.repository.dart';
 import 'package:flashcards/domain/interfaces/flashcard.repository.dart';
-import 'package:flashcards/domain/models/category.dart';
 import 'package:flashcards/domain/models/category_flashcards_count.dart';
 
 class FindCategoriesCountingFlashcardsUseCase {

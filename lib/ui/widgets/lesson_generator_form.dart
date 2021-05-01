@@ -1,4 +1,3 @@
-import 'package:flashcards/domain/models/category.dart';
 import 'package:flashcards/domain/models/category_flashcards_count.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
 import 'package:flashcards/domain/models/lesson_settings.dart';
@@ -146,7 +145,7 @@ class _LessonGeneratorFormState extends State<LessonGeneratorForm> {
         ),
         Spacer(),
         ElevatedButton(
-          onPressed: count > 0 && count <= 10 ? () {
+          onPressed: count > 0 && count <= chosenCategory!.flashcardsCount ? () {
             generateLesson(LessonSettings(
               category: chosenCategory!.category,
               flashcardsCount: count
