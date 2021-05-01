@@ -8,8 +8,8 @@ class FindCategoriesUseCase {
     required this.categoryRepository,
   });
 
-  Future<List<Category>> call() async {
-    return await categoryRepository.findAll();
+  Future<List<Category>> call({bool countFlashcards = false}) async {
+    return await categoryRepository.findAll(countFlashcards: countFlashcards);
   }
 
 }

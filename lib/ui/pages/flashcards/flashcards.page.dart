@@ -2,6 +2,7 @@ import 'package:flashcards/domain/models/fashcard.dart';
 import 'package:flashcards/domain/usecases/delete_flashcard.usecase.dart';
 import 'package:flashcards/router.dart';
 import 'package:flashcards/ui/pages/flashcard-editor/flashcard_editor.page.arguments.dart';
+import 'package:flashcards/ui/pages/lesson/lesson.page.arguments.dart';
 import 'package:flashcards/ui/widgets/confirm_bottom_dialog.dart';
 import 'package:flashcards/ui/widgets/flashcard_details_bottom_dialog.dart';
 import 'package:flashcards/ui/widgets/flashcards_grid.dart';
@@ -158,7 +159,15 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
       builder: (context) {
         return Padding(
           padding: const EdgeInsets.all(8.0),
-          child: LessonGeneratorForm(),
+          child: LessonGeneratorForm(
+            onGenerate: (flashcards) async {
+              if (ModalRoute.of(context)!.isCurrent) {
+                Navigator.of(context).pop();
+                await Navigator.of(context).pushNamed(RoutesPaths.lesson, arguments: LessonPageArguments(flashcards));
+                _flashcardsGridKey.currentState?.fetchFlashcards();
+              }
+            },
+          ),
         );
       }
     );

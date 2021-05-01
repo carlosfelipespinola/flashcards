@@ -1,6 +1,7 @@
 
 import 'package:flashcards/data/category.mapper.dart';
 import 'package:flashcards/data/category.schema.dart';
+import 'package:flashcards/data/flashcard.schema.dart';
 import 'package:flashcards/domain/interfaces/category.repository.dart';
 import 'package:flashcards/domain/models/category.dart';
 import 'package:flashcards/domain/models/failure.dart';
@@ -35,11 +36,23 @@ class CategoryRepository implements ICategoryRepository {
   }
 
   @override
-  Future<List<Category>> findAll() async {
+  Future<List<Category>> findAll({bool countFlashcards = false}) async {
     try {
-      final categoriesMap = await (await dbe).query(CategorySchema.tableName);
-      return categoriesMap.map((map) => CategoryMapper.fromMap(map)).toList();
+      if (!countFlashcards) {
+        final categoriesMap = await (await dbe).query(CategorySchema.tableName);
+        return categoriesMap.map((map) => CategoryMapper.fromMap(map)).toList();
+      } else {
+        final categoriesMap = await (await dbe).rawQuery(
+          'SELECT *, IFNULL(COUNT(${FlashcardSchema.id}), 0) as ${CategorySchema.flashcardsCount} '
+          'FROM ${CategorySchema.tableName} '
+          'LEFT JOIN ${FlashcardSchema.tableName} on ${CategorySchema.id} = ${FlashcardSchema.category} '
+          'GROUP BY ${CategorySchema.id}'
+          
+        );
+        return categoriesMap.map((map) => CategoryMapper.fromMap(map)).toList();
+      }
     } catch (_) {
+      print(_);
       throw Failure();
     }
   }

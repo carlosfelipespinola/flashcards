@@ -60,12 +60,11 @@ class FlashcardRepository implements IFlashcardRepository {
     ;
     if (category != null) {
       query += ' AND ${CategorySchema.id} = ${category.id}';
+    } else {
+      query += ' AND ${CategorySchema.id} IS NULL';
     }
     if (sortBy != null && sortBy.length > 0) {
       query += ' ORDER BY ${sortBy.map((sort) => FlashcardMapper.mapSortToSql(sort)).join(", ")}';
-    }
-    if (randomize) {
-      query += ' , RANDOM()';
     }
     if (limit != null) {
       query += ' LIMIT $limit';

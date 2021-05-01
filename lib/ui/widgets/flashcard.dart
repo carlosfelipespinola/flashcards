@@ -10,12 +10,14 @@ class FlashcardTile extends StatelessWidget {
   final double size;
   final Flashcard flashcard;
   final void Function()? onLongPress;
+  final void Function(bool)? onTurned;
 
   const FlashcardTile({
     Key? key,
     required this.maxSize,
     required this.size,
     required this.flashcard,
+    this.onTurned,
     this.onLongPress
   }) : super(key: key);
 
@@ -25,6 +27,7 @@ class FlashcardTile extends StatelessWidget {
       maxSize: maxSize,
       size: size,
       longPress: onLongPress,
+      onTurned: onTurned,
       builder: (context, isShowingFront) {
         if ( isShowingFront ) {
           return Center(
