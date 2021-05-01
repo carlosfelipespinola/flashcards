@@ -5,6 +5,7 @@ import 'package:flashcards/ui/pages/flashcard-editor/flashcard_editor.page.argum
 import 'package:flashcards/ui/widgets/confirm_bottom_dialog.dart';
 import 'package:flashcards/ui/widgets/flashcard_details_bottom_dialog.dart';
 import 'package:flashcards/ui/widgets/flashcards_grid.dart';
+import 'package:flashcards/ui/widgets/lesson_generator_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get_it/get_it.dart';
@@ -66,7 +67,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
           SpeedDialChild(
             elevation: 2,
             child: Icon(Icons.play_arrow),
-            onTap: () async {},
+            onTap: showLessonGeneratorForm,
             backgroundColor: Theme.of(context).primaryColor,
             foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
             labelWidget: Container(
@@ -149,6 +150,18 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
       await deleteFlashcard(flashcard);
       _flashcardsGridKey.currentState?.fetchFlashcards();
     }
+  }
+
+  void showLessonGeneratorForm() async {
+    await showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: LessonGeneratorForm(),
+        );
+      }
+    );
   }
 
   Future<void> deleteFlashcard(Flashcard flashcard) async {
