@@ -12,10 +12,6 @@ class GenerateLessonUseCase {
   });
 
   Future<List<Flashcard>> call(LessonSettings settings) async {
-    // TODO IDEIA
-    // 10% flashcards priorizando mais antigos com alto aprendizado;
-    // 30% flashcards priorizando primeiramente mais antigos depois baixo aprendizado;
-    // 60% flashcards priorizando primeiramente baixo aprendizado depois idade
     return await this.flashcardRepository.query(
       category: settings.category,
       sortBy: [
