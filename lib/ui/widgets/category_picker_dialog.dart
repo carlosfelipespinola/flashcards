@@ -15,7 +15,7 @@ class CategoryPickerDialog extends StatefulWidget {
 class _CategoryPickerDialogState extends State<CategoryPickerDialog> {
   late FindCategoriesUseCase findCategoriesUseCase;
   late Future<List<Category>> findCategoriesFuture;
-  bool isShowingList = true;
+  bool isShowingListOfCategories = true;
 
   @override
   void initState() {
@@ -23,6 +23,7 @@ class _CategoryPickerDialogState extends State<CategoryPickerDialog> {
     findCategoriesFuture = findCategoriesUseCase();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,26 +40,23 @@ class _CategoryPickerDialogState extends State<CategoryPickerDialog> {
           if (!snapshot.hasData) {
             return Container();
           }
-          if (snapshot.requireData.length == 0) {
-            return Center(child: Text('Você ainda não tem nenhuma categoria cadastrada'),);
+          if (isShowingListOfCategories && snapshot.requireData.length == 0) {
+            return Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(child: Text('Você ainda não tem nenhuma categoria cadastrada'),),
+                SizedBox(height: 12,),
+                createCategoryButton
+              ],
+            );
           }
-          if (isShowingList) {
+          if (isShowingListOfCategories) {
             return ListView.builder(
               itemCount: snapshot.requireData.length + 1,
               itemBuilder: (context, index) {
                 if (index == snapshot.requireData.length) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        setState(() {
-                          isShowingList = false;
-                        });
-                      },
-                      icon: Icon(Icons.add), 
-                      label: Text('Criar Nova categoria'.toUpperCase())
-                    ),
-                  );
+                  return createCategoryButton;
                 }
                 final category = snapshot.requireData.elementAt(index);
                 return ListTile(
@@ -85,8 +83,22 @@ class _CategoryPickerDialogState extends State<CategoryPickerDialog> {
               )
             ),
           );
-          
         }
+      ),
+    );
+  }
+
+  Widget get createCategoryButton {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
+      child: ElevatedButton.icon(
+        onPressed: () {
+          setState(() {
+            isShowingListOfCategories = false;
+          });
+        },
+        icon: Icon(Icons.add), 
+        label: Text('Criar Nova categoria'.toUpperCase())
       ),
     );
   }

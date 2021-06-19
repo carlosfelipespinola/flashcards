@@ -19,8 +19,8 @@ class _CategoryPickerState extends State<CategoryPicker> {
     return Card(
       margin: EdgeInsets.all(0),
       child: ListTile(
-        title: Text('Category', style: Theme.of(context).textTheme.caption,),
-        subtitle: Text(widget.selectedCategory?.name ?? 'No category selected', style: Theme.of(context).textTheme.subtitle1),
+        title: Text('Categoria', style: Theme.of(context).textTheme.caption,),
+        subtitle: Text(widget.selectedCategory?.name ?? '-', style: Theme.of(context).textTheme.subtitle1),
         trailing: Icon(Icons.arrow_drop_down),
         onTap: () {
           showCategoryPicker(context, widget.selectedCategory);
