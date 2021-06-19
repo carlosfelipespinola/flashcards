@@ -11,10 +11,6 @@ void main() {
 
 class MyApp extends StatelessWidget {
   // TODO
-  // Não permitir selecionar um número maior que o possível em generate lesson
-  // Redirecionar para Lesson após generate Lesson
-  // Lesson
-  // Lesson Result
   // Permitir remover categoria de um flashcard
   @override
   Widget build(BuildContext context) {

@@ -2,9 +2,11 @@
 class Category {
   int? id;
   String name;
+  final int? flashcardsCount;
   Category({
     this.id,
     required this.name,
+    this.flashcardsCount
   });
 
   Category copyWith({
@@ -14,6 +16,7 @@ class Category {
     return Category(
       id: id ?? this.id,
       name: name ?? this.name,
+      flashcardsCount: this.flashcardsCount
     );
   }
 

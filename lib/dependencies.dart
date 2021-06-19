@@ -2,9 +2,11 @@ import 'package:flashcards/data/category.repository.dart';
 import 'package:flashcards/data/flashcard.repository.dart';
 import 'package:flashcards/domain/interfaces/category.repository.dart';
 import 'package:flashcards/domain/interfaces/flashcard.repository.dart';
+import 'package:flashcards/domain/usecases/answer_flashcard.dart';
 import 'package:flashcards/domain/usecases/delete_category.usecase.dart';
 import 'package:flashcards/domain/usecases/delete_flashcard.usecase.dart';
 import 'package:flashcards/domain/usecases/find_categories.usecase.dart';
+import 'package:flashcards/domain/usecases/find_categories_couting_flashcards.usecase.dart';
 import 'package:flashcards/domain/usecases/find_flashcards.usecase.dart';
 import 'package:flashcards/domain/usecases/generate_lesson.usecase.dart';
 import 'package:flashcards/domain/usecases/save_category.usecase.dart';
@@ -20,23 +22,28 @@ void setupDependencies() {
 }
 
 void _setupCategoryUseCasesAndRepositories() {
-  GetIt.I.registerLazySingleton<FindCategoriesUseCase>(() => FindCategoriesUseCase(categoryRepository: GetIt.I()));
-  GetIt.I.registerLazySingleton<SaveCategoryUseCase>(() => SaveCategoryUseCase(categoryRepository: GetIt.I()));
-  GetIt.I.registerLazySingleton<DeleteCategoryUseCase>(() => DeleteCategoryUseCase(categoryRepository: GetIt.I()));
+  GetIt.I.registerLazySingleton(() => FindCategoriesCountingFlashcardsUseCase(
+    categoryRepository: GetIt.I(),
+    flashcardRepository: GetIt.I())
+  );
+  GetIt.I.registerLazySingleton(() => FindCategoriesUseCase(categoryRepository: GetIt.I()));
+  GetIt.I.registerLazySingleton(() => SaveCategoryUseCase(categoryRepository: GetIt.I()));
+  GetIt.I.registerLazySingleton(() => DeleteCategoryUseCase(categoryRepository: GetIt.I()));
   GetIt.I.registerLazySingleton<ICategoryRepository>(() => CategoryRepository(databaseProvider: GetIt.I()));
 }
 
 void _setupFlashcardUseCasesAndRepositories() {
-  GetIt.I.registerLazySingleton<FindFlashcardsUseCase>(() => FindFlashcardsUseCase(flashcardRepository: GetIt.I()));
-  GetIt.I.registerLazySingleton<SaveFlashcardUseCase>(() => SaveFlashcardUseCase(flashcardRepository: GetIt.I()));
-  GetIt.I.registerLazySingleton<DeleteFlashcardUseCase>(() => DeleteFlashcardUseCase(flashcardRepository: GetIt.I()));
+  GetIt.I.registerLazySingleton(() => AnswerFlashcard(flashcardRepository: GetIt.I()));
+  GetIt.I.registerLazySingleton(() => FindFlashcardsUseCase(flashcardRepository: GetIt.I()));
+  GetIt.I.registerLazySingleton(() => SaveFlashcardUseCase(flashcardRepository: GetIt.I()));
+  GetIt.I.registerLazySingleton(() => DeleteFlashcardUseCase(flashcardRepository: GetIt.I()));
   GetIt.I.registerLazySingleton<IFlashcardRepository>(() => FlashcardRepository(databaseProvider: GetIt.I()));
 }
 
 void _setUpLessonUseCases() {
-  GetIt.I.registerLazySingleton<GenerateLessonUseCase>(() => GenerateLessonUseCase(flashcardRepository: GetIt.I()));
+  GetIt.I.registerLazySingleton(() => GenerateLessonUseCase(flashcardRepository: GetIt.I()));
 }
 
 void _setupServices() {
-  GetIt.I.registerSingleton<DatabaseProvider>(DatabaseProvider(test: false));
+  GetIt.I.registerSingleton(DatabaseProvider(test: false));
 }

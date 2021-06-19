@@ -6,7 +6,8 @@ class CategoryMapper {
   static Category fromMap(Map<String, dynamic> map) {
     return Category(
       name: map[CategorySchema.name],
-      id: map[CategorySchema.id] as int
+      id: map[CategorySchema.id] as int,
+      flashcardsCount: map[CategorySchema.flashcardsCount]
     );
   }
 

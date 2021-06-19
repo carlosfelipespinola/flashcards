@@ -35,11 +35,11 @@ class Flashcard {
   }
 
   void increaseStrength() {
-    _strength = _strength >= 5 ? 5 : _strength++;
+    _strength = _strength >= 5 ? 5 : _strength + 1;
   }
 
   void decreaseStrength() {
-    _strength = _strength <= 1 ? 1 : _strength--;
+    _strength = _strength <= 1 ? 1 : _strength - 1;
   }
 
   void markAsSeenNow() {
