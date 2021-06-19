@@ -7,7 +7,7 @@ import 'package:flashcards/domain/models/failure.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
 import 'package:flashcards/domain/models/category.dart';
 import 'package:flashcards/domain/models/sort.dart';
-import 'package:flashcards/services/database.dart';
+import 'package:flashcards/data/database.dart';
 import 'package:sqflite/sqflite.dart';
 
 class FlashcardRepository implements IFlashcardRepository {
@@ -52,7 +52,7 @@ class FlashcardRepository implements IFlashcardRepository {
   }
 
   @override
-  Future<List<Flashcard>> query({Category? category, List<Sort<FlashcardSortableFields>>? sortBy, int? limit, bool randomize = false}) async {
+  Future<List<Flashcard>> query({Category? category, List<Sort<FlashcardSortableFields>>? sortBy, int? limit}) async {
     var query = 'SELECT * FROM ${FlashcardSchema.tableName}'
       ' LEFT JOIN ${CategorySchema.tableName}'
       ' ON ${FlashcardSchema.category} = ${CategorySchema.id}'

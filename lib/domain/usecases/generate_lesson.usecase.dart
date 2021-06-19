@@ -18,8 +18,7 @@ class GenerateLessonUseCase {
         Sort(field: FlashcardSortableFields.strength, type: SortType.asc),
         Sort(field: FlashcardSortableFields.lastSeentAt, type: SortType.asc)
       ],
-      limit: settings.flashcardsCount,
-      randomize: true,
+      limit: settings.flashcardsCount
     );
   }
 

@@ -12,7 +12,6 @@ abstract class IFlashcardRepository {
   Future<List<Flashcard>> query({
     Category? category,
     List<Sort<FlashcardSortableFields>>? sortBy,
-    int? limit,
-    bool randomize = false
+    int? limit
   });
 }

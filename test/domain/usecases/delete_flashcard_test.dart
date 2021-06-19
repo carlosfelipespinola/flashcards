@@ -5,7 +5,7 @@ import 'package:flashcards/data/flashcard.schema.dart';
 import 'package:flashcards/domain/models/category.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
 import 'package:flashcards/domain/usecases/delete_flashcard.usecase.dart';
-import 'package:flashcards/services/database.dart';
+import 'package:flashcards/data/database.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() async {
