@@ -17,6 +17,7 @@ class LessonPage extends StatefulWidget {
 class _LessonPageState extends State<LessonPage> {
   final AnswerFlashcard answerFlashcard = GetIt.I();
   late final List<Flashcard> flashcards;
+  GlobalKey<FlashcardTileState> flashCardTileKey = GlobalKey();
   int currentFlashcard = 0;
   int correctlyAnsweredCount = 0;
   bool hasSeenCurrentCard = false;
@@ -46,6 +47,7 @@ class _LessonPageState extends State<LessonPage> {
   }
 
   void nextCard() {
+    flashCardTileKey.currentState?.restore();
     setState(() {
       hasSeenCurrentCard = false;
       currentFlashcard++;
@@ -110,6 +112,7 @@ class _LessonPageState extends State<LessonPage> {
           }
           return Center(
             child: FlashcardTile(
+              key: flashCardTileKey,
               onTurned: (showingFront) {
                 setState(() {
                   hasSeenCurrentCard = true;

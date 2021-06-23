@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flashcards/ui/widgets/turnable_card.dart';
 
-class FlashcardTile extends StatelessWidget {
+class FlashcardTile extends StatefulWidget {
 
   final double maxSize;
   final double size;
@@ -22,17 +22,26 @@ class FlashcardTile extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  FlashcardTileState createState() => FlashcardTileState();
+}
+
+class FlashcardTileState extends State<FlashcardTile> {
+
+  final GlobalKey<TurnableCardState> _turnableCardKey = GlobalKey();
+  
+  @override
   Widget build(BuildContext context) {
     return TurnableCard(
-      maxSize: maxSize,
-      size: size,
-      longPress: onLongPress,
-      onTurned: onTurned,
+      key: _turnableCardKey,
+      maxSize: widget.maxSize,
+      size: widget.size,
+      longPress: widget.onLongPress,
+      onTurned: widget.onTurned,
       builder: (context, isShowingFront) {
         if ( isShowingFront ) {
           return Center(
               child: AutoSizeText(
-                flashcard.term,
+                widget.flashcard.term,
                 style: TextStyle(fontSize: 18.0),
                 textAlign: TextAlign.center,
               )
@@ -40,7 +49,7 @@ class FlashcardTile extends StatelessWidget {
         } else {
           return Center(
               child: AutoSizeText(
-                flashcard.definition,
+                widget.flashcard.definition,
                 style: TextStyle(fontSize: 18.0),
                 textAlign: TextAlign.center,
               )
@@ -49,4 +58,6 @@ class FlashcardTile extends StatelessWidget {
       },
     );
   }
+
+  void restore() => _turnableCardKey.currentState?.restore();
 }
