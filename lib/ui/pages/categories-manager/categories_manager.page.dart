@@ -1,5 +1,6 @@
 
 import 'package:flashcards/domain/usecases/delete_category.usecase.dart';
+import 'package:flashcards/ui/widgets/bottom_sheet_dialog.dart';
 import 'package:flashcards/ui/widgets/category_list.dart';
 import 'package:flashcards/ui/widgets/confirm_bottom_dialog.dart';
 import 'package:flutter/material.dart';
@@ -131,7 +132,7 @@ class _CategoriesManagerPageState extends State<CategoriesManagerPage> {
       isScrollControlled: true,
       context: context,
       builder: (context) {
-        return Padding(
+        return BottomSheetDialog(
           padding: const EdgeInsets.all(16.0),
           child: CategoryForm(
             category: category,
