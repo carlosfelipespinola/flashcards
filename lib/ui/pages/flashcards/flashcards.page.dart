@@ -71,7 +71,10 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
           SpeedDialChild(
             elevation: 2,
             child: Icon(Icons.label),
-            onTap: () => Navigator.of(context).pushNamed(RoutesPaths.categoryManager),
+            onTap: () async {
+              await Navigator.of(context).pushNamed(RoutesPaths.categoryManager);
+              _flashcardsGridKey.currentState?.fetchFlashcards();
+            },
             backgroundColor: Theme.of(context).primaryColor,
             foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
             labelWidget: Container(
