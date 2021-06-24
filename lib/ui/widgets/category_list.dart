@@ -17,25 +17,25 @@ class CategoryList extends StatefulWidget {
 }
 
 class CategoryListState extends State<CategoryList> {
-  final FindCategoriesUseCase findCategoriesUseCase = GetIt.I();
-  late Future<List<Category>> categories;
+  final FindCategoriesUseCase _findCategoriesUseCase = GetIt.I();
+  late Future<List<Category>> _categories;
 
   @override
   void initState() {
-    categories = findCategoriesUseCase();
+    _categories = _findCategoriesUseCase();
     super.initState();
   }
 
   void fetchCategories() {
     setState(() {
-      categories = findCategoriesUseCase();
+      _categories = _findCategoriesUseCase();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Category>>(
-      future: categories,
+      future: _categories,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(

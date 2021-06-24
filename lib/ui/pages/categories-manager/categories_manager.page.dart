@@ -98,7 +98,7 @@ class _CategoriesManagerPageState extends State<CategoriesManagerPage> {
     ) ?? false;
     if (shouldDelete) {
       await deleteCategory(category);
-      _categoryListKey.currentState?.findCategoriesUseCase();
+      _categoryListKey.currentState?.fetchCategories();
     }
   }
 
