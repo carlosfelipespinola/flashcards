@@ -10,7 +10,7 @@ ThemeData generateLightTheme() {
       brightness: Brightness.light,
       centerTitle: true,
       iconTheme: IconThemeData(color: Colors.black),
-      color: backgroundColor,
+      color: Colors.white,
       elevation: 1,
       textTheme: TextTheme(
         headline6: TextStyle(
