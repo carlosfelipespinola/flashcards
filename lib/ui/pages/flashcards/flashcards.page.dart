@@ -8,6 +8,7 @@ import 'package:flashcards/ui/widgets/flashcard_details_bottom_dialog.dart';
 import 'package:flashcards/ui/widgets/flashcards_grid.dart';
 import 'package:flashcards/ui/widgets/lesson_generator_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get_it/get_it.dart';
 
@@ -27,15 +28,6 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        title: Text(
-          'Meus Flashcards'.toUpperCase(),
-          style: Theme.of(context).appBarTheme.textTheme!.headline6,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-        ),
-      ),
       body: SafeArea(
         child: FlashcardGrid(
           key: _flashcardsGridKey,
