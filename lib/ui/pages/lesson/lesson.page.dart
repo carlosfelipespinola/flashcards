@@ -5,6 +5,7 @@ import 'package:flashcards/ui/pages/lesson/lesson.page.arguments.dart';
 import 'package:flashcards/ui/widgets/flashcard.dart';
 import 'package:flashcards/ui/widgets/progress_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
 class LessonPage extends StatefulWidget {
@@ -31,8 +32,15 @@ class _LessonPageState extends State<LessonPage> {
 
   @override
   void initState() {
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     flashcards = widget.arguments.flashcards;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    super.dispose();
   }
 
   @override
