@@ -79,7 +79,9 @@ class _CategoryPickerDialogState extends State<CategoryPickerDialog> {
                           trailing: widget.selectedCategory?.id == category.id ? Icon(Icons.check) : null,
                           onTap: () {
                             final isThisCategorySelected = widget.selectedCategory?.id == category.id;
-                            if (!isThisCategorySelected) {
+                            if (isThisCategorySelected) {
+                              Navigator.of(context).pop(null);
+                            } else {
                               Navigator.of(context).pop(category);
                             }
                           },

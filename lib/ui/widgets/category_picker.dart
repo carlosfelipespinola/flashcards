@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class CategoryPicker extends StatefulWidget {
   final Category? selectedCategory;
-  final void Function(Category) onChange;
+  final void Function(Category?) onChange;
 
   const CategoryPicker({Key? key, this.selectedCategory, required this.onChange}) : super(key: key);
 
@@ -39,8 +39,6 @@ class _CategoryPickerState extends State<CategoryPicker> {
         return CategoryPickerDialog(selectedCategory: selectedCategory,);
       }
     );
-    if (category != null) {
-      widget.onChange(category);
-    }
+    widget.onChange(category);
   }
 }

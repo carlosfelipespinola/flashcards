@@ -104,13 +104,11 @@ class _FlashcardFormState extends State<FlashcardForm> {
   void save() async {
     try {
       setState(() { state = FlashcardFormSaveState.pending; });
-      _flashcard = await saveFlashcardUseCase.call(
-        _flashcard.copyWith(
-          category: _selectedCategory,
-          definition: _definitionController.text,
-          term: _termController.text
-        )
-      );
+      final flashcard = _flashcard.copyWith();
+      flashcard.term = _termController.text;
+      flashcard.definition = _definitionController.text;
+      flashcard.category = _selectedCategory;
+      _flashcard = await saveFlashcardUseCase.call(flashcard);
       setState(() { state = FlashcardFormSaveState.saved; });
       if (widget.onFlashcardSaved != null) {
         widget.onFlashcardSaved!();
