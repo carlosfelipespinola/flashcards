@@ -15,7 +15,7 @@ class ProgressAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: LinearProgressIndicator(
           value: progress, 
           backgroundColor: Colors.grey, 
-          valueColor: AlwaysStoppedAnimation(Colors.black), 
+          valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor), 
         )
       )
     );

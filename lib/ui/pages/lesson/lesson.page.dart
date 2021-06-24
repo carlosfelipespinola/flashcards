@@ -91,8 +91,8 @@ class _LessonPageState extends State<LessonPage> {
               child: CircularProgressIndicator(
                 value: result / 100.0,
                 strokeWidth: 10,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                backgroundColor: Colors.red,
+                valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+                backgroundColor: Theme.of(context).errorColor,
               )
             ),
           ),
@@ -101,7 +101,8 @@ class _LessonPageState extends State<LessonPage> {
             child: Text(
               '$result%',
               style: Theme.of(context).textTheme.headline4!.copyWith(
-                fontWeight: FontWeight.bold
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).primaryColor
               ),
             ),
           )
@@ -133,7 +134,6 @@ class _LessonPageState extends State<LessonPage> {
             minHeight: 50
           ),
           child: ElevatedButton(
-            style: ElevatedButton.styleFrom(primary: Theme.of(context).accentColor),
             onPressed: hasSeenCurrentCard ? answerCorrectly : null,
             child: Icon(Icons.check),
           ),

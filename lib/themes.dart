@@ -2,13 +2,15 @@
 import 'package:flutter/material.dart';
 
 ThemeData generateLightTheme() {
+  final primaryColor = Colors.indigo[400];
+  final backgroundColor = Colors.indigo[50];
   return ThemeData(
-    scaffoldBackgroundColor: Colors.blueGrey[50],
+    scaffoldBackgroundColor: backgroundColor,
     appBarTheme: AppBarTheme(
       brightness: Brightness.light,
       centerTitle: true,
       iconTheme: IconThemeData(color: Colors.black),
-      color: Colors.blueGrey[50],
+      color: backgroundColor,
       elevation: 1,
       textTheme: TextTheme(
         headline6: TextStyle(
@@ -34,6 +36,10 @@ ThemeData generateLightTheme() {
         borderRadius: BorderRadius.only(topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0))
       ),
     ),
-    primarySwatch: Colors.blueGrey
+    elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(primary: primaryColor)),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: primaryColor),
+    buttonColor: primaryColor,
+    primarySwatch: Colors.indigo,
+    primaryColor: primaryColor
   );
 }
