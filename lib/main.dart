@@ -10,8 +10,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // TODO
-  // Permitir remover categoria de um flashcard
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
