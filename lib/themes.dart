@@ -1,9 +1,13 @@
 
 import 'package:flutter/material.dart';
 
-ThemeData generateLightTheme() {
-  final primaryColor = Colors.indigo[400];
-  final backgroundColor = Colors.indigo[50];
+ThemeData get indigoTheme => generateLightTheme(Colors.indigo);
+
+ThemeData get greenTheme => generateLightTheme(Colors.green);
+
+ThemeData generateLightTheme(MaterialColor color) {
+  final primaryColor = color[400];
+  final backgroundColor = color[50];
   return ThemeData(
     scaffoldBackgroundColor: backgroundColor,
     appBarTheme: AppBarTheme(
@@ -39,7 +43,7 @@ ThemeData generateLightTheme() {
     elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(primary: primaryColor)),
     floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: primaryColor),
     buttonColor: primaryColor,
-    primarySwatch: Colors.indigo,
+    primarySwatch: color,
     primaryColor: primaryColor
   );
 }

@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: generateLightTheme(),
+      theme: indigoTheme,
       onGenerateRoute: (settings) => generateRoutes(settings),
       initialRoute: RoutesPaths.flashcards
     );

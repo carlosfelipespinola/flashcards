@@ -1,6 +1,7 @@
 
 import 'package:flashcards/domain/models/fashcard.dart';
 import 'package:flashcards/domain/usecases/answer_flashcard.dart';
+import 'package:flashcards/themes.dart';
 import 'package:flashcards/ui/pages/lesson/lesson.page.arguments.dart';
 import 'package:flashcards/ui/widgets/flashcard.dart';
 import 'package:flashcards/ui/widgets/progress_app_bar.dart';
@@ -77,68 +78,81 @@ class _LessonPageState extends State<LessonPage> {
   }
 
   Widget buildResultBody() {
-    return Center(
-      child: Stack(
-        children: [
-          Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minWidth: 170,
-                minHeight: 170,
-                maxHeight: 170,
-                maxWidth: 170
-              ),
-              child: CircularProgressIndicator(
-                value: result / 100.0,
-                strokeWidth: 10,
-                valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
-                backgroundColor: Theme.of(context).errorColor,
-              )
+    return Theme(
+      data: greenTheme,
+      child: Builder(
+        builder: (context) {
+          return Center(
+            child: Stack(
+              children: [
+                Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minWidth: 170,
+                      minHeight: 170,
+                      maxHeight: 170,
+                      maxWidth: 170
+                    ),
+                    child: CircularProgressIndicator(
+                      value: result / 100.0,
+                      strokeWidth: 10,
+                      valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+                      backgroundColor: Theme.of(context).errorColor,
+                    )
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    '$result%',
+                    style: Theme.of(context).textTheme.headline4!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
+              ],
             ),
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: Text(
-              '$result%',
-              style: Theme.of(context).textTheme.headline4!.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor
-              ),
-            ),
-          )
-        ],
+          );
+        }
       ),
     );
   }
 
   Widget buildAnswerOptions () {
-    return ButtonBar(
-      alignment: MainAxisAlignment.center,
-      buttonMinWidth: 100,
-      buttonHeight: 50,
-      children: [
-        ConstrainedBox(
-          constraints: BoxConstraints(
-            minWidth: 100,
-            minHeight: 50
-          ),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(primary: Theme.of(context).errorColor),
-            onPressed: hasSeenCurrentCard ? answerWrongly : null,
-            child: Icon(Icons.close),
-          ),
-        ),
-        ConstrainedBox(
-          constraints: BoxConstraints(
-            minWidth: 100,
-            minHeight: 50
-          ),
-          child: ElevatedButton(
-            onPressed: hasSeenCurrentCard ? answerCorrectly : null,
-            child: Icon(Icons.check),
-          ),
-        ),
-      ],
+    return Theme(
+      data: greenTheme,
+      child: Builder(
+        builder: (context) {
+          return ButtonBar(
+            alignment: MainAxisAlignment.center,
+            buttonMinWidth: 100,
+            buttonHeight: 50,
+            children: [
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: 100,
+                  minHeight: 50
+                ),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(primary: Theme.of(context).errorColor),
+                  onPressed: hasSeenCurrentCard ? answerWrongly : null,
+                  child: Icon(Icons.close),
+                ),
+              ),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: 100,
+                  minHeight: 50
+                ),
+                child: ElevatedButton(
+                  onPressed: hasSeenCurrentCard ? answerCorrectly : null,
+                  child: Icon(Icons.check),
+                ),
+              ),
+            ],
+          );
+        }
+      ),
     );
   }
 
