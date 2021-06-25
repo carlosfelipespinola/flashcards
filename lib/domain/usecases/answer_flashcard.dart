@@ -19,7 +19,6 @@ class AnswerFlashcard {
     } else {
       flashcard.decreaseStrength();
     }
-    print('answering ${flashcard.term} as $answeredCorrectly and current strength ${flashcard.strength}');
     flashcard.markAsSeenNow();
     return await flashcardRepository.save(flashcard);
   }

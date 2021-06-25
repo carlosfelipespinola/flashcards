@@ -61,7 +61,6 @@ void main() async {
           final flashcardCreated = await saveFlashcard(flashcard);
           expect(flashcardCreated.id == null, false);
         } catch (error) {
-          print(error);
           expect(true, false);
         }
       }

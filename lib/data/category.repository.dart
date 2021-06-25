@@ -52,7 +52,6 @@ class CategoryRepository implements ICategoryRepository {
         return categoriesMap.map((map) => CategoryMapper.fromMap(map)).toList();
       }
     } catch (_) {
-      print(_);
       throw Failure();
     }
   }
