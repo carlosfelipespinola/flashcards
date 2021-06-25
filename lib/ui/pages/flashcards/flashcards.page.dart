@@ -22,8 +22,12 @@ class FlashcardsPage extends StatefulWidget {
 class _FlashcardsPageState extends State<FlashcardsPage> {
 
   GlobalKey<FlashcardGridState> _flashcardsGridKey = GlobalKey();
+
   final DeleteFlashcardUseCase deleteFlashcardUseCase = GetIt.I();
+
   Set<Flashcard> flashcardsBeingDeleted = {};
+
+  bool shouldHideFloatingActionButton = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +36,11 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
         child: FlashcardGrid(
           key: _flashcardsGridKey,
           onFlashcardLongPress: (flashcard) => showFlashcardBottomDialog(flashcard),
+          onScrollBottomEnter: () => setState(() { shouldHideFloatingActionButton = true; }),
+          onScrollBottomExit: () => setState(() { shouldHideFloatingActionButton = false; }),
         )
       ),
-      floatingActionButton: SpeedDial(
+      floatingActionButton: shouldHideFloatingActionButton ? Container() : SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,
         animatedIconTheme: IconThemeData(size: 22.0),
         visible: true,
