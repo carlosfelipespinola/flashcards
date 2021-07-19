@@ -39,7 +39,7 @@ class Flashcard {
   }
 
   void decreaseStrength() {
-    _strength = _strength <= 1 ? 1 : _strength - 1;
+    _strength = 1;
   }
 
   void markAsSeenNow() {
