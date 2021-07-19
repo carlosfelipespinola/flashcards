@@ -43,11 +43,10 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
           onScrollBottomExit: () => setState(() { shouldHideFloatingActionButton = false; }),
         )
       ),
-      floatingActionButton: shouldHideFloatingActionButton ? Container() : SpeedDial(
+      floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,
         animatedIconTheme: IconThemeData(size: 22.0),
-        visible: true,
-        curve: Curves.bounceIn,
+        visible: !shouldHideFloatingActionButton,
         backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
         overlayColor: Colors.black,
