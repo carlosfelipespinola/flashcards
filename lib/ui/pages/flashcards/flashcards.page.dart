@@ -90,13 +90,13 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
           ),
           SpeedDialChild(
             elevation: 2,
-            child: Icon(Icons.info_outline),
+            child: Icon(Icons.lock_open),
             onTap: () async => showLicensePage(context: context),
             backgroundColor: Theme.of(context).primaryColor,
             foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
-              child: Text('About the app'.toUpperCase(), style: speedDialChildTextStyle),
+              child: Text('Licenças de código aberto'.toUpperCase(), style: speedDialChildTextStyle),
             )
           ),
         ],
