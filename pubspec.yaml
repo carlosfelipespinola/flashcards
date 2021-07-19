@@ -39,6 +39,7 @@ dev_dependencies:
     sdk: flutter
   sqflite_common_ffi:
   flutter_launcher_icons: ^0.9.0
+  flutter_native_splash: ^1.1.8+4
 
 flutter_icons:
   android: "launcher_icon"
