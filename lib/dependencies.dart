@@ -12,13 +12,15 @@ import 'package:flashcards/domain/usecases/generate_lesson.usecase.dart';
 import 'package:flashcards/domain/usecases/save_category.usecase.dart';
 import 'package:flashcards/domain/usecases/save_flashcard.usecase.dart';
 import 'package:flashcards/data/database.dart';
+import 'package:flashcards/services/app_info/app_info.dart';
+import 'package:flashcards/services/app_info/app_info_impl.dart';
 import 'package:get_it/get_it.dart';
 
-void setupDependencies() {
+Future<void> setupDependencies() async {
   _setupCategoryUseCasesAndRepositories();
   _setupFlashcardUseCasesAndRepositories();
   _setUpLessonUseCases();
-  _setupServices();
+  await _setupServices();
 }
 
 void _setupCategoryUseCasesAndRepositories() {
@@ -44,6 +46,9 @@ void _setUpLessonUseCases() {
   GetIt.I.registerLazySingleton(() => GenerateLessonUseCase(flashcardRepository: GetIt.I()));
 }
 
-void _setupServices() {
+Future<void> _setupServices() async {
+  final appInfo = AppInfoImpl();
+  await appInfo.loadInfos();
+  GetIt.I.registerLazySingleton<AppInfo>(() => appInfo);
   GetIt.I.registerSingleton(DatabaseProvider(test: false));
 }

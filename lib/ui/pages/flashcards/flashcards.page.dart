@@ -1,6 +1,7 @@
 import 'package:flashcards/domain/models/fashcard.dart';
 import 'package:flashcards/domain/usecases/delete_flashcard.usecase.dart';
 import 'package:flashcards/router.dart';
+import 'package:flashcards/services/app_info/app_info.dart';
 import 'package:flashcards/ui/pages/flashcard-editor/flashcard_editor.page.arguments.dart';
 import 'package:flashcards/ui/pages/lesson/lesson.page.arguments.dart';
 import 'package:flashcards/ui/widgets/confirm_bottom_dialog.dart';
@@ -28,6 +29,8 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
   Set<Flashcard> flashcardsBeingDeleted = {};
 
   bool shouldHideFloatingActionButton = false;
+
+  AppInfo _appInfo = GetIt.I<AppInfo>();
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +94,11 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
           SpeedDialChild(
             elevation: 2,
             child: Icon(Icons.lock_open),
-            onTap: () async => showLicensePage(context: context),
+            onTap: () async => showLicensePage(
+              context: context,
+              applicationIcon: _appInfo.appIconPath != null ? CircleAvatar(child: Image.asset(_appInfo.appIconPath!)) : null,
+              applicationVersion: _appInfo.appVersion
+            ),
             backgroundColor: Theme.of(context).primaryColor,
             foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
             labelWidget: Container(
