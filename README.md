@@ -1,5 +1,6 @@
 # Arquitetura  
 
-/ domain - contém as regras de negócio, não dependem de nenhuma biblioteca externa  
-/ data - contém as classes responsáveis pelo acesso aos dados  
-/ ui - contém tudo relacionado a interface de usuário  
+/ domain - defines the business logic of the application.  
+/ data - contains everything related to data access.  
+/ ui - contains everything related to user interface.  
+/ services - contains services that communicates directly with the platform.  
