@@ -89,6 +89,14 @@ class _FlashcardFormState extends State<FlashcardForm> {
               selectedCategory: _selectedCategory,
               onChange: onCategoryChanged
             ),
+            if ( state == FlashcardFormSaveState.error ) ... [
+              SizedBox(height: 12,),
+              Text(
+                'Ocorreu um erro ao salvar flashcard',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Theme.of(context).errorColor)
+              ),
+            ],
             SizedBox(height: 12,),
             ElevatedButton.icon(
               onPressed: canSave ? save : null,
