@@ -1,3 +1,4 @@
+import 'package:flashcards/ui/widgets/flashcard_strength_indicator.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flashcards/domain/models/fashcard.dart';
@@ -24,11 +25,11 @@ class FlashcardDetailsBottomDialog extends StatelessWidget {
           physics: NeverScrollableScrollPhysics(),
           children: [
             ListTile(
-              leading: Text('Strength'),
-              trailing: Text(flashcard.strength.toString()),
+              title: Text('Domínio'),
+              trailing: FlashcardStrengthIndicator(value: flashcard.strength,),
             ),
             ListTile(
-              leading: Text('Category'),
+              leading: Text('Categoria'),
               trailing: Text(flashcard.category?.name ?? '-'),
             )
           ],
@@ -39,12 +40,12 @@ class FlashcardDetailsBottomDialog extends StatelessWidget {
             TextButton.icon(
               onPressed: onDelete, 
               icon: Icon(Icons.delete, color: Theme.of(context).errorColor,),
-              label: Text('Delete', style: TextStyle(color: Theme.of(context).errorColor),),
+              label: Text('Deletar', style: TextStyle(color: Theme.of(context).errorColor),),
             ),
             SizedBox(width: 12,),
             ElevatedButton.icon(
               onPressed: onEdit, 
-              icon: Icon(Icons.edit), label: Text('Edit')
+              icon: Icon(Icons.edit), label: Text('Editar')
             )
           ],
         )
