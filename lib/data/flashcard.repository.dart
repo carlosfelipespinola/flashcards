@@ -38,13 +38,13 @@ class FlashcardRepository implements IFlashcardRepository {
   }
 
   @override
-  Future<List<Flashcard>> findAll() async {
+  Future<List<Flashcard>> findAll({List<Sort<FlashcardSortableFields>>? sortBy}) async {
     try {
-      final sql = 'SELECT * FROM ${FlashcardSchema.tableName}'
-        ' LEFT JOIN ${CategorySchema.tableName}'
-        ' ON ${CategorySchema.id} = ${FlashcardSchema.category}'
-      ;
-      final flashcardsMap = await (await dbe).rawQuery(sql);
+      var query = _findAllFlashcardsQuery;
+      if (sortBy != null && sortBy.length > 0) {
+        query = _addOrderByToQuery(query, sortBy);
+      }
+      final flashcardsMap = await (await dbe).rawQuery(query);
       return flashcardsMap.map((map) => FlashcardMapper.fromMap(map)).toList();
     } catch (_) {
       throw Failure();
@@ -53,24 +53,33 @@ class FlashcardRepository implements IFlashcardRepository {
 
   @override
   Future<List<Flashcard>> query({Category? category, List<Sort<FlashcardSortableFields>>? sortBy, int? limit}) async {
-    var query = 'SELECT * FROM ${FlashcardSchema.tableName}'
-      ' LEFT JOIN ${CategorySchema.tableName}'
-      ' ON ${FlashcardSchema.category} = ${CategorySchema.id}'
-      ' WHERE 1'
-    ;
+    var query = _findAllFlashcardsQuery;
     if (category != null) {
       query += ' AND ${CategorySchema.id} = ${category.id}';
     } else {
       query += ' AND ${CategorySchema.id} IS NULL';
     }
     if (sortBy != null && sortBy.length > 0) {
-      query += ' ORDER BY ${sortBy.map((sort) => FlashcardMapper.mapSortToSql(sort)).join(", ")}';
+      query = _addOrderByToQuery(query, sortBy);
     }
     if (limit != null) {
       query += ' LIMIT $limit';
     }
     final rawFlashcards = await (await dbe).rawQuery(query);
     return rawFlashcards.map((map) => FlashcardMapper.fromMap(map)).toList();
+  }
+
+  String get _findAllFlashcardsQuery {
+    return 'SELECT * FROM ${FlashcardSchema.tableName}'
+      ' LEFT JOIN ${CategorySchema.tableName}'
+      ' ON ${FlashcardSchema.category} = ${CategorySchema.id}'
+      ' WHERE 1'
+    ;
+  }
+
+  String _addOrderByToQuery(String query, List<Sort<FlashcardSortableFields>> sortBy) {
+    query += ' ORDER BY ${sortBy.map((sort) => FlashcardMapper.mapSortToSql(sort)).join(", ")}';
+    return query;
   }
 
   @override

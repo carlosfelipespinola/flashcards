@@ -1,6 +1,7 @@
 
 import 'package:flashcards/domain/interfaces/flashcard.repository.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
+import 'package:flashcards/domain/models/sort.dart';
 
 class FindFlashcardsUseCase {
 
@@ -10,7 +11,12 @@ class FindFlashcardsUseCase {
   });
 
   Future<List<Flashcard>> call() async {
-    return await flashcardRepository.findAll();
+    return await flashcardRepository.findAll(
+      sortBy: [
+        Sort(field: FlashcardSortableFields.strength, type: SortType.asc),
+        Sort(field: FlashcardSortableFields.lastSeentAt, type: SortType.asc)
+      ],
+    );
   }
 
 }
