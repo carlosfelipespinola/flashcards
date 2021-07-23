@@ -33,7 +33,6 @@ dependencies:
   flutter_speed_dial: ^3.0.5
   get_it: ^6.1.1
   package_info_plus: ^1.0.4
-  signal_strength_indicator: ^0.4.0
 
 dev_dependencies:
   flutter_test:

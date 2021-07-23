@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:signal_strength_indicator/signal_strength_indicator.dart';
 
 class FlashcardStrengthIndicator extends StatelessWidget {
 
@@ -10,18 +9,28 @@ class FlashcardStrengthIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SignalStrengthIndicator.bars(
-      levels: <num, Color>{
-        0: Colors.red,
-        20: Colors.orange[600]!,
-        40: Colors.yellow[700]!,
-        60: Colors.lightGreen,
-        80: Colors.green
-      },
-      barCount: 5,
-      minValue: 0,
-      maxValue: 100,
-      value: value * 20
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(4),
+      child: SizedBox(
+        width: 44,
+        height: 16,
+        child: LinearProgressIndicator(
+          value: value / 5,
+          backgroundColor: Colors.indigo[100],
+          valueColor: AlwaysStoppedAnimation<Color>(colorByValue),
+        ),
+      ),
     );
+  }
+
+  Color get colorByValue {
+    final levels = <num, Color>{
+      1: Colors.red,
+      2: Colors.orange[600]!,
+      3: Colors.yellow[700]!,
+      4: Colors.lightGreen,
+      5: Colors.green
+    };
+    return levels[value]!;
   }
 }
