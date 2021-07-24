@@ -1,11 +1,6 @@
-import 'package:flashcards/domain/models/fashcard.dart';
-import 'package:flashcards/domain/usecases/delete_flashcard.usecase.dart';
 import 'package:flashcards/router.dart';
 import 'package:flashcards/services/app_info/app_info.dart';
-import 'package:flashcards/ui/pages/flashcard-editor/flashcard_editor.page.arguments.dart';
 import 'package:flashcards/ui/pages/lesson/lesson.page.arguments.dart';
-import 'package:flashcards/ui/widgets/confirm_bottom_dialog.dart';
-import 'package:flashcards/ui/widgets/flashcard_details_bottom_dialog.dart';
 import 'package:flashcards/ui/widgets/flashcards_grid.dart';
 import 'package:flashcards/ui/widgets/lesson_generator_form.dart';
 import 'package:flutter/material.dart';
@@ -22,11 +17,8 @@ class FlashcardsPage extends StatefulWidget {
 
 class _FlashcardsPageState extends State<FlashcardsPage> {
 
-  GlobalKey<FlashcardGridState> _flashcardsGridKey = GlobalKey();
+  GlobalKey<FlashcardsGridState> _flashcardsGridKey = GlobalKey();
 
-  final DeleteFlashcardUseCase deleteFlashcardUseCase = GetIt.I();
-
-  Set<Flashcard> flashcardsBeingDeleted = {};
 
   bool shouldHideFloatingActionButton = false;
 
@@ -36,9 +28,8 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: FlashcardGrid(
+        child: FlashcardsGrid(
           key: _flashcardsGridKey,
-          onFlashcardLongPress: (flashcard) => showFlashcardBottomDialog(flashcard),
           onScrollBottomEnter: () => setState(() { shouldHideFloatingActionButton = true; }),
           onScrollBottomExit: () => setState(() { shouldHideFloatingActionButton = false; }),
         )
@@ -112,54 +103,6 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
 
   TextStyle get speedDialChildTextStyle => TextStyle(fontWeight: FontWeight.bold, color: Colors.white);
 
-  void showFlashcardBottomDialog(Flashcard flashcard) async {
-    await showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return FlashcardDetailsBottomDialog(
-          flashcard: flashcard,
-          onEdit: () async {
-            if (ModalRoute.of(context)!.isCurrent) {
-              Navigator.of(context).pop();
-            }
-            await Navigator.of(context).pushNamed(
-              RoutesPaths.flashcardEditor,
-              arguments: FlashcardEditorPageArguments(flashcard: flashcard)
-            );
-            _flashcardsGridKey.currentState?.fetchFlashcards();
-            
-          },
-          onDelete: () {
-            if (ModalRoute.of(context)!.isCurrent) {
-              Navigator.of(context).pop();
-            }
-            showFlashcardDeletionConfirmDialog(flashcard);
-          }
-        );
-      }
-    );
-  }
-
-  void showFlashcardDeletionConfirmDialog(Flashcard flashcard) async {
-    if (flashcardsBeingDeleted.contains(flashcard)) return;
-    final shouldDelete = await showModalBottomSheet<bool?>(
-      isScrollControlled: false,
-      context: context,
-      builder: (context) {
-        return ConfirmBottomDialog(
-          title: 'Deletar Flashcard',
-          text: 'Você tem certeza que deseja deletar esse flashcard?',
-          onConfirm: () => Navigator.of(context).pop(true),
-          onCancel: () => Navigator.of(context).pop(false)
-        );
-      }
-    ) ?? false;
-    if (shouldDelete) {
-      await deleteFlashcard(flashcard);
-      _flashcardsGridKey.currentState?.fetchFlashcards();
-    }
-  }
-
   void showLessonGeneratorForm() async {
     await showModalBottomSheet(
       context: context,
@@ -178,26 +121,6 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
         );
       }
     );
-  }
-
-  Future<void> deleteFlashcard(Flashcard flashcard) async {
-    try {
-      flashcardsBeingDeleted.add(flashcard);
-      await deleteFlashcardUseCase(flashcard);
-      showMessage('Flashcard deletado com sucesso');
-    } catch(_) {
-      showMessage('Erro ao deletar flashcard');
-    } finally {
-      flashcardsBeingDeleted.remove(flashcard);
-    }
-  }
-
-  void showMessage(String message) {
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message))
-      );
-    }
   }
 
   @override

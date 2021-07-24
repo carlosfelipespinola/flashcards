@@ -1,26 +1,40 @@
 
+import 'package:flashcards/domain/models/category.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
-import 'package:flashcards/domain/usecases/find_flashcards.usecase.dart';
+import 'package:flashcards/domain/usecases/delete_flashcard.usecase.dart';
+import 'package:flashcards/domain/usecases/find_flashcards_grouped_by_category.dart';
+import 'package:flashcards/router.dart';
+import 'package:flashcards/ui/pages/flashcard-editor/flashcard_editor.page.arguments.dart';
+import 'package:flashcards/ui/widgets/confirm_bottom_dialog.dart';
 import 'package:flashcards/ui/widgets/flashcard.dart';
 import 'package:flashcards/ui/widgets/try_again.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:sticky_headers/sticky_headers.dart';
 
-class FlashcardGrid extends StatefulWidget {
-  final void Function(Flashcard)? onFlashcardLongPress;
+import 'flashcard_details_bottom_dialog.dart';
+
+class FlashcardsGrid extends StatefulWidget {
   final void Function()? onScrollBottomEnter;
   final void Function()? onScrollBottomExit;
 
-  const FlashcardGrid({Key? key, this.onFlashcardLongPress, this.onScrollBottomEnter, this.onScrollBottomExit}) : super(key: key);
+  const FlashcardsGrid({Key? key, this.onScrollBottomEnter, this.onScrollBottomExit}) : super(key: key);
+
   @override
-  FlashcardGridState createState() => FlashcardGridState();
+  FlashcardsGridState createState() => FlashcardsGridState();
 }
 
-class FlashcardGridState extends State<FlashcardGrid> {
+class FlashcardsGridState extends State<FlashcardsGrid> {
 
-  late FindFlashcardsUseCase findFlashcardsUseCase;
+  late FindFlashcardsGroupedByCategory _findFlashcardsGroupedByCategory;
 
-  late Future<List<Flashcard>> flashcards;
+  late Future<Map<Category?, List<Flashcard>>> _mapCategoryFlashcardsFuture;
+
+  Map<Category?, List<Flashcard>> _mapCategoryFlashcards = {};
+
+  Set<Flashcard> _flashcardsBeingDeleted = {};
+
+  final DeleteFlashcardUseCase _deleteFlashcardUseCase = GetIt.I();
 
   late ScrollController _scrollController;
 
@@ -33,7 +47,7 @@ class FlashcardGridState extends State<FlashcardGrid> {
     _scrollController = ScrollController(debugLabel: 'flashcards-grid-scroll');
     _scrollController.addListener(_onScroll);
     _hasExitedScrollBottom = !_isScrollAtBottom;
-    findFlashcardsUseCase = GetIt.I();
+    _findFlashcardsGroupedByCategory = GetIt.I();
     fetchFlashcards();
     super.initState();
   }
@@ -55,9 +69,9 @@ class FlashcardGridState extends State<FlashcardGrid> {
     }
   }
 
-  void fetchFlashcards() async {
+  void fetchFlashcards() {
     setState(() {
-      flashcards = findFlashcardsUseCase();
+      _mapCategoryFlashcardsFuture = _findFlashcardsGroupedByCategory();
     });
   }
 
@@ -70,10 +84,10 @@ class FlashcardGridState extends State<FlashcardGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Flashcard>>(
-      future: flashcards,
+    return FutureBuilder<Map<Category?, List<Flashcard>>>(
+      future: _mapCategoryFlashcardsFuture,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        if (snapshot.connectionState == ConnectionState.waiting && _mapCategoryFlashcards.length == 0) {
           return Center(child: CircularProgressIndicator());
         }
         if (snapshot.hasError) {
@@ -89,33 +103,124 @@ class FlashcardGridState extends State<FlashcardGrid> {
             child: Text('Você ainda não tem nenhum flashcard cadastrado'),
           );
         }
+        if (snapshot.connectionState == ConnectionState.done) {
+          _mapCategoryFlashcards = snapshot.requireData;
+        }
         return RefreshIndicator(
           onRefresh: () async => fetchFlashcards(),
-          child: GridView.builder(
+          child: ListView.builder(
             controller: _scrollController,
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 300),
-            itemCount: snapshot.requireData.length,
-            itemBuilder: (context, index) {
-              final flashcard = snapshot.requireData.elementAt(index);
-              return LayoutBuilder(
-                builder: (context, constraints) {
-                  return FlashcardTile(
-                    maxSize: constraints.maxWidth, 
-                    size: constraints.maxWidth,
-                    flashcard: flashcard,
-                    onLongPress: () {
-                      if (widget.onFlashcardLongPress != null) {
-                        widget.onFlashcardLongPress!(flashcard);
-                      }
-                    },
+            itemCount: _mapCategoryFlashcards.keys.length,
+            itemBuilder: (context, categoryIndex) {
+              final category = _mapCategoryFlashcards.keys.elementAt(categoryIndex);
+              return StickyHeaderBuilder(
+                builder: (context, factor) {
+                  return Container(
+                    height: kToolbarHeight + 1,
+                    child: Opacity(
+                      opacity: 0.80,
+                      child: AppBar(
+                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                        elevation: factor == 1 ? 0.0 : 0.5,
+                        title: Text(category?.name ?? 'Sem categoria', style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.center,),
+                      ),
+                    ),
                   );
-                }
+                },
+                content: GridView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 300),
+                  itemCount: _mapCategoryFlashcards.values.elementAt(categoryIndex).length,
+                  itemBuilder: (context, flashcardIndex) {
+                    final flashcard = _mapCategoryFlashcards.values.elementAt(categoryIndex).elementAt(flashcardIndex);
+                    return LayoutBuilder(
+                      builder: (context, constraints) {
+                        return FlashcardTile(
+                          maxSize: constraints.maxWidth, 
+                          size: constraints.maxWidth,
+                          flashcard: flashcard,
+                          onLongPress: () {
+                            showFlashcardBottomDialog(flashcard);
+                          },
+                        );
+                      }
+                    );
+                  }
+                )
               );
-            }
+            },
           ),
         );
       }
     );
+  }
+
+  void showFlashcardBottomDialog(Flashcard flashcard) async {
+    await showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return FlashcardDetailsBottomDialog(
+          flashcard: flashcard,
+          onEdit: () async {
+            if (ModalRoute.of(context)!.isCurrent) {
+              Navigator.of(context).pop();
+            }
+            await Navigator.of(context).pushNamed(
+              RoutesPaths.flashcardEditor,
+              arguments: FlashcardEditorPageArguments(flashcard: flashcard)
+            );
+            fetchFlashcards();
+          },
+          onDelete: () {
+            if (ModalRoute.of(context)!.isCurrent) {
+              Navigator.of(context).pop();
+            }
+            showFlashcardDeletionConfirmDialog(flashcard);
+          }
+        );
+      }
+    );
+  }
+
+  void showFlashcardDeletionConfirmDialog(Flashcard flashcard) async {
+    if (_flashcardsBeingDeleted.contains(flashcard)) return;
+    final shouldDelete = await showModalBottomSheet<bool?>(
+      isScrollControlled: false,
+      context: context,
+      builder: (context) {
+        return ConfirmBottomDialog(
+          title: 'Deletar Flashcard',
+          text: 'Você tem certeza que deseja deletar esse flashcard?',
+          onConfirm: () => Navigator.of(context).pop(true),
+          onCancel: () => Navigator.of(context).pop(false)
+        );
+      }
+    ) ?? false;
+    if (shouldDelete) {
+      await deleteFlashcard(flashcard);
+      fetchFlashcards();
+    }
+  }
+
+  Future<void> deleteFlashcard(Flashcard flashcard) async {
+    try {
+      _flashcardsBeingDeleted.add(flashcard);
+      await _deleteFlashcardUseCase(flashcard);
+      showMessage('Flashcard deletado com sucesso');
+    } catch(_) {
+      showMessage('Erro ao deletar flashcard');
+    } finally {
+      _flashcardsBeingDeleted.remove(flashcard);
+    }
+  }
+
+  void showMessage(String message) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message))
+      );
+    }
   }
 }
