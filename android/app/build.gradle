@@ -42,7 +42,7 @@ android {
         applicationId "dev.carlosfelipe.flashcards"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 4
+        versionCode 5
         versionName '1.0.0'
     }
 
