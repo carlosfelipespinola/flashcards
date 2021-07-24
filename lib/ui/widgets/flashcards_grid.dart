@@ -8,6 +8,7 @@ import 'package:flashcards/ui/pages/flashcard-editor/flashcard_editor.page.argum
 import 'package:flashcards/ui/widgets/confirm_bottom_dialog.dart';
 import 'package:flashcards/ui/widgets/flashcard.dart';
 import 'package:flashcards/ui/widgets/try_again.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sticky_headers/sticky_headers.dart';
@@ -24,13 +25,15 @@ class FlashcardsGrid extends StatefulWidget {
   FlashcardsGridState createState() => FlashcardsGridState();
 }
 
+enum _FlashcardFetchState { pending, error, success }
+
 class FlashcardsGridState extends State<FlashcardsGrid> {
 
   late FindFlashcardsGroupedByCategory _findFlashcardsGroupedByCategory;
 
-  late Future<Map<Category?, List<Flashcard>>> _mapCategoryFlashcardsFuture;
-
   Map<Category?, List<Flashcard>> _mapCategoryFlashcards = {};
+
+  _FlashcardFetchState _fetchState = _FlashcardFetchState.pending;
 
   Set<Flashcard> _flashcardsBeingDeleted = {};
 
@@ -63,17 +66,39 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
 
   void _onScroll() {
     if (_isScrollAtBottom) {
-      widget.onScrollBottomEnter?.call();
-      _hasExitedScrollBottom = false; 
+      _notifyBottomEnter();
     } else if (!_hasExitedScrollBottom) {
-      _hasExitedScrollBottom = true;
-      widget.onScrollBottomExit?.call();
+      _notifyBottomExit();
     }
   }
 
-  void fetchFlashcards() {
-    setState(() {
-      _mapCategoryFlashcardsFuture = _findFlashcardsGroupedByCategory();
+  void _notifyBottomEnter() {
+    widget.onScrollBottomEnter?.call();
+    _hasExitedScrollBottom = false; 
+  }
+
+  void _notifyBottomExit() {
+    _hasExitedScrollBottom = true;
+    widget.onScrollBottomExit?.call();
+  }
+
+  Future<void> fetchFlashcards() async {
+    try {
+      setState(() { _fetchState = _FlashcardFetchState.pending; });
+      final response = await _findFlashcardsGroupedByCategory.call();
+      setState(() {
+        _mapCategoryFlashcards = response;
+        _fetchState = _FlashcardFetchState.success;
+      });
+    } catch (error) {
+      setState(() {
+        _fetchState = _FlashcardFetchState.error;
+        _mapCategoryFlashcards = {};
+      });
+    }
+    // This is required to prevent unexpected behaviour with sticky headers
+    WidgetsBinding.instance?.endOfFrame.then((_) {
+      setState(() {});
     });
   }
 
@@ -86,83 +111,76 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Map<Category?, List<Flashcard>>>(
-      future: _mapCategoryFlashcardsFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting && _mapCategoryFlashcards.length == 0) {
-          return Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.hasError) {
-          return Center(
-            child: TryAgain(
-              message: 'Algo deu errado, tente novamente.',
-              onPressed: fetchFlashcards
-            ),
-          );
-        }
-        if (snapshot.requireData.isEmpty) {
-          return Center(
-            child: Text('Você ainda não tem nenhum flashcard cadastrado'),
-          );
-        }
-        if (snapshot.connectionState == ConnectionState.done) {
-          _mapCategoryFlashcards = snapshot.requireData;
-        }
-        return RefreshIndicator(
-          onRefresh: () async => fetchFlashcards(),
-          child: ListView.builder(
-            controller: _scrollController,
-            itemCount: _mapCategoryFlashcards.keys.length,
-            itemBuilder: (context, categoryIndex) {
-              final category = _mapCategoryFlashcards.keys.elementAt(categoryIndex);
-              return StickyHeaderBuilder(
-                builder: (context, factor) {
-                  return Container(
-                    height: kToolbarHeight + 1,
-                    child: Opacity(
-                      opacity: 0.80,
-                      child: AppBar(
-                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                        elevation: factor == 1 ? 0.0 : 0.5,
-                        title: Text(category?.name ?? 'Sem categoria', style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.center,),
-                      ),
-                    ),
-                  );
-                },
-                content: GridView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 300),
-                  itemCount: _mapCategoryFlashcards.values.elementAt(categoryIndex).length,
-                  itemBuilder: (context, flashcardIndex) {
-                    final flashcard = _mapCategoryFlashcards.values.elementAt(categoryIndex).elementAt(flashcardIndex);
-                    final cardShape = Theme.of(context).cardTheme.shape;
-                    return LayoutBuilder(
-                      builder: (context, constraints) {
-                        return Container(
-                          decoration: _hightLightedFlashcard == flashcard ? BoxDecoration(
-                            border: Border.all(color: Theme.of(context).accentColor),
-                            borderRadius: cardShape is RoundedRectangleBorder ? cardShape.borderRadius : null
-                          ) : null,
-                          child: FlashcardTile(
-                            maxSize: constraints.maxWidth, 
-                            size: constraints.maxWidth,
-                            flashcard: flashcard,
-                            onLongPress: () {
-                              showFlashcardBottomDialog(flashcard);
-                            },
-                          ),
-                        );
-                      }
-                    );
-                  }
-                )
+    if (_fetchState == _FlashcardFetchState.pending && _mapCategoryFlashcards.length == 0) {
+      return Center(child: CircularProgressIndicator());
+    }
+    if (_fetchState == _FlashcardFetchState.error) {
+      return Center(
+        child: TryAgain(
+          message: 'Algo deu errado, tente novamente.',
+          onPressed: fetchFlashcards
+        ),
+      );
+    }
+    if (_mapCategoryFlashcards.isEmpty) {
+      return Center(
+        child: Text('Você ainda não tem nenhum flashcard cadastrado'),
+      );
+    }
+    return RefreshIndicator(
+      onRefresh: () async => fetchFlashcards(),
+      child: ListView.builder(
+        physics: AlwaysScrollableScrollPhysics(),
+        controller: _scrollController,
+        itemCount: _mapCategoryFlashcards.keys.length,
+        itemBuilder: (context, categoryIndex) {
+          final category = _mapCategoryFlashcards.keys.elementAt(categoryIndex);
+          return StickyHeaderBuilder(
+            builder: (context, factor) {
+              return Container(
+                height: kToolbarHeight,
+                child: Opacity(
+                  opacity: 0.80,
+                  child: AppBar(
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    elevation: factor == 1 ? 0.0 : 0.5,
+                    title: Text(category?.name ?? 'Sem categoria', style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.center,),
+                  ),
+                ),
               );
             },
-          ),
-        );
-      }
+            content: GridView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 300),
+              itemCount: _mapCategoryFlashcards.values.elementAt(categoryIndex).length,
+              itemBuilder: (context, flashcardIndex) {
+                final flashcard = _mapCategoryFlashcards.values.elementAt(categoryIndex).elementAt(flashcardIndex);
+                final cardShape = Theme.of(context).cardTheme.shape;
+                return LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Container(
+                      decoration: _hightLightedFlashcard == flashcard ? BoxDecoration(
+                        border: Border.all(color: Theme.of(context).accentColor),
+                        borderRadius: cardShape is RoundedRectangleBorder ? cardShape.borderRadius : null
+                      ) : null,
+                      child: FlashcardTile(
+                        maxSize: constraints.maxWidth, 
+                        size: constraints.maxWidth,
+                        flashcard: flashcard,
+                        onLongPress: () {
+                          showFlashcardBottomDialog(flashcard);
+                        },
+                      ),
+                    );
+                  }
+                );
+              }
+            )
+          );
+        },
+      ),
     );
   }
 
@@ -184,7 +202,7 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
         RoutesPaths.flashcardEditor,
         arguments: FlashcardEditorPageArguments(flashcard: flashcard)
       );
-      fetchFlashcards();
+      await fetchFlashcards();
     } else if (result == 'delete') {
       showFlashcardDeletionConfirmDialog(flashcard);
     } else {
@@ -208,7 +226,6 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
     ) ?? false;
     if (shouldDelete) {
       await deleteFlashcard(flashcard);
-      fetchFlashcards();
     }
     setState(() { _hightLightedFlashcard = null; });
   }
@@ -217,6 +234,14 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
     try {
       _flashcardsBeingDeleted.add(flashcard);
       await _deleteFlashcardUseCase(flashcard);
+      await fetchFlashcards();
+      bool wasScrollAtBottomButThereIsNoMoreScroll = 
+        _isScrollAtBottom &&
+        !_hasExitedScrollBottom &&
+        _scrollController.position.maxScrollExtent <= MediaQuery.of(context).size.height;
+      if (wasScrollAtBottomButThereIsNoMoreScroll) {
+        _notifyBottomExit();
+      }
       showMessage('Flashcard deletado com sucesso');
     } catch(_) {
       showMessage('Erro ao deletar flashcard');
