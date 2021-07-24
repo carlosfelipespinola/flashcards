@@ -27,10 +27,6 @@ class FlashcardDetailsBottomDialog extends StatelessWidget {
             ListTile(
               title: Text('Domínio'),
               trailing: FlashcardStrengthIndicator(value: flashcard.strength,),
-            ),
-            ListTile(
-              leading: Text('Categoria'),
-              trailing: Text(flashcard.category?.name ?? '-'),
             )
           ],
         ),
