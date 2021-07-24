@@ -44,6 +44,7 @@ ThemeData generateLightTheme(MaterialColor color) {
     floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: primaryColor),
     buttonColor: primaryColor,
     primarySwatch: color,
-    primaryColor: primaryColor
+    primaryColor: primaryColor,
+    accentColor: color
   );
 }

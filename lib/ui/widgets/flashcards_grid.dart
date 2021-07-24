@@ -42,6 +42,8 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
 
   bool get _isScrollAtBottom =>_scrollController.hasClients && _scrollController.position.atEdge && _scrollController.position.pixels != 0;
 
+  Flashcard? _hightLightedFlashcard;
+
   @override
   void initState() {
     _scrollController = ScrollController(debugLabel: 'flashcards-grid-scroll');
@@ -135,15 +137,22 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
                   itemCount: _mapCategoryFlashcards.values.elementAt(categoryIndex).length,
                   itemBuilder: (context, flashcardIndex) {
                     final flashcard = _mapCategoryFlashcards.values.elementAt(categoryIndex).elementAt(flashcardIndex);
+                    final cardShape = Theme.of(context).cardTheme.shape;
                     return LayoutBuilder(
                       builder: (context, constraints) {
-                        return FlashcardTile(
-                          maxSize: constraints.maxWidth, 
-                          size: constraints.maxWidth,
-                          flashcard: flashcard,
-                          onLongPress: () {
-                            showFlashcardBottomDialog(flashcard);
-                          },
+                        return Container(
+                          decoration: _hightLightedFlashcard == flashcard ? BoxDecoration(
+                            border: Border.all(color: Theme.of(context).accentColor),
+                            borderRadius: cardShape is RoundedRectangleBorder ? cardShape.borderRadius : null
+                          ) : null,
+                          child: FlashcardTile(
+                            maxSize: constraints.maxWidth, 
+                            size: constraints.maxWidth,
+                            flashcard: flashcard,
+                            onLongPress: () {
+                              showFlashcardBottomDialog(flashcard);
+                            },
+                          ),
                         );
                       }
                     );
@@ -158,30 +167,29 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
   }
 
   void showFlashcardBottomDialog(Flashcard flashcard) async {
-    await showModalBottomSheet(
+    setState(() { _hightLightedFlashcard = flashcard; });
+    final result = await showModalBottomSheet<String?>(
       context: context,
       builder: (context) {
         return FlashcardDetailsBottomDialog(
           flashcard: flashcard,
-          onEdit: () async {
-            if (ModalRoute.of(context)!.isCurrent) {
-              Navigator.of(context).pop();
-            }
-            await Navigator.of(context).pushNamed(
-              RoutesPaths.flashcardEditor,
-              arguments: FlashcardEditorPageArguments(flashcard: flashcard)
-            );
-            fetchFlashcards();
-          },
-          onDelete: () {
-            if (ModalRoute.of(context)!.isCurrent) {
-              Navigator.of(context).pop();
-            }
-            showFlashcardDeletionConfirmDialog(flashcard);
-          }
+          onEdit: () => Navigator.of(context).pop('edit'),
+          onDelete: () => Navigator.of(context).pop('delete')
         );
       }
     );
+    if (result == 'edit') {
+      setState(() { _hightLightedFlashcard = null; });
+      await Navigator.of(context).pushNamed(
+        RoutesPaths.flashcardEditor,
+        arguments: FlashcardEditorPageArguments(flashcard: flashcard)
+      );
+      fetchFlashcards();
+    } else if (result == 'delete') {
+      showFlashcardDeletionConfirmDialog(flashcard);
+    } else {
+      setState(() { _hightLightedFlashcard = null; });
+    }
   }
 
   void showFlashcardDeletionConfirmDialog(Flashcard flashcard) async {
@@ -202,6 +210,7 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
       await deleteFlashcard(flashcard);
       fetchFlashcards();
     }
+    setState(() { _hightLightedFlashcard = null; });
   }
 
   Future<void> deleteFlashcard(Flashcard flashcard) async {
