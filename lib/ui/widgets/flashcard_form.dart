@@ -87,7 +87,8 @@ class _FlashcardFormState extends State<FlashcardForm> {
             SizedBox(height: 12,),
             CategoryPicker(
               selectedCategory: _selectedCategory,
-              onChange: onCategoryChanged
+              onChange: onCategoryChanged,
+              onBeforeShowCategoryPicker: () => FocusScope.of(context).unfocus(),
             ),
             if ( state == FlashcardFormSaveState.error ) ... [
               SizedBox(height: 12,),

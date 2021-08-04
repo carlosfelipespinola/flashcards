@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 class CategoryPicker extends StatefulWidget {
   final Category? selectedCategory;
   final void Function(Category?) onChange;
+  final void Function()? onBeforeShowCategoryPicker;
 
-  const CategoryPicker({Key? key, this.selectedCategory, required this.onChange}) : super(key: key);
+  const CategoryPicker({Key? key, this.selectedCategory, required this.onChange, this.onBeforeShowCategoryPicker}) : super(key: key);
 
   @override
   _CategoryPickerState createState() => _CategoryPickerState();
@@ -23,6 +24,7 @@ class _CategoryPickerState extends State<CategoryPicker> {
         subtitle: Text(widget.selectedCategory?.name ?? '-', style: Theme.of(context).textTheme.subtitle1),
         trailing: Icon(Icons.arrow_drop_down),
         onTap: () {
+          widget.onBeforeShowCategoryPicker?.call();
           showCategoryPicker(context, widget.selectedCategory);
         },
       ),
