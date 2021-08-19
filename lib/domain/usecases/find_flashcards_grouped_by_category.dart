@@ -24,7 +24,8 @@ class FindFlashcardsGroupedByCategory {
       return flashcard.category;
     });
     final sortedMapEntries = map.entries.sorted((a, b) {
-      if (a.key == null || b.key == null) return 1;
+      if (a.key == null) return 1;
+      if (b.key == null) return -1;
       return a.key!.name.toLowerCase().compareTo(b.key!.name.toLowerCase());
     });
     return Map.fromEntries(sortedMapEntries);
