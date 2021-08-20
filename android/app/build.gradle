@@ -42,8 +42,8 @@ android {
         applicationId "dev.carlosfelipe.flashcards"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 8
-        versionName '1.0.0+4'
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
     }
 
     signingConfigs {
