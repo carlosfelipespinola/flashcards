@@ -12,6 +12,7 @@ abstract class IFlashcardRepository {
   Future<List<Flashcard>> query({
     Category? category,
     List<Sort<FlashcardSortableFields>>? sortBy,
+    String? searchTerm,
     int? limit
   });
 }
