@@ -42,7 +42,7 @@ class FlashcardRepository implements IFlashcardRepository {
     try {
       var query = _findAllFlashcardsQuery;
       if (sortBy != null && sortBy.length > 0) {
-        query = _addOrderByToQuery(query, sortBy);
+        query = _contactOrderBy(query, sortBy);
       }
       final flashcardsMap = await (await dbe).rawQuery(query);
       return flashcardsMap.map((map) => FlashcardMapper.fromMap(map)).toList();
@@ -52,20 +52,34 @@ class FlashcardRepository implements IFlashcardRepository {
   }
 
   @override
-  Future<List<Flashcard>> query({Category? category, List<Sort<FlashcardSortableFields>>? sortBy, int? limit}) async {
+  Future<List<Flashcard>> query({
+    Category? category,
+    List<Sort<FlashcardSortableFields>>? sortBy,
+    String? searchTerm,
+    int? limit
+  }) async {
     var query = _findAllFlashcardsQuery;
+    final arguments = [];
     if (category != null) {
       query += ' AND ${CategorySchema.id} = ${category.id}';
     } else {
       query += ' AND ${CategorySchema.id} IS NULL';
     }
+    if (searchTerm != null) {
+      query += ' AND ('
+        '${FlashcardSchema.term} LIKE ?'
+        ' OR '
+        '${FlashcardSchema.definition} LIKE ?'
+      ')';
+      arguments.addAll(["%$searchTerm%", "%$searchTerm%"]);
+    }
     if (sortBy != null && sortBy.length > 0) {
-      query = _addOrderByToQuery(query, sortBy);
+      query = _contactOrderBy(query, sortBy);
     }
     if (limit != null) {
       query += ' LIMIT $limit';
     }
-    final rawFlashcards = await (await dbe).rawQuery(query);
+    final rawFlashcards = await (await dbe).rawQuery(query, arguments);
     return rawFlashcards.map((map) => FlashcardMapper.fromMap(map)).toList();
   }
 
@@ -77,7 +91,7 @@ class FlashcardRepository implements IFlashcardRepository {
     ;
   }
 
-  String _addOrderByToQuery(String query, List<Sort<FlashcardSortableFields>> sortBy) {
+  String _contactOrderBy(String query, List<Sort<FlashcardSortableFields>> sortBy) {
     query += ' ORDER BY ${sortBy.map((sort) => FlashcardMapper.mapSortToSql(sort)).join(", ")}';
     return query;
   }
