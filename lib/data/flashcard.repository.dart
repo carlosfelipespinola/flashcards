@@ -42,7 +42,7 @@ class FlashcardRepository implements IFlashcardRepository {
     try {
       var query = _findAllFlashcardsQuery;
       if (sortBy != null && sortBy.length > 0) {
-        query = _contactOrderBy(query, sortBy);
+        query = _concatOrderBy(query, sortBy);
       }
       final flashcardsMap = await (await dbe).rawQuery(query);
       return flashcardsMap.map((map) => FlashcardMapper.fromMap(map)).toList();
@@ -75,7 +75,7 @@ class FlashcardRepository implements IFlashcardRepository {
       arguments.addAll(["%$searchTerm%", "%$searchTerm%"]);
     }
     if (sortBy != null && sortBy.length > 0) {
-      query = _contactOrderBy(query, sortBy);
+      query = _concatOrderBy(query, sortBy);
     }
     if (limit != null) {
       query += ' LIMIT $limit';
@@ -92,7 +92,7 @@ class FlashcardRepository implements IFlashcardRepository {
     ;
   }
 
-  String _contactOrderBy(String query, List<Sort<FlashcardSortableFields>> sortBy) {
+  String _concatOrderBy(String query, List<Sort<FlashcardSortableFields>> sortBy) {
     query += ' ORDER BY ${sortBy.map((sort) => FlashcardMapper.mapSortToSql(sort)).join(", ")}';
     return query;
   }
