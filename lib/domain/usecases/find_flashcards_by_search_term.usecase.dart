@@ -13,6 +13,7 @@ class FindFlashcardsBySearchTermUseCase {
   Future<List<Flashcard>> call(String searchTerm) async {
     return await flashcardRepository.query(
       searchTerm: searchTerm,
+      anyCategory: true,
       sortBy: [
         Sort(field: FlashcardSortableFields.strength, type: SortType.asc),
         Sort(field: FlashcardSortableFields.lastSeentAt, type: SortType.asc)

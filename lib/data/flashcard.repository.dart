@@ -54,6 +54,7 @@ class FlashcardRepository implements IFlashcardRepository {
   @override
   Future<List<Flashcard>> query({
     Category? category,
+    bool anyCategory = false,
     List<Sort<FlashcardSortableFields>>? sortBy,
     String? searchTerm,
     int? limit
@@ -62,7 +63,7 @@ class FlashcardRepository implements IFlashcardRepository {
     final arguments = [];
     if (category != null) {
       query += ' AND ${CategorySchema.id} = ${category.id}';
-    } else {
+    } else if (!anyCategory) {
       query += ' AND ${CategorySchema.id} IS NULL';
     }
     if (searchTerm != null) {
