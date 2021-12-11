@@ -181,7 +181,10 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
                   ),
                 );
               },
-              content: _buildGrid(_mapCategoryFlashcards.values.elementAt(categoryIndex))
+              content: _buildGrid(
+                _mapCategoryFlashcards.values.elementAt(categoryIndex),
+                physics: NeverScrollableScrollPhysics()
+              )
             );
           },
         ),
@@ -189,16 +192,16 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
     } else {
       return RefreshIndicator(
         onRefresh: () async => fetchFlashcards(),
-        child: _buildGrid(_flashcards)
+        child: _buildGrid(_flashcards, physics: AlwaysScrollableScrollPhysics(), shrinkWrap: false)
       );
     }
     
   }
 
-  Widget _buildGrid(List<Flashcard> flashcards) {
+  Widget _buildGrid(List<Flashcard> flashcards, {required ScrollPhysics physics, bool shrinkWrap = true}) {
     return GridView.builder(
-      physics: NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
+      physics: physics,
+      shrinkWrap: shrinkWrap,
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 300),
       itemCount: flashcards.length,
