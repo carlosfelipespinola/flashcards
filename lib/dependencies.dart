@@ -11,6 +11,7 @@ import 'package:flashcards/domain/usecases/find_flashcards.usecase.dart';
 import 'package:flashcards/domain/usecases/generate_lesson.usecase.dart';
 import 'package:flashcards/domain/usecases/save_category.usecase.dart';
 import 'package:flashcards/domain/usecases/save_flashcard.usecase.dart';
+import 'domain/usecases/find_flashcards_by_search_term.usecase.dart';
 import 'domain/usecases/find_flashcards_grouped_by_category.dart';
 import 'package:flashcards/data/database.dart';
 import 'package:flashcards/services/app_info/app_info.dart';
@@ -38,6 +39,7 @@ void _setupCategoryUseCasesAndRepositories() {
 void _setupFlashcardUseCasesAndRepositories() {
   GetIt.I.registerLazySingleton(() => AnswerFlashcard(flashcardRepository: GetIt.I()));
   GetIt.I.registerLazySingleton(() => FindFlashcardsGroupedByCategory(flashcardRepository: GetIt.I()));
+  GetIt.I.registerLazySingleton(() => FindFlashcardsBySearchTermUseCase(flashcardRepository: GetIt.I()));
   GetIt.I.registerLazySingleton(() => FindFlashcardsUseCase(flashcardRepository: GetIt.I()));
   GetIt.I.registerLazySingleton(() => SaveFlashcardUseCase(flashcardRepository: GetIt.I()));
   GetIt.I.registerLazySingleton(() => DeleteFlashcardUseCase(flashcardRepository: GetIt.I()));
