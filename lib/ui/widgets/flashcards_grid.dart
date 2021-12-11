@@ -1,8 +1,8 @@
-
+import 'package:collection/collection.dart';
 import 'package:flashcards/domain/models/category.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
 import 'package:flashcards/domain/usecases/delete_flashcard.usecase.dart';
-import 'package:flashcards/domain/usecases/find_flashcards_grouped_by_category.dart';
+import 'package:flashcards/domain/usecases/find_flashcards.usecase.dart';
 import 'package:flashcards/router.dart';
 import 'package:flashcards/ui/pages/flashcard-editor/flashcard_editor.page.arguments.dart';
 import 'package:flashcards/ui/widgets/confirm_bottom_dialog.dart';
@@ -16,10 +16,18 @@ import 'package:sticky_headers/sticky_headers.dart';
 import 'flashcard_details_bottom_dialog.dart';
 
 class FlashcardsGrid extends StatefulWidget {
+  final String? searchFilter;
+  final bool groupByCategory;
   final void Function()? onScrollBottomEnter;
   final void Function()? onScrollBottomExit;
 
-  const FlashcardsGrid({Key? key, this.onScrollBottomEnter, this.onScrollBottomExit}) : super(key: key);
+  const FlashcardsGrid({
+    Key? key,
+    this.onScrollBottomEnter,
+    this.onScrollBottomExit,
+    this.searchFilter,
+    this.groupByCategory = true
+  }) : super(key: key);
 
   @override
   FlashcardsGridState createState() => FlashcardsGridState();
@@ -29,15 +37,14 @@ enum _FlashcardFetchState { pending, error, success }
 
 class FlashcardsGridState extends State<FlashcardsGrid> {
 
-  late FindFlashcardsGroupedByCategory _findFlashcardsGroupedByCategory;
+  final FindFlashcardsUseCase _findFlashcardsUseCase = GetIt.I();
+  final DeleteFlashcardUseCase _deleteFlashcardUseCase = GetIt.I();
 
-  Map<Category?, List<Flashcard>> _mapCategoryFlashcards = {};
+  List<Flashcard> _flashcards = [];
 
   _FlashcardFetchState _fetchState = _FlashcardFetchState.pending;
 
   Set<Flashcard> _flashcardsBeingDeleted = {};
-
-  final DeleteFlashcardUseCase _deleteFlashcardUseCase = GetIt.I();
 
   late ScrollController _scrollController;
 
@@ -47,14 +54,33 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
 
   Flashcard? _hightLightedFlashcard;
 
+  Map<Category?, List<Flashcard>> get _flashcardsGroupedByCategory {
+    final map = groupBy<Flashcard, Category?>(_flashcards, (flashcard) {
+      return flashcard.category;
+    });
+    final sortedMapEntries = map.entries.sorted((a, b) {
+      if (a.key == null) return 1;
+      if (b.key == null) return -1;
+      return a.key!.name.toLowerCase().compareTo(b.key!.name.toLowerCase());
+    });
+    return Map.fromEntries(sortedMapEntries);
+  }
+
   @override
   void initState() {
     _scrollController = ScrollController(debugLabel: 'flashcards-grid-scroll');
     _scrollController.addListener(_onScroll);
     _hasExitedScrollBottom = !_isScrollAtBottom;
-    _findFlashcardsGroupedByCategory = GetIt.I();
     fetchFlashcards();
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant FlashcardsGrid oldWidget) {
+    if (oldWidget.searchFilter != widget.searchFilter) {
+      fetchFlashcards();
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -84,16 +110,16 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
 
   Future<void> fetchFlashcards() async {
     try {
+      late final List<Flashcard> response;
       setState(() { _fetchState = _FlashcardFetchState.pending; });
-      final response = await _findFlashcardsGroupedByCategory.call();
+      response = await _findFlashcardsUseCase.call(searchTerm: widget.searchFilter);
       setState(() {
-        _mapCategoryFlashcards = response;
+        _flashcards = response;
         _fetchState = _FlashcardFetchState.success;
       });
     } catch (error) {
       setState(() {
         _fetchState = _FlashcardFetchState.error;
-        _mapCategoryFlashcards = {};
       });
     }
     // This is required to prevent unexpected behaviour with sticky headers
@@ -111,7 +137,7 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
 
   @override
   Widget build(BuildContext context) {
-    if (_fetchState == _FlashcardFetchState.pending && _mapCategoryFlashcards.length == 0) {
+    if (_fetchState == _FlashcardFetchState.pending && _flashcards.isEmpty) {
       return Center(child: CircularProgressIndicator());
     }
     if (_fetchState == _FlashcardFetchState.error) {
@@ -122,65 +148,85 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
         ),
       );
     }
-    if (_mapCategoryFlashcards.isEmpty) {
+    if (_flashcards.isEmpty && widget.searchFilter != null && widget.searchFilter!.isNotEmpty) {
+      return Center(
+        child: Text('Nenhum flashcard foi encontrado para a sua pesquisa'),
+      );
+    } else if (_flashcards.isEmpty) {
       return Center(
         child: Text('Você ainda não tem nenhum flashcard cadastrado'),
       );
     }
-    return RefreshIndicator(
-      onRefresh: () async => fetchFlashcards(),
-      child: ListView.builder(
-        physics: AlwaysScrollableScrollPhysics(),
-        controller: _scrollController,
-        itemCount: _mapCategoryFlashcards.keys.length,
-        itemBuilder: (context, categoryIndex) {
-          final category = _mapCategoryFlashcards.keys.elementAt(categoryIndex);
-          return StickyHeaderBuilder(
-            builder: (context, factor) {
-              return Container(
-                height: kToolbarHeight,
-                child: Opacity(
-                  opacity: 0.80,
-                  child: AppBar(
-                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                    elevation: factor == 1 ? 0.0 : 0.5,
-                    title: Text(category?.name ?? 'Sem categoria', style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.center,),
+    if (widget.groupByCategory) {
+      final _mapCategoryFlashcards = _flashcardsGroupedByCategory;
+      return RefreshIndicator(
+        onRefresh: () async => fetchFlashcards(),
+        child: ListView.builder(
+          physics: AlwaysScrollableScrollPhysics(),
+          controller: _scrollController,
+          itemCount: _mapCategoryFlashcards.keys.length,
+          itemBuilder: (context, categoryIndex) {
+            final category = _mapCategoryFlashcards.keys.elementAt(categoryIndex);
+            return StickyHeaderBuilder(
+              builder: (context, factor) {
+                return Container(
+                  height: kToolbarHeight,
+                  child: Opacity(
+                    opacity: 0.80,
+                    child: AppBar(
+                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                      elevation: factor == 1 ? 0.0 : 0.5,
+                      title: Text(category?.name ?? 'Sem categoria', style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.center,),
+                    ),
                   ),
-                ),
-              );
-            },
-            content: GridView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 300),
-              itemCount: _mapCategoryFlashcards.values.elementAt(categoryIndex).length,
-              itemBuilder: (context, flashcardIndex) {
-                final flashcard = _mapCategoryFlashcards.values.elementAt(categoryIndex).elementAt(flashcardIndex);
-                final cardShape = Theme.of(context).cardTheme.shape;
-                return LayoutBuilder(
-                  builder: (context, constraints) {
-                    return Container(
-                      decoration: _hightLightedFlashcard == flashcard ? BoxDecoration(
-                        border: Border.all(color: Theme.of(context).accentColor),
-                        borderRadius: cardShape is RoundedRectangleBorder ? cardShape.borderRadius : null
-                      ) : null,
-                      child: FlashcardTile(
-                        maxSize: constraints.maxWidth, 
-                        size: constraints.maxWidth,
-                        flashcard: flashcard,
-                        onLongPress: () {
-                          showFlashcardBottomDialog(flashcard);
-                        },
-                      ),
-                    );
-                  }
                 );
-              }
-            )
-          );
-        },
-      ),
+              },
+              content: _buildGrid(
+                _mapCategoryFlashcards.values.elementAt(categoryIndex),
+                physics: NeverScrollableScrollPhysics()
+              )
+            );
+          },
+        ),
+      );
+    } else {
+      return RefreshIndicator(
+        onRefresh: () async => fetchFlashcards(),
+        child: _buildGrid(_flashcards, physics: AlwaysScrollableScrollPhysics(), shrinkWrap: false)
+      );
+    }
+    
+  }
+
+  Widget _buildGrid(List<Flashcard> flashcards, {required ScrollPhysics physics, bool shrinkWrap = true}) {
+    return GridView.builder(
+      physics: physics,
+      shrinkWrap: shrinkWrap,
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 300),
+      itemCount: flashcards.length,
+      itemBuilder: (context, flashcardIndex) {
+        final flashcard = flashcards.elementAt(flashcardIndex);
+        final cardShape = Theme.of(context).cardTheme.shape;
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            return Container(
+              decoration: _hightLightedFlashcard == flashcard ? BoxDecoration(
+                border: Border.all(color: Theme.of(context).accentColor),
+                borderRadius: cardShape is RoundedRectangleBorder ? cardShape.borderRadius : null
+              ) : null,
+              child: FlashcardTile(
+                maxSize: constraints.maxWidth, 
+                size: constraints.maxWidth,
+                flashcard: flashcard,
+                onLongPress: () {
+                  showFlashcardBottomDialog(flashcard);
+                },
+              ),
+            );
+          }
+        );
+      }
     );
   }
 

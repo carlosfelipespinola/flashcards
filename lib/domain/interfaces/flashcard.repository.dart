@@ -11,7 +11,9 @@ abstract class IFlashcardRepository {
   Future<Flashcard> delete(Flashcard flashcard);
   Future<List<Flashcard>> query({
     Category? category,
+    bool anyCategory = false,
     List<Sort<FlashcardSortableFields>>? sortBy,
+    String? searchTerm,
     int? limit
   });
 }

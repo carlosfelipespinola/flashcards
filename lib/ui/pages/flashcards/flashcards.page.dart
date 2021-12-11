@@ -1,5 +1,6 @@
 import 'package:flashcards/router.dart';
 import 'package:flashcards/services/app_info/app_info.dart';
+import 'package:flashcards/ui/pages/flashcard-search/flashcard_search.dart';
 import 'package:flashcards/ui/pages/lesson/lesson.page.arguments.dart';
 import 'package:flashcards/ui/widgets/flashcards_grid.dart';
 import 'package:flashcards/ui/widgets/lesson_generator_form.dart';
@@ -79,6 +80,20 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
               child: Text('Gerenciar categorias'.toUpperCase(), style: speedDialChildTextStyle),
+            )
+          ),
+          SpeedDialChild(
+            elevation: 2,
+            child: Icon(Icons.search),
+            onTap: () async {
+              await showSearch(context: context, delegate: FlashcardSearch());
+              _flashcardsGridKey.currentState?.fetchFlashcards();
+            },
+            backgroundColor: Theme.of(context).primaryColor,
+            foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
+            labelWidget: Container(
+              margin: EdgeInsets.only(right: 12),
+              child: Text('Pesquisar Flashcard'.toUpperCase(), style: speedDialChildTextStyle),
             )
           ),
           SpeedDialChild(
