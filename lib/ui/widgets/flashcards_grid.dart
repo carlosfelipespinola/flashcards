@@ -3,7 +3,6 @@ import 'package:flashcards/domain/models/category.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
 import 'package:flashcards/domain/usecases/delete_flashcard.usecase.dart';
 import 'package:flashcards/domain/usecases/find_flashcards.usecase.dart';
-import 'package:flashcards/domain/usecases/find_flashcards_by_search_term.usecase.dart';
 import 'package:flashcards/router.dart';
 import 'package:flashcards/ui/pages/flashcard-editor/flashcard_editor.page.arguments.dart';
 import 'package:flashcards/ui/widgets/confirm_bottom_dialog.dart';
@@ -39,7 +38,6 @@ enum _FlashcardFetchState { pending, error, success }
 class FlashcardsGridState extends State<FlashcardsGrid> {
 
   final FindFlashcardsUseCase _findFlashcardsUseCase = GetIt.I();
-  final FindFlashcardsBySearchTermUseCase _findFlashcardsBySearchTermUseCase = GetIt.I();
   final DeleteFlashcardUseCase _deleteFlashcardUseCase = GetIt.I();
 
   List<Flashcard> _flashcards = [];
@@ -114,11 +112,7 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
     try {
       late final List<Flashcard> response;
       setState(() { _fetchState = _FlashcardFetchState.pending; });
-      if (widget.searchFilter != null && widget.searchFilter!.isNotEmpty) {
-        response = await _findFlashcardsBySearchTermUseCase.call(widget.searchFilter!);
-      } else {
-        response = await _findFlashcardsUseCase.call();
-      }
+      response = await _findFlashcardsUseCase.call(searchTerm: widget.searchFilter);
       setState(() {
         _flashcards = response;
         _fetchState = _FlashcardFetchState.success;
