@@ -2,6 +2,9 @@ import 'package:flashcards/ui/widgets/flashcards_grid.dart';
 import 'package:flutter/material.dart';
 
 class FlashcardSearch extends SearchDelegate {
+
+  @override
+  String? get searchFieldLabel => 'Pesquisar';
   
   @override
   List<Widget> buildActions(BuildContext context) => [];
