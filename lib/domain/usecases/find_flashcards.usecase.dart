@@ -10,13 +10,24 @@ class FindFlashcardsUseCase {
     required this.flashcardRepository,
   });
 
-  Future<List<Flashcard>> call() async {
-    return await flashcardRepository.findAll(
-      sortBy: [
-        Sort(field: FlashcardSortableFields.strength, type: SortType.asc),
-        Sort(field: FlashcardSortableFields.lastSeentAt, type: SortType.asc)
-      ],
-    );
+  Future<List<Flashcard>> call({String? searchTerm}) async {
+    if (searchTerm != null && searchTerm.isNotEmpty) {
+      return await flashcardRepository.query(
+        searchTerm: searchTerm,
+        anyCategory: true,
+        sortBy: [
+          Sort(field: FlashcardSortableFields.strength, type: SortType.asc),
+          Sort(field: FlashcardSortableFields.lastSeentAt, type: SortType.asc)
+        ],
+      );
+    } else {
+      return await flashcardRepository.findAll(
+        sortBy: [
+          Sort(field: FlashcardSortableFields.strength, type: SortType.asc),
+          Sort(field: FlashcardSortableFields.lastSeentAt, type: SortType.asc)
+        ],
+      );
+    }
   }
 
 }
