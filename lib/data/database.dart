@@ -1,6 +1,5 @@
 import 'dart:io';
-import 'package:flashcards/data/category.schema.dart';
-import 'package:flashcards/data/flashcard.schema.dart';
+import 'package:flashcards/data/database_migrations.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -40,7 +39,8 @@ class DatabaseProvider {
       options: OpenDatabaseOptions(
         onConfigure: _onConfigure,
         onCreate: _onCreate,
-        version: 1
+        onUpgrade: _onUpgrade,
+        version: Migrations.lastVersion,
       )
     );
   }
@@ -52,7 +52,8 @@ class DatabaseProvider {
       path,
       onConfigure: _onConfigure,
       onCreate: _onCreate,
-      version: 1,
+      onUpgrade: _onUpgrade,
+      version: Migrations.lastVersion,
     );
     return database;
   }
@@ -75,8 +76,24 @@ class DatabaseProvider {
 
   Future<void> _onCreate(Database database, int version) async {
     var batch = database.batch();
-    batch.execute(CategorySchema.createTable);
-    batch.execute(FlashcardSchema.createTableSql);
+    _executeMigrations(Migrations.items, batch);
     await batch.commit();
   }
+
+  Future<void> _onUpgrade(Database database, int oldVersion, int newVersion) async {
+    var batch = database.batch();
+    bool migrationFilter(Migration migration) => migration.version > oldVersion && migration.version <= newVersion;
+    final migrations = Migrations.items.where(migrationFilter).toList();
+    _executeMigrations(migrations, batch);
+    await batch.commit();
+  }
+
+  void _executeMigrations(List<Migration> migrations, Batch batch) {
+    for (var migration in migrations) {
+      for (var script in migration.scripts) {
+        batch.execute(script);
+      }
+    }
+  }
+  
 }
