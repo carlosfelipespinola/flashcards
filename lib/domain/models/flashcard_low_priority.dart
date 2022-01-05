@@ -71,6 +71,6 @@ class LowPriorityInfo {
     required Duration duration,
   }) : _enterDateTime = enterDateTime, _duration = duration;
 
-  bool get isExpired => _enterDateTime.add(_duration).isBefore(DateTime.now());
-  
+  bool get isExpired => expiresAt.isBefore(DateTime.now());
+  DateTime get expiresAt => _enterDateTime.add(duration);
 }
