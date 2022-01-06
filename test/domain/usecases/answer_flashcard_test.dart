@@ -124,8 +124,8 @@ void main() async {
 
     group('when answering wrongly...', () {
 
-      test('a low priority card should be removed from low priority', () async {
-        Flashcard flashcard = LowPriorityFlashcard(
+      test('a low priority card should not have its duration or enter date time changed', () async {
+        var flashcard = LowPriorityFlashcard(
             base: Flashcard(
             term: 'term',
             definition: 'definition',
@@ -137,13 +137,13 @@ void main() async {
             enterDateTime: DateTime.now()
           )
         );
-        flashcard = await flashcardRepository.save(flashcard);
-        final flashcardAfterAnswer = await answerFlashcardUseCase.call(flashcard: flashcard.copyWith(), answeredCorrectly: false);
-        final foundFlashcard = await flashcardRepository.findById(flashcardAfterAnswer.id!);
-        expect(flashcardAfterAnswer, isA<Flashcard>());
-        expect(foundFlashcard, isA<Flashcard>());
-        expect(flashcardAfterAnswer, isNot(isA<LowPriorityFlashcard>()));
-        expect(foundFlashcard, isNot(isA<LowPriorityFlashcard>()));
+        flashcard = (await flashcardRepository.save(flashcard)) as LowPriorityFlashcard;
+        final flashcardAfterAnswer = (await answerFlashcardUseCase.call(flashcard: flashcard.copyWith(), answeredCorrectly: false)) as LowPriorityFlashcard;
+        final foundFlashcard = (await flashcardRepository.findById(flashcardAfterAnswer.id!)) as LowPriorityFlashcard;
+        expect(flashcardAfterAnswer, isA<LowPriorityFlashcard>());
+        expect(foundFlashcard, isA<LowPriorityFlashcard>());
+        expect(flashcardAfterAnswer.lowPriorityInfo.expiresAt, flashcard.lowPriorityInfo.expiresAt);
+        expect(foundFlashcard.lowPriorityInfo.expiresAt, flashcard.lowPriorityInfo.expiresAt);
       });
 
       test('a low priority flashcard should have its strength decreased', () async {
@@ -178,6 +178,22 @@ void main() async {
         final foundFlashcard = await flashcardRepository.findById(flashcardAfterAnswer.id!);
         expect(flashcardAfterAnswer.strength, lessThan(flashcard.strength));
         expect(foundFlashcard.strength, flashcardAfterAnswer.strength);
+      });
+
+      test('a non low priority flashcard should be marked as low priority for 30 minutes', () async {
+        Flashcard flashcard = Flashcard(
+          term: 'term',
+          definition: 'definition',
+          lastSeenAt: DateTime.now(),
+          strength: 2
+        );
+        flashcard = await flashcardRepository.save(flashcard);
+        final flashcardAfterAnswer = await answerFlashcardUseCase.call(flashcard: flashcard.copyWith(), answeredCorrectly: false);
+        final foundFlashcard = await flashcardRepository.findById(flashcardAfterAnswer.id!);
+        expect(flashcardAfterAnswer, isA<LowPriorityFlashcard>());
+        expect(foundFlashcard, isA<LowPriorityFlashcard>());
+        expect((flashcardAfterAnswer as LowPriorityFlashcard).lowPriorityInfo.duration, Duration(minutes: 30));
+        expect((foundFlashcard as LowPriorityFlashcard).lowPriorityInfo.duration, Duration(minutes: 30));
       });
     });
   });
