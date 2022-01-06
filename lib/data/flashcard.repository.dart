@@ -6,6 +6,7 @@ import 'package:flashcards/domain/interfaces/flashcard.repository.dart';
 import 'package:flashcards/domain/models/failure.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
 import 'package:flashcards/domain/models/category.dart';
+import 'package:flashcards/domain/models/flashcard_filters.dart';
 import 'package:flashcards/domain/models/sort.dart';
 import 'package:flashcards/data/database.dart';
 import 'package:sqflite/sqflite.dart';
@@ -53,11 +54,12 @@ class FlashcardRepository implements IFlashcardRepository {
 
   @override
   Future<List<Flashcard>> query({
+    List<FlashcardFilter> filters = const [],
     Category? category,
     bool anyCategory = false,
     List<Sort<FlashcardSortableFields>>? sortBy,
     String? searchTerm,
-    int? limit
+    int? limit,
   }) async {
     var query = _findAllFlashcardsQuery;
     final arguments = [];
@@ -74,6 +76,27 @@ class FlashcardRepository implements IFlashcardRepository {
       ')';
       arguments.addAll(["%$searchTerm%", "%$searchTerm%"]);
     }
+    for (final filter in filters) {
+      if (filter is OnlyLowPriorityFlashcardsFilter) {
+        query += ' AND ('
+          'datetime(${FlashcardSchema.exitsLowAt}) > datetime(\'now\', \'localtime\')'
+          ' AND '
+          'datetime(${FlashcardSchema.enteredLowAt}) < datetime(\'now\', \'localtime\')'
+        ')';
+      }
+      if (filter is ExceptLowPriorityFlashcardsFilter) {
+        query += ' AND ('
+          'datetime(${FlashcardSchema.exitsLowAt}) <= datetime(\'now\', \'localtime\')'
+          ' OR '
+          'datetime(${FlashcardSchema.enteredLowAt}) > datetime(\'now\', \'localtime\')'
+          ' OR '
+          '${FlashcardSchema.exitsLowAt} IS NULL'
+          ' OR '
+          '${FlashcardSchema.enteredLowAt} IS NULL'
+        ')';
+      }
+    }
+    
     if (sortBy != null && sortBy.length > 0) {
       query = _concatOrderBy(query, sortBy);
     }
