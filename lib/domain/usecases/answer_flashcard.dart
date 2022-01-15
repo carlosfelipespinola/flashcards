@@ -26,26 +26,19 @@ class AnswerFlashcard {
 
   Flashcard _answerCorrectly(Flashcard flashcard) {
     flashcard.increaseStrength();
-    return _turnFlashcardIntoLowPriority(flashcard);
+    return _turnFlashcardIntoLowPriority(flashcard, Duration(hours: 12));
   }
 
   Flashcard _answerWrongly(Flashcard flashcard) {
     flashcard.decreaseStrength();
-    return _turnFlashcardIntoNonLowPriority(flashcard);
+    return _turnFlashcardIntoLowPriority(flashcard, Duration(minutes: 30));
   }
 
-  LowPriorityFlashcard _turnFlashcardIntoLowPriority(Flashcard flashcard) {
+  LowPriorityFlashcard _turnFlashcardIntoLowPriority(Flashcard flashcard, Duration duration) {
     if (flashcard is LowPriorityFlashcard) {
       return flashcard;
     } else {
-      return LowPriorityFlashcard.fromFlashcard(flashcard, Duration(hours: 12));
+      return LowPriorityFlashcard.fromFlashcard(flashcard, duration);
     }
   }
-
-  Flashcard _turnFlashcardIntoNonLowPriority(Flashcard flashcard) {
-    if (flashcard is LowPriorityFlashcard) {
-      return flashcard.toNonLowPriority();
-    }
-    return flashcard;
-  } 
 }
