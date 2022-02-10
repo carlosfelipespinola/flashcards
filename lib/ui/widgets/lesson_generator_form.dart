@@ -112,13 +112,16 @@ class _LessonGeneratorFormState extends State<LessonGeneratorForm> {
           )
         ),
         SizedBox(height: 8),
-        ElevatedButton(
-          onPressed: chosenCategory != null ? () {
-            setState(() {
-              step = _LessonGeneratorSteps.selectQuantity;
-            });
-          } : null,
-          child: Text('Próximo Passo'.toUpperCase())
+        Container(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: chosenCategory != null ? () {
+              setState(() {
+                step = _LessonGeneratorSteps.selectQuantity;
+              });
+            } : null,
+            child: Text('Próximo Passo'.toUpperCase())
+          ),
         )
       ],
     );
@@ -144,14 +147,17 @@ class _LessonGeneratorFormState extends State<LessonGeneratorForm> {
           },
         ),
         Spacer(),
-        ElevatedButton(
-          onPressed: count > 0 && count <= chosenCategory!.flashcardsCount ? () {
-            generateLesson(LessonSettings(
-              category: chosenCategory!.category,
-              flashcardsCount: count
-            ));
-          } : null,
-          child: Text('Começar'.toUpperCase())
+        Container(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: count > 0 && count <= chosenCategory!.flashcardsCount ? () {
+              generateLesson(LessonSettings(
+                category: chosenCategory!.category,
+                flashcardsCount: count
+              ));
+            } : null,
+            child: Text('Começar'.toUpperCase())
+          ),
         )
       ],
     );

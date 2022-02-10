@@ -16,7 +16,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'MyFlashcards',
       debugShowCheckedModeBanner: false,
-      theme: indigoTheme,
+      theme: generateLightTheme(Colors.indigo),
+      darkTheme: generateDarkTheme(Colors.indigo),
+      themeMode: ThemeMode.light,
       onGenerateRoute: (settings) => generateRoutes(settings),
       initialRoute: RoutesPaths.flashcards
     );
