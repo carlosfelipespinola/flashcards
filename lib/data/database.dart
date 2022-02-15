@@ -1,8 +1,12 @@
 import 'dart:io';
-import 'package:flashcards/data/database_migrations.dart';
-import 'package:sqflite/sqflite.dart';
+
 import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'flashcard.schema.dart';
+import 'category.schema.dart';
+
+part 'database_migrations.dart';
 
 class DatabaseProvider {
   bool _test;
@@ -20,6 +24,10 @@ class DatabaseProvider {
     }
     _databaseFuture ??= _initDb();
     return _databaseFuture!;
+  }
+
+  Future<_SharedPreferencesDatabase> get sharedPreferences async {
+    return _SharedPreferencesDatabase(database: await db);
   }
 
   Future<Database> _initDb() async {
@@ -96,4 +104,69 @@ class DatabaseProvider {
     }
   }
   
+}
+
+class _SharedPreferencesDatabase {
+  final Database database;
+
+  _SharedPreferencesDatabase({
+    required this.database,
+  });
+
+  Future<void> save(String key, String value) async {
+    final count = await database.update(
+      _SharedPreferencesSchema.tableName,
+      _SharedPreferencesMapper.toMap(_SharedPreferences(key: key, value: value))
+    );
+    if (count == 0) {
+      throw Exception('no items were updated');
+    }
+  }
+
+  Future<String?> load(String key) async {
+    final maps = await database.query(
+      _SharedPreferencesSchema.tableName,
+      where: '${_SharedPreferencesSchema.key} = ?',
+      whereArgs: [key]
+    );
+    if (maps.isEmpty) {
+      return null;
+    }
+    final map = maps.first;
+    final _SharedPreferences preferences = _SharedPreferencesMapper.fromMap(map);
+    return preferences.value;
+  }
+}
+
+class _SharedPreferencesMapper {
+  static _SharedPreferences fromMap(Map<String, dynamic> map) {
+    return _SharedPreferences(
+      key: map[_SharedPreferencesSchema.key],
+      value: map[_SharedPreferencesSchema.value]
+    );
+  }
+
+  static Map<String, dynamic> toMap(_SharedPreferences sharedPreferences) {
+    return <String, dynamic>{
+      _SharedPreferencesSchema.key: sharedPreferences.key,
+      _SharedPreferencesSchema.value: sharedPreferences.value
+    };
+  }
+}
+
+
+class _SharedPreferencesSchema {
+  static String tableName = 'preferences';
+  static String key = 'name';
+  static String value = 'value';
+}
+
+class _SharedPreferences {
+  final String key;
+  final String value;
+
+  _SharedPreferences({
+    required this.key,
+    required this.value,
+  });
 }

@@ -1,5 +1,4 @@
-import 'flashcard.schema.dart';
-import 'category.schema.dart';
+part of 'database.dart';
 
 
 /// migrations cannot be removed or changed.
@@ -32,6 +31,15 @@ class Migrations {
       scripts: [
         'ALTER TABLE ${FlashcardSchema.tableName} ADD COLUMN ${FlashcardSchema.enteredLowAt} DATETIME;',
         'ALTER TABLE ${FlashcardSchema.tableName} ADD COLUMN ${FlashcardSchema.exitsLowAt} DATETIME;'
+      ]
+    ),
+    Migration(
+      version: 3,
+      scripts: [
+        'CREATE TABLE ${_SharedPreferencesSchema.tableName}('
+          ' ${_SharedPreferencesSchema.key} TEXT PRIMARY KEY NOT NULL,'
+          ' ${_SharedPreferencesSchema.value} TEXT NOT NULL'
+        ');'
       ]
     )
   ];
