@@ -114,9 +114,10 @@ class _SharedPreferencesDatabase {
   });
 
   Future<void> save(String key, String value) async {
-    final count = await database.update(
+    final count = await database.insert(
       _SharedPreferencesSchema.tableName,
-      _SharedPreferencesMapper.toMap(_SharedPreferences(key: key, value: value))
+      _SharedPreferencesMapper.toMap(_SharedPreferences(key: key, value: value)),
+      conflictAlgorithm: ConflictAlgorithm.replace
     );
     if (count == 0) {
       throw Exception('no items were updated');
