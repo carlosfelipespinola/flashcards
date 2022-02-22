@@ -36,9 +36,9 @@ class Migrations {
     Migration(
       version: 3,
       scripts: [
-        'CREATE TABLE ${_SharedPreferencesSchema.tableName}('
-          ' ${_SharedPreferencesSchema.key} TEXT PRIMARY KEY NOT NULL,'
-          ' ${_SharedPreferencesSchema.value} TEXT NOT NULL'
+        'CREATE TABLE ${SharedPreferencesSchema.tableName}('
+          ' ${SharedPreferencesSchema.key} TEXT PRIMARY KEY NOT NULL,'
+          ' ${SharedPreferencesSchema.value} TEXT NOT NULL'
         ');'
       ]
     )

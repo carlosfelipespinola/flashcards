@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -115,7 +116,7 @@ class _SharedPreferencesDatabase {
 
   Future<void> save(String key, String value) async {
     final count = await database.insert(
-      _SharedPreferencesSchema.tableName,
+      SharedPreferencesSchema.tableName,
       _SharedPreferencesMapper.toMap(_SharedPreferences(key: key, value: value)),
       conflictAlgorithm: ConflictAlgorithm.replace
     );
@@ -126,8 +127,8 @@ class _SharedPreferencesDatabase {
 
   Future<String?> load(String key) async {
     final maps = await database.query(
-      _SharedPreferencesSchema.tableName,
-      where: '${_SharedPreferencesSchema.key} = ?',
+      SharedPreferencesSchema.tableName,
+      where: '${SharedPreferencesSchema.key} = ?',
       whereArgs: [key]
     );
     if (maps.isEmpty) {
@@ -142,21 +143,21 @@ class _SharedPreferencesDatabase {
 class _SharedPreferencesMapper {
   static _SharedPreferences fromMap(Map<String, dynamic> map) {
     return _SharedPreferences(
-      key: map[_SharedPreferencesSchema.key],
-      value: map[_SharedPreferencesSchema.value]
+      key: map[SharedPreferencesSchema.key],
+      value: map[SharedPreferencesSchema.value]
     );
   }
 
   static Map<String, dynamic> toMap(_SharedPreferences sharedPreferences) {
     return <String, dynamic>{
-      _SharedPreferencesSchema.key: sharedPreferences.key,
-      _SharedPreferencesSchema.value: sharedPreferences.value
+      SharedPreferencesSchema.key: sharedPreferences.key,
+      SharedPreferencesSchema.value: sharedPreferences.value
     };
   }
 }
 
-
-class _SharedPreferencesSchema {
+@visibleForTesting
+class SharedPreferencesSchema {
   static String tableName = 'preferences';
   static String key = 'name';
   static String value = 'value';
