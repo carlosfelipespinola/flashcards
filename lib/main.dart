@@ -1,14 +1,28 @@
 import 'package:flashcards/dependencies.dart';
 import 'package:flashcards/domain/models/app_settings.dart';
+import 'package:flashcards/domain/usecases/load_settings.usecase.dart';
+import 'package:flashcards/domain/usecases/save_settings.usecase.dart';
 import 'package:flashcards/main.store.dart';
 import 'package:flashcards/router.dart';
 import 'package:flashcards/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setupDependencies();
-  runApp(MyApp(MainStore(MainStoreState(settings: AppSettings.standard()))));
+  final mainStore = await setUpMainStore();
+  runApp(MyApp(mainStore));
+}
+
+Future<MainStore> setUpMainStore() async {
+  final loadSettingsUseCase = GetIt.I.get<LoadSettingsUseCase>();
+  final saveSettingsUseCase = GetIt.I.get<SaveSettingsUseCase>();
+  final settings = await loadSettingsUseCase.call();
+  return MainStore(
+    MainStoreState(settings: settings),
+    saveSettingsUseCase: saveSettingsUseCase
+  );
 }
 
 class MyApp extends InheritedWidget {

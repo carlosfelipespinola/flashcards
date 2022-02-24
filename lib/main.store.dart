@@ -1,5 +1,6 @@
 
 
+import 'package:flashcards/domain/usecases/save_settings.usecase.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
@@ -22,10 +23,12 @@ class MainStoreState {
 }
 
 class MainStore extends ValueNotifier<MainStoreState> {
-  MainStore(MainStoreState state) : super(state);
+  final SaveSettingsUseCase saveSettingsUseCase;
 
+  MainStore(MainStoreState state, {required this.saveSettingsUseCase}) : super(state);
 
   void updateSettings(AppSettings settings) {
     this.value = value.copyWith(settings: settings);
+    saveSettingsUseCase.call(settings);
   }
 }
