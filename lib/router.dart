@@ -4,6 +4,7 @@ import 'package:flashcards/ui/pages/flashcard-editor/flashcard_editor.page.dart'
 import 'package:flashcards/ui/pages/flashcards/flashcards.page.dart';
 import 'package:flashcards/ui/pages/lesson/lesson.page.arguments.dart';
 import 'package:flashcards/ui/pages/lesson/lesson.page.dart';
+import 'package:flashcards/ui/pages/settings/settings.page.dart';
 import 'package:flutter/material.dart';
 
 class RoutesPaths {
@@ -11,9 +12,16 @@ class RoutesPaths {
   static const flashcardEditor = 'flashcard-editor';
   static const categoryManager = 'category-manager';
   static const lesson = 'lesson';
+  static const settings = 'settings';
 }
 
 Route<dynamic> generateRoutes(RouteSettings settings) {
+  if ( settings.name == RoutesPaths.settings ) {
+    return MaterialPageRoute(
+      fullscreenDialog: false,
+      builder: (context) => SettingsPage()
+    );
+  }
   if ( settings.name == RoutesPaths.flashcards ) {
     return MaterialPageRoute(
       fullscreenDialog: false,

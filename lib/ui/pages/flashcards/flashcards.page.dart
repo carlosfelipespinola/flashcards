@@ -1,13 +1,10 @@
 import 'package:flashcards/router.dart';
-import 'package:flashcards/services/app_info/app_info.dart';
 import 'package:flashcards/ui/pages/flashcard-search/flashcard_search.dart';
 import 'package:flashcards/ui/pages/lesson/lesson.page.arguments.dart';
 import 'package:flashcards/ui/widgets/flashcards_grid.dart';
 import 'package:flashcards/ui/widgets/lesson_generator_form.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:get_it/get_it.dart';
 
 import '../../../router.dart';
 
@@ -22,8 +19,6 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
 
 
   bool shouldHideFloatingActionButton = false;
-
-  AppInfo _appInfo = GetIt.I<AppInfo>();
 
   @override
   Widget build(BuildContext context) {
@@ -98,17 +93,13 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
           ),
           SpeedDialChild(
             elevation: 2,
-            child: Icon(Icons.lock_open),
-            onTap: () async => showLicensePage(
-              context: context,
-              applicationIcon: _appInfo.appIconPath != null ? CircleAvatar(child: Image.asset(_appInfo.appIconPath!)) : null,
-              applicationVersion: _appInfo.appVersion
-            ),
+            child: Icon(Icons.settings),
+            onTap: () => Navigator.of(context).pushNamed(RoutesPaths.settings),
             backgroundColor: Theme.of(context).primaryColor,
             foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
-              child: Text('Licenças de código aberto'.toUpperCase(), style: speedDialChildTextStyle),
+              child: Text('Configurações'.toUpperCase(), style: speedDialChildTextStyle),
             )
           ),
         ],

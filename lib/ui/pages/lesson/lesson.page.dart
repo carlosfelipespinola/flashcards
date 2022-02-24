@@ -79,7 +79,7 @@ class _LessonPageState extends State<LessonPage> {
 
   Widget buildResultBody() {
     return Theme(
-      data: greenTheme,
+      data: ThemeUtils.isDarkTheme(Theme.of(context)) ? generateDarkTheme(Colors.green) : generateLightTheme(Colors.green),
       child: Builder(
         builder: (context) {
           return Center(
@@ -119,8 +119,9 @@ class _LessonPageState extends State<LessonPage> {
   }
 
   Widget buildAnswerOptions () {
+    
     return Theme(
-      data: greenTheme,
+      data: ThemeUtils.isDarkTheme(Theme.of(context)) ? generateDarkTheme(Colors.green) : generateLightTheme(Colors.green),
       child: Builder(
         builder: (context) {
           return ButtonBar(
