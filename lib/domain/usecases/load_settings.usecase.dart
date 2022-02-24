@@ -11,7 +11,11 @@ class LoadSettingsUseCase {
   }) : _appSettingsRepository = appSettingsRepository;
 
   Future<AppSettings> call() async {
-    return (await _appSettingsRepository.load()) ?? AppSettings.standard();
+    try {
+      return (await _appSettingsRepository.load()) ?? AppSettings.standard();
+    } catch (_) {
+      return AppSettings.standard();
+    }
   }
 
 }
