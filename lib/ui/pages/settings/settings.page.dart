@@ -15,7 +15,7 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final store = MyApp.of(context).store;
     return Scaffold(
-      appBar: AppBar(title: Text('Configurações'),),
+      appBar: AppBar(title: Text(MyApp.localizationsOf(context).settings),),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: ListView(
@@ -27,7 +27,7 @@ class SettingsPage extends StatelessWidget {
                 return Card(
                   child: ListTile(
                     leading: Icon(Icons.dark_mode),
-                    title: Text('Modo Escuro'),
+                    title: Text(MyApp.localizationsOf(context).darkMode),
                     trailing: Switch.adaptive(
                       value: state.settings.themeMode == AppThemeMode.dark,
                       onChanged: (value) {
@@ -45,7 +45,7 @@ class SettingsPage extends StatelessWidget {
             Card(
               child: ListTile(
                 leading: Icon(Icons.lock_open),
-                title: Text('Licenças de código aberto'),
+                title: Text(MyApp.localizationsOf(context).openSourceLicenses),
                 onTap: () async => showLicensePage(
                   context: context,
                   applicationIcon: _appInfo.appIconPath != null ? CircleAvatar(child: Image.asset(_appInfo.appIconPath!)) : null,

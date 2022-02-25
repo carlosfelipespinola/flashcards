@@ -3,5 +3,7 @@
     "searchFlashcard": "Pesquisar flashcard",
     "manageCategories": "Gerenciar categorias",
     "createFlashcard": "Criar flashcard",
-    "practice": "Praticar"
+    "practice": "Praticar",
+    "darkMode": "Modo escuro",
+    "openSourceLicenses": "Licenças de código aberto"
 }
