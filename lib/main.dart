@@ -6,7 +6,6 @@ import 'package:flashcards/main.store.dart';
 import 'package:flashcards/router.dart';
 import 'package:flashcards/themes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -51,6 +50,7 @@ class MyApp extends InheritedWidget {
           initialRoute: RoutesPaths.flashcards,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
+          locale: Locale('pt'),
         );
       },
     )
