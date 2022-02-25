@@ -1,6 +1,7 @@
 import 'package:flashcards/domain/interfaces/category.repository.dart';
 import 'package:flashcards/domain/interfaces/flashcard.repository.dart';
 import 'package:flashcards/domain/models/category_flashcards_count.dart';
+import 'package:flashcards/domain/models/flashcard_filters.dart';
 
 class FindCategoriesCountingFlashcardsUseCase {
 
@@ -14,7 +15,7 @@ class FindCategoriesCountingFlashcardsUseCase {
   Future<List<CategoryFlashcardsCount>> call() async {
     final List<CategoryFlashcardsCount> categoriesFlashcardsCount = [];
     final categories = await categoryRepository.findAll(countFlashcards: true);
-    final flashcardsWithoutCategory = (await flashcardRepository.query(category: null)).length;
+    final flashcardsWithoutCategory = (await flashcardRepository.query(filters: [FlashcardCategoryFilter(category: null)])).length;
     for (var category in categories) {
       categoriesFlashcardsCount.add(CategoryFlashcardsCount(
         category: category,

@@ -47,10 +47,10 @@ void main() async {
         )
       ];
       for (var flashcard in flashcards) { await flashcardRepository.save(flashcard); }
-      var flashcardsCount = (await flashcardRepository.findAll()).length;
+      var flashcardsCount = (await flashcardRepository.query()).length;
       expect(flashcardsCount, 2);
       await deleteFlashcardUseCase(flashcards[0]);
-      flashcardsCount = (await flashcardRepository.findAll()).length;
+      flashcardsCount = (await flashcardRepository.query()).length;
       expect(flashcardsCount, 1);
     });
 

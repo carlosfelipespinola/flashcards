@@ -5,7 +5,6 @@ import 'package:flashcards/data/flashcard.schema.dart';
 import 'package:flashcards/domain/interfaces/flashcard.repository.dart';
 import 'package:flashcards/domain/models/failure.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
-import 'package:flashcards/domain/models/category.dart';
 import 'package:flashcards/domain/models/flashcard_filters.dart';
 import 'package:flashcards/domain/models/sort.dart';
 import 'package:flashcards/data/database.dart';
@@ -39,44 +38,31 @@ class FlashcardRepository implements IFlashcardRepository {
   }
 
   @override
-  Future<List<Flashcard>> findAll({List<Sort<FlashcardSortableFields>>? sortBy}) async {
-    try {
-      var query = _findAllFlashcardsQuery;
-      if (sortBy != null && sortBy.length > 0) {
-        query = _concatOrderBy(query, sortBy);
-      }
-      final flashcardsMap = await (await dbe).rawQuery(query);
-      return flashcardsMap.map((map) => FlashcardMapper.fromMap(map)).toList();
-    } catch (_) {
-      throw Failure();
-    }
-  }
-
-  @override
   Future<List<Flashcard>> query({
     List<FlashcardFilter> filters = const [],
-    Category? category,
-    bool anyCategory = false,
     List<Sort<FlashcardSortableFields>>? sortBy,
-    String? searchTerm,
     int? limit,
   }) async {
     var query = _findAllFlashcardsQuery;
     final arguments = [];
-    if (category != null) {
-      query += ' AND ${CategorySchema.id} = ${category.id}';
-    } else if (!anyCategory) {
-      query += ' AND ${CategorySchema.id} IS NULL';
-    }
-    if (searchTerm != null) {
-      query += ' AND ('
-        '${FlashcardSchema.term} LIKE ?'
-        ' OR '
-        '${FlashcardSchema.definition} LIKE ?'
-      ')';
-      arguments.addAll(["%$searchTerm%", "%$searchTerm%"]);
-    }
+    
     for (final filter in filters) {
+      if (filter is FlashcardCategoryFilter) {
+        if (filter.category == null) {
+          query += ' AND ${CategorySchema.id} IS NULL';
+        } else {
+          query += ' AND ${CategorySchema.id} = ${filter.category!.id}';
+        }
+      }
+      if (filter is FlashcardSearchFilter) {
+        final searchTerm = filter.search;
+        query += ' AND ('
+          '${FlashcardSchema.term} LIKE ?'
+          ' OR '
+          '${FlashcardSchema.definition} LIKE ?'
+        ')';
+        arguments.addAll(["%$searchTerm%", "%$searchTerm%"]);
+      }
       if (filter is OnlyLowPriorityFlashcardsFilter) {
         query += ' AND ('
           'datetime(${FlashcardSchema.exitsLowAt}) > datetime(\'now\', \'localtime\')'

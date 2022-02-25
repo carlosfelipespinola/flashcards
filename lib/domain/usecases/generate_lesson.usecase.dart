@@ -25,8 +25,10 @@ class GenerateLessonUseCase {
 
   Future<List<Flashcard>> _fetchAllExceptLowPriorityFlashcards({required LessonSettings settings}) async {
     return _flashcardRepository.query(
-      category: settings.category,
-      filters: [ ExceptLowPriorityFlashcardsFilter() ],
+      filters: [
+        ExceptLowPriorityFlashcardsFilter(),
+        FlashcardCategoryFilter(category: settings.category)
+      ],
       sortBy: [
         Sort(field: FlashcardSortableFields.strength, type: SortType.asc),
         Sort(field: FlashcardSortableFields.lastSeentAt, type: SortType.asc)
@@ -37,8 +39,10 @@ class GenerateLessonUseCase {
 
   Future<List<Flashcard>> _fetchOnlyLowPriorityFlashcards({required LessonSettings settings, required int quantity}) async  {
     return _flashcardRepository.query(
-      category: settings.category,
-      filters: [ OnlyLowPriorityFlashcardsFilter() ],
+      filters: [
+        OnlyLowPriorityFlashcardsFilter(),
+        FlashcardCategoryFilter(category: settings.category)
+      ],
       sortBy: [
         Sort(field: FlashcardSortableFields.lastSeentAt, type: SortType.asc)
       ],
