@@ -6,7 +6,10 @@ import 'package:flashcards/main.store.dart';
 import 'package:flashcards/router.dart';
 import 'package:flashcards/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,7 +48,9 @@ class MyApp extends InheritedWidget {
           darkTheme: generateDarkTheme(Colors.indigo),
           themeMode: _appThemeModeMapping[state.settings.themeMode] ?? ThemeMode.light,
           onGenerateRoute: (settings) => generateRoutes(settings),
-          initialRoute: RoutesPaths.flashcards
+          initialRoute: RoutesPaths.flashcards,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
         );
       },
     )
@@ -54,6 +59,10 @@ class MyApp extends InheritedWidget {
   static MyApp of(BuildContext context) {
     final MyApp? result = context.dependOnInheritedWidgetOfExactType<MyApp>();
     return result!;
+  }
+
+  static AppLocalizations localizationsOf(BuildContext context) {
+    return AppLocalizations.of(context)!;
   }
 
   @override
