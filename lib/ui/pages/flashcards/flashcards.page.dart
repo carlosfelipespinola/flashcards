@@ -1,3 +1,4 @@
+import 'package:flashcards/main.dart';
 import 'package:flashcards/router.dart';
 import 'package:flashcards/ui/pages/flashcard-search/flashcard_search.dart';
 import 'package:flashcards/ui/pages/lesson/lesson.page.arguments.dart';
@@ -49,7 +50,10 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
             foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
-              child: Text('Criar Flashcard'.toUpperCase(), style: speedDialChildTextStyle),
+              child: Text(
+                MyApp.localizationsOf(context).createFlashcard.toUpperCase(),
+                style: speedDialChildTextStyle
+              ),
             )
           ),
           SpeedDialChild(
@@ -60,7 +64,10 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
             foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
-              child: Text('Praticar'.toUpperCase(), style: speedDialChildTextStyle),
+              child: Text(
+                MyApp.localizationsOf(context).practice.toUpperCase(),
+                style: speedDialChildTextStyle
+              ),
             )
           ),
           SpeedDialChild(
@@ -74,7 +81,10 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
             foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
-              child: Text('Gerenciar categorias'.toUpperCase(), style: speedDialChildTextStyle),
+              child: Text(
+                MyApp.localizationsOf(context).manageCategories.toUpperCase(),
+                style: speedDialChildTextStyle
+              ),
             )
           ),
           SpeedDialChild(
@@ -88,7 +98,10 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
             foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
-              child: Text('Pesquisar Flashcard'.toUpperCase(), style: speedDialChildTextStyle),
+              child: Text(
+                MyApp.localizationsOf(context).searchFlashcard.toUpperCase(),
+                style: speedDialChildTextStyle
+              ),
             )
           ),
           SpeedDialChild(
@@ -99,7 +112,10 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
             foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
-              child: Text('Configurações'.toUpperCase(), style: speedDialChildTextStyle),
+              child: Text(
+                MyApp.localizationsOf(context).settings.toUpperCase(),
+                style: speedDialChildTextStyle
+              ),
             )
           ),
         ],

@@ -1,3 +1,7 @@
 {
-    "helloWorld": "Olá mundo"
-  }
+    "settings": "Configurações",
+    "searchFlashcard": "Pesquisar flashcard",
+    "manageCategories": "Gerenciar categorias",
+    "createFlashcard": "Criar flashcard",
+    "practice": "Praticar"
+}

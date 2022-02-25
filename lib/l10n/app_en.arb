@@ -1,6 +1,7 @@
 {
-  "helloWorld": "Hello World!",
-  "@helloWorld": {
-    "description": "The conventional newborn programmer greeting"
-  }
+  "settings": "Settings",
+  "searchFlashcard": "Search flashcard",
+  "manageCategories": "Manage categories",
+  "createFlashcard": "Create flashcard",
+  "practice": "Practice"
 }
