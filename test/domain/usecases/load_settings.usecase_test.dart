@@ -17,14 +17,23 @@ void main() async {
   });
 
   test('load exiting settings usecase ...', () async {
-    final settingsToSave = AppSettings(themeMode: AppThemeMode.dark);
-    await saveSettingsUseCase(AppSettings(themeMode: AppThemeMode.dark));
+    final settingsToSave = AppSettings(themeMode: AppThemeMode.dark, languageCode: null);
+    await saveSettingsUseCase(settingsToSave);
     final loadedSettings = await loadSettingsUseCase();
     expect(loadedSettings.themeMode, settingsToSave.themeMode);
+    expect(loadedSettings.languageCode, settingsToSave.languageCode);
   });
 
   test('load unexiting settings usecase should return standardSettings ...', () async {
     final loadedSettings = await loadSettingsUseCase();
     expect(loadedSettings.themeMode, AppSettings.standard().themeMode);
+  });
+
+  test('load exiting settings usecase with languageCode populated...', () async {
+    final settingsToSave = AppSettings(themeMode: AppThemeMode.dark, languageCode: 'en');
+    await saveSettingsUseCase(settingsToSave);
+    final loadedSettings = await loadSettingsUseCase();
+    expect(loadedSettings.themeMode, settingsToSave.themeMode);
+    expect(loadedSettings.languageCode, settingsToSave.languageCode);
   });
 }

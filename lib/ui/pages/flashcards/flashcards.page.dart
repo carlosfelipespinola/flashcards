@@ -1,4 +1,4 @@
-import 'package:flashcards/main.dart';
+import 'package:flashcards/my_app_localizations.dart';
 import 'package:flashcards/router.dart';
 import 'package:flashcards/ui/pages/flashcard-search/flashcard_search.dart';
 import 'package:flashcards/ui/pages/lesson/lesson.page.arguments.dart';
@@ -51,7 +51,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
               child: Text(
-                MyApp.localizationsOf(context).createFlashcard.toUpperCase(),
+                MyAppLocalizations.of(context).createFlashcard.toUpperCase(),
                 style: speedDialChildTextStyle
               ),
             )
@@ -65,7 +65,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
               child: Text(
-                MyApp.localizationsOf(context).practice.toUpperCase(),
+                MyAppLocalizations.of(context).practice.toUpperCase(),
                 style: speedDialChildTextStyle
               ),
             )
@@ -82,7 +82,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
               child: Text(
-                MyApp.localizationsOf(context).manageCategories.toUpperCase(),
+                MyAppLocalizations.of(context).manageCategories.toUpperCase(),
                 style: speedDialChildTextStyle
               ),
             )
@@ -99,7 +99,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
               child: Text(
-                MyApp.localizationsOf(context).searchFlashcard.toUpperCase(),
+                MyAppLocalizations.of(context).searchFlashcard.toUpperCase(),
                 style: speedDialChildTextStyle
               ),
             )
@@ -113,7 +113,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
               child: Text(
-                MyApp.localizationsOf(context).settings.toUpperCase(),
+                MyAppLocalizations.of(context).settings.toUpperCase(),
                 style: speedDialChildTextStyle
               ),
             )
