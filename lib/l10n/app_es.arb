@@ -30,7 +30,9 @@
     }
   },
   "edit": "Editar",
+  "finish": "Finalizar",
   "manageCategories": "Administrar categorías",
+  "noFlashcardsFoundMessage": "No se encontraron flashcards",
   "openSourceLicenses": "Licencias de código abierto",
   "practice": "Practicar",
   "searchFlashcard": "Buscar flashcard",
