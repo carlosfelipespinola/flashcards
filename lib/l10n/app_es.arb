@@ -2,6 +2,7 @@
   "categories": "Categorías",
   "category": "Categoría",
   "categoryName": "Nombre de la categoría",
+  "createCategory": "Crear categoría",
   "createFlashcard": "Crear flashcard",
   "createFlashcardSuccessMessage": "Flashcard registrado con éxito",
   "darkMode": "Modo oscuro",
