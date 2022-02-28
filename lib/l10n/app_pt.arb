@@ -2,6 +2,7 @@
   "categories": "Categorias",
   "category": "Categoria",
   "createFlashcard": "Criar flashcard",
+  "createFlashcardSuccessMessage": "Flashcard cadastrado com sucesso",
   "darkMode": "Modo escuro",
   "delete": "Deletar",
   "deleteCategoryConfirmMessage": "Você tem certeza que deseja deletar a categoria: {category}?",
@@ -33,5 +34,7 @@
   "openSourceLicenses": "Licenças de código aberto",
   "practice": "Praticar",
   "searchFlashcard": "Pesquisar flashcard",
-  "settings": "Configurações"
+  "settings": "Configurações",
+  "updateFlashcard": "Atualizar flashcard",
+  "updateFlashcardSuccessMessage": "Flashcard atualizado com sucesso"
 }
