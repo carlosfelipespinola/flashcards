@@ -1,7 +1,9 @@
 {
+  "cancel": "Cancelar",
   "categories": "Categorias",
   "category": "Categoria",
   "categoryName": "Nome da categoria",
+  "confirm": "Confirmar",
   "createCategory": "Criar categoria",
   "createFlashcard": "Criar flashcard",
   "createFlashcardSuccessMessage": "Flashcard cadastrado com sucesso",
