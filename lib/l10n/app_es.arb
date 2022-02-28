@@ -34,6 +34,7 @@
   "edit": "Editar",
   "finish": "Finalizar",
   "manageCategories": "Administrar categorías",
+  "noCategoryRegisteredMessage": "Ninguna categoría registrada",
   "noFlashcardsFoundMessage": "No se encontraron flashcards",
   "openSourceLicenses": "Licencias de código abierto",
   "practice": "Practicar",
