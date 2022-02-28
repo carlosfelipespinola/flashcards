@@ -1,9 +1,37 @@
 {
-  "settings": "Settings",
-  "searchFlashcard": "Search flashcard",
-  "manageCategories": "Manage categories",
+  "categories": "Categories",
+  "category": "Category",
   "createFlashcard": "Create flashcard",
-  "practice": "Practice",
   "darkMode": "Dark mode",
-  "openSourceLicenses": "Open source licenses"
+  "delete": "Delete",
+  "deleteCategoryConfirmMessage": "Are you sure about deleting the following category: {category}?",
+  "@deleteCategoryConfirmMessage": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteCategoryErrorMessage": "Something went wrong while deleting the following category: '{category}'.",
+  "@deleteCategoryErrorMessage": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteCategorySuccessMessage": "The category '{category}' was successfully deleted.",
+  "@deleteCategorySuccessMessage": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "edit": "Edit",
+  "manageCategories": "Manage categories",
+  "openSourceLicenses": "Open source licenses",
+  "practice": "Practice",
+  "searchFlashcard": "Search flashcard",
+  "settings": "Settings"
 }
