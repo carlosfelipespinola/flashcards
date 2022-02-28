@@ -1,9 +1,11 @@
 {
   "categories": "Categorías",
   "category": "Categoría",
+  "categoryName": "Nombre de la categoría",
   "createFlashcard": "Crear flashcard",
   "createFlashcardSuccessMessage": "Flashcard registrado con éxito",
   "darkMode": "Modo oscuro",
+  "defaultErrorMessage": "Algo salió mal.",
   "delete": "Eliminar",
   "deleteCategoryConfirmMessage": "¿Está seguro de que desea eliminar la categoría: {category}?",
   "@deleteCategoryConfirmMessage": {
@@ -35,6 +37,7 @@
   "noFlashcardsFoundMessage": "No se encontraron flashcards",
   "openSourceLicenses": "Licencias de código abierto",
   "practice": "Practicar",
+  "save": "Guardar",
   "searchFlashcard": "Buscar flashcard",
   "settings": "Ajustes",
   "updateFlashcard": "Actualizar flashcard",
