@@ -37,19 +37,38 @@
   },
   "edit": "Editar",
   "finish": "Finalizar",
+  "flashcardsQuantity": "Número de flashcards",
   "frontSide": "Lado frontal",
   "manageCategories": "Administrar categorías",
+  "nextStep": "Proximo paso",
   "noCategoryRegisteredMessage": "Ninguna categoría registrada",
   "noFlashcardCreated": "Aún no has creado un flashcard",
   "noFlashcardForSearchMessage": "No se encontraron flashcards para su búsqueda",
   "noFlashcardsFoundMessage": "No se encontraron flashcards",
   "openSourceLicenses": "Licencias de código abierto",
   "practice": "Practicar",
+  "practiceNeedsFlashcardsMessage": "No es posible practicar porque aún no tienes flashcards registrados.",
   "proficiency": "Dominio",
   "save": "Guardar",
   "searchFlashcard": "Buscar flashcard",
+  "selectCategory": "Seleccione una categoría",
   "settings": "Ajustes",
+  "start": "Comenzar",
+  "typeNumberBetween": "Introduzca un número entre {min} y {max}",
+  "@typeNumberBetween": {
+    "placeholders": {
+      "min": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "max": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
   "uncategorized": "Sin categoría",
   "updateFlashcard": "Actualizar flashcard",
-  "updateFlashcardSuccessMessage": "Flashcard actualizado con éxito"
+  "updateFlashcardSuccessMessage": "Flashcard actualizado con éxito",
+  "lessonGenerationErrorMessage": "Algo salió mal al elegir flashcards para practicar"
 }
