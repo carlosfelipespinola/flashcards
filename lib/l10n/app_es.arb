@@ -40,6 +40,8 @@
   "frontSide": "Lado frontal",
   "manageCategories": "Administrar categorías",
   "noCategoryRegisteredMessage": "Ninguna categoría registrada",
+  "noFlashcardCreated": "Aún no has creado un flashcard",
+  "noFlashcardForSearchMessage": "No se encontraron flashcards para su búsqueda",
   "noFlashcardsFoundMessage": "No se encontraron flashcards",
   "openSourceLicenses": "Licencias de código abierto",
   "practice": "Practicar",
@@ -47,6 +49,7 @@
   "save": "Guardar",
   "searchFlashcard": "Buscar flashcard",
   "settings": "Ajustes",
+  "uncategorized": "Sin categoría",
   "updateFlashcard": "Actualizar flashcard",
   "updateFlashcardSuccessMessage": "Flashcard actualizado con éxito"
 }
