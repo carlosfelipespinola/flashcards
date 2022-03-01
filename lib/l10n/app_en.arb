@@ -43,7 +43,7 @@
   "manageCategories": "Manage categories",
   "nextStep": "Next step",
   "noCategoryRegisteredMessage": "There are no registered categories",
-  "noFlashcardCreated": "You haven't created a flashcard yet",
+  "noFlashcardCreatedMessage": "You haven't created a flashcard yet",
   "noFlashcardForSearchMessage": "No flashcards found for your search",
   "noFlashcardsFoundMessage": "No flashcards found",
   "openSourceLicenses": "Open source licenses",

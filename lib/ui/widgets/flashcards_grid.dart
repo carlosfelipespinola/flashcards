@@ -155,7 +155,7 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
       );
     } else if (_flashcards.isEmpty) {
       return Center(
-        child: Text(MyAppLocalizations.of(context).noFlashcardCreated),
+        child: Text(MyAppLocalizations.of(context).noFlashcardCreatedMessage),
       );
     }
     if (widget.groupByCategory) {
