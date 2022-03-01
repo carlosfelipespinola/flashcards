@@ -1,4 +1,5 @@
 {
+  "backSide": "Lado trasero",
   "cancel": "Cancelar",
   "categories": "Categorías",
   "category": "Categoría",
@@ -36,6 +37,7 @@
   },
   "edit": "Editar",
   "finish": "Finalizar",
+  "frontSide": "Lado frontal",
   "manageCategories": "Administrar categorías",
   "noCategoryRegisteredMessage": "Ninguna categoría registrada",
   "noFlashcardsFoundMessage": "No se encontraron flashcards",
