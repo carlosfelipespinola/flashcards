@@ -1,6 +1,5 @@
 import 'package:flashcards/domain/models/category.dart';
 import 'package:flashcards/domain/usecases/find_categories.usecase.dart';
-import 'package:flashcards/main.dart';
 import 'package:flashcards/my_app_localizations.dart';
 import 'package:flashcards/ui/widgets/bottom_sheet_dialog.dart';
 import 'package:flashcards/ui/widgets/category_form.dart';
