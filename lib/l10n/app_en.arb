@@ -39,6 +39,7 @@
   "finish": "Finish",
   "flashcardsQuantity": "Number of flashcards",
   "frontSide": "Front side",
+  "lessonGenerationErrorMessage": "Something went wrong while choosing flashcards to practice",
   "manageCategories": "Manage categories",
   "nextStep": "Next step",
   "noCategoryRegisteredMessage": "There are no registered categories",
@@ -54,6 +55,7 @@
   "selectCategory": "Select a category",
   "settings": "Settings",
   "start": "Start",
+  "tryAgain": "Try again",
   "typeNumberBetween": "Enter a number between {min} and {max}",
   "@typeNumberBetween": {
     "placeholders": {
@@ -69,6 +71,5 @@
   },
   "uncategorized": "Uncategorized",
   "updateFlashcard": "Update flashcard",
-  "updateFlashcardSuccessMessage": "Flashcard successfully updated",
-  "lessonGenerationErrorMessage": "Something went wrong while choosing flashcards to practice"
+  "updateFlashcardSuccessMessage": "Flashcard successfully updated"
 }
