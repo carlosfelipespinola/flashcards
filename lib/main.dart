@@ -3,16 +3,18 @@ import 'package:flashcards/domain/models/app_settings.dart';
 import 'package:flashcards/domain/usecases/load_settings.usecase.dart';
 import 'package:flashcards/domain/usecases/save_settings.usecase.dart';
 import 'package:flashcards/main.store.dart';
+import 'package:flashcards/my_app_localizations.dart';
 import 'package:flashcards/router.dart';
 import 'package:flashcards/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setupDependencies();
   final mainStore = await setUpMainStore();
-  runApp(MyApp(mainStore));
+  runApp(MyApp(mainStore, await MyAppLocalizations.findSystemLocaleOrDefault()));
 }
 
 Future<MainStore> setUpMainStore() async {
@@ -27,6 +29,7 @@ Future<MainStore> setUpMainStore() async {
 
 class MyApp extends InheritedWidget {
   final MainStore store;
+  final SuportedLocale defaultLocale;
 
   static const _appThemeModeMapping = {
     AppThemeMode.dark: ThemeMode.dark,
@@ -34,7 +37,7 @@ class MyApp extends InheritedWidget {
     AppThemeMode.system: ThemeMode.system
   };
 
-  MyApp(this.store) : super(
+  MyApp(this.store, this.defaultLocale) : super(
     child: ValueListenableBuilder<MainStoreState>(
       valueListenable: store,
       builder: (context, state, _) {
@@ -45,7 +48,13 @@ class MyApp extends InheritedWidget {
           darkTheme: generateDarkTheme(Colors.indigo),
           themeMode: _appThemeModeMapping[state.settings.themeMode] ?? ThemeMode.light,
           onGenerateRoute: (settings) => generateRoutes(settings),
-          initialRoute: RoutesPaths.flashcards
+          initialRoute: RoutesPaths.flashcards,
+          localizationsDelegates: MyAppLocalizations.localizationsDelegates,
+          supportedLocales: MyAppLocalizations.supportedLocales,
+          locale: MyAppLocalizations.supportedLocales.firstWhere(
+            (candidateLocale) => candidateLocale.languageCode == state.settings.languageCode,
+            orElse: () => defaultLocale
+          ),
         );
       },
     )

@@ -1,0 +1,75 @@
+{
+  "backSide": "Verso",
+  "cancel": "Cancelar",
+  "categories": "Categorias",
+  "category": "Categoria",
+  "categoryName": "Nome da categoria",
+  "confirm": "Confirmar",
+  "createCategory": "Criar categoria",
+  "createFlashcard": "Criar flashcard",
+  "createFlashcardSuccessMessage": "Flashcard cadastrado com sucesso",
+  "darkMode": "Modo escuro",
+  "defaultErrorMessage": "Algo deu errado.",
+  "delete": "Deletar",
+  "deleteCategoryConfirmMessage": "Você tem certeza que deseja deletar a categoria: {category}?",
+  "@deleteCategoryConfirmMessage": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteCategoryErrorMessage": "Ocorreu um erro ao deletar a categoria '{category}'.",
+  "@deleteCategoryErrorMessage": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteCategorySuccessMessage": "Categoria '{category}' deletada com secesso",
+  "@deleteCategorySuccessMessage": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "edit": "Editar",
+  "finish": "Finalizar",
+  "flashcardsQuantity": "Quantidade de flashcards",
+  "frontSide": "Frente",
+  "lessonGenerationErrorMessage": "Ocorreu um erro ao filtrar flashcards para prática, tente novamente",
+  "manageCategories": "Gerenciar categorias",
+  "nextStep": "Próximo passo",
+  "noCategoryRegisteredMessage": "Nenhuma categoria foi registrada ainda",
+  "noFlashcardCreatedMessage": "Você ainda não criou um flashcard",
+  "noFlashcardForSearchMessage": "Nenhum flashcard encontrado para sua pesquisa",
+  "noFlashcardsFoundMessage": "Nenhum flashcard foi encontrado",
+  "openSourceLicenses": "Licenças de código aberto",
+  "practice": "Praticar",
+  "practiceNeedsFlashcardsMessage": "Não é possível praticar porque você ainda não tem flashcards cadastrado",
+  "proficiency": "Domínio",
+  "save": "Salvar",
+  "searchFlashcard": "Pesquisar flashcard",
+  "selectCategory": "Selecione uma categoria",
+  "settings": "Configurações",
+  "start": "Começar",
+  "tryAgain": "Tentar novamente",
+  "typeNumberBetween": "Digite um número entre {min} e {max}",
+  "@typeNumberBetween": {
+    "placeholders": {
+      "min": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "max": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "uncategorized": "Sem categoria",
+  "updateFlashcard": "Atualizar flashcard",
+  "updateFlashcardSuccessMessage": "Flashcard atualizado com sucesso"
+}

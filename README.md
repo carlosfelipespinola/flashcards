@@ -1,6 +1,15 @@
 # Download  
 https://play.google.com/store/apps/details?id=dev.carlosfelipe.flashcards
 
+# Getting Started
+
+run ```flutter packages get``` to install the required packages  
+
+run ```flutter gen-l10n``` to generate internationalization files  
+
+run ```flutter run lib/main.dart``` to start the application  
+
+
 # Architecture  
 
 ### Flutter

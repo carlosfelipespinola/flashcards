@@ -1,4 +1,5 @@
 import 'package:flashcards/domain/models/category.dart';
+import 'package:flashcards/my_app_localizations.dart';
 import 'package:flashcards/ui/widgets/category_picker_dialog.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +21,7 @@ class _CategoryPickerState extends State<CategoryPicker> {
     return Card(
       margin: EdgeInsets.all(0),
       child: ListTile(
-        title: Text('Categoria', style: Theme.of(context).textTheme.caption,),
+        title: Text(MyAppLocalizations.of(context).category, style: Theme.of(context).textTheme.caption,),
         subtitle: Text(widget.selectedCategory?.name ?? '-', style: Theme.of(context).textTheme.subtitle1),
         trailing: Icon(Icons.arrow_drop_down),
         onTap: () {

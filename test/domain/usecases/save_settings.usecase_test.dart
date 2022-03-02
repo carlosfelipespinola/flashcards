@@ -12,9 +12,18 @@ void main() {
   var loadSettingsUseCase = LoadSettingsUseCase(appSettingsRepository: appSettingsRepository);
 
   test('save settings usecase ...', () async {
-    final settingsToSave = AppSettings(themeMode: AppThemeMode.dark);
-    await saveSettingsUseCase(AppSettings(themeMode: AppThemeMode.dark));
+    final settingsToSave = AppSettings(themeMode: AppThemeMode.dark, languageCode: null);
+    await saveSettingsUseCase(settingsToSave);
     final loadedSettings = await loadSettingsUseCase();
     expect(loadedSettings.themeMode, settingsToSave.themeMode);
+    expect(loadedSettings.languageCode, settingsToSave.languageCode);
+  });
+
+  test('save settings usecase with languageCode populated...', () async {
+    final settingsToSave = AppSettings(themeMode: AppThemeMode.dark, languageCode: 'en');
+    await saveSettingsUseCase(settingsToSave);
+    final loadedSettings = await loadSettingsUseCase();
+    expect(loadedSettings.themeMode, settingsToSave.themeMode);
+    expect(loadedSettings.languageCode, settingsToSave.languageCode);
   });
 }

@@ -3,6 +3,7 @@ import 'package:flashcards/domain/models/category.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
 import 'package:flashcards/domain/usecases/delete_flashcard.usecase.dart';
 import 'package:flashcards/domain/usecases/find_flashcards.usecase.dart';
+import 'package:flashcards/my_app_localizations.dart';
 import 'package:flashcards/router.dart';
 import 'package:flashcards/ui/pages/flashcard-editor/flashcard_editor.page.arguments.dart';
 import 'package:flashcards/ui/widgets/confirm_bottom_dialog.dart';
@@ -143,18 +144,18 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
     if (_fetchState == _FlashcardFetchState.error) {
       return Center(
         child: TryAgain(
-          message: 'Algo deu errado, tente novamente.',
+          message: MyAppLocalizations.of(context).defaultErrorMessage,
           onPressed: fetchFlashcards
         ),
       );
     }
     if (_flashcards.isEmpty && widget.searchFilter != null && widget.searchFilter!.isNotEmpty) {
       return Center(
-        child: Text('Nenhum flashcard foi encontrado para a sua pesquisa'),
+        child: Text(MyAppLocalizations.of(context).noFlashcardForSearchMessage),
       );
     } else if (_flashcards.isEmpty) {
       return Center(
-        child: Text('Você ainda não tem nenhum flashcard cadastrado'),
+        child: Text(MyAppLocalizations.of(context).noFlashcardCreatedMessage),
       );
     }
     if (widget.groupByCategory) {
@@ -176,7 +177,11 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
                     child: AppBar(
                       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                       elevation: factor == 1 ? 0.0 : 0.5,
-                      title: Text(category?.name ?? 'Sem categoria', style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.center,),
+                      title: Text(
+                        category?.name ?? MyAppLocalizations.of(context).uncategorized,
+                        style: Theme.of(context).textTheme.headline6,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                 );

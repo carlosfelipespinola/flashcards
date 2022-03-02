@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 class FlashcardSearch extends SearchDelegate {
 
   @override
-  String? get searchFieldLabel => 'Pesquisar';
-  
-  @override
   List<Widget> buildActions(BuildContext context) => [];
 
   @override

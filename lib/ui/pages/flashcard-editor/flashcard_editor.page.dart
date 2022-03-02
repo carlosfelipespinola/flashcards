@@ -1,4 +1,5 @@
 import 'package:flashcards/domain/models/fashcard.dart';
+import 'package:flashcards/my_app_localizations.dart';
 import 'package:flashcards/ui/pages/flashcard-editor/flashcard_editor.page.arguments.dart';
 import 'package:flashcards/ui/widgets/flashcard_form.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ class FlashcardEditorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(title.toUpperCase())),
+      appBar: AppBar(title: Text(titleOf(context).toUpperCase())),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -19,7 +20,7 @@ class FlashcardEditorPage extends StatelessWidget {
             flashcard: arguments.flashcard ?? Flashcard.create(),
             onFlashcardSaved: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(successMessage))
+                SnackBar(content: Text(successMessageOf(context)))
               );
               if(ModalRoute.of(context)!.isCurrent) {
                 Navigator.of(context).pop();
@@ -33,13 +34,13 @@ class FlashcardEditorPage extends StatelessWidget {
 
   bool get isEditing => arguments.flashcard != null;
 
-  String get title {
-    if (isEditing) return 'Atualizar Flashcard';
-    return 'Criar Flashcard';
+  String titleOf(BuildContext context) {
+    if (isEditing) return MyAppLocalizations.of(context).updateFlashcard;
+    return MyAppLocalizations.of(context).createFlashcard;
   }
 
-  String get successMessage {
-    if (isEditing) return 'Flashcard atualizado com sucesso';
-    return 'Flashcard cadastrado com sucesso';
+  String successMessageOf(BuildContext context) {
+    if (isEditing) return MyAppLocalizations.of(context).updateFlashcardSuccessMessage;
+    return MyAppLocalizations.of(context).createFlashcardSuccessMessage;
   }
 }

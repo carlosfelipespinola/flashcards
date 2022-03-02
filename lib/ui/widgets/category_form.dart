@@ -1,5 +1,6 @@
 import 'package:flashcards/domain/models/category.dart';
 import 'package:flashcards/domain/usecases/save_category.usecase.dart';
+import 'package:flashcards/my_app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -60,18 +61,21 @@ class _CategoryFormState extends State<CategoryForm> {
                 validate();
               },
               decoration: InputDecoration(
-                labelText: 'Nome',
+                labelText: MyAppLocalizations.of(context).categoryName,
                 border: OutlineInputBorder()
               ),
             ),
             SizedBox(height: 8),
             if (state == CategoryFormSaveState.error) ...[
-              Text('Algo deu errado, tente novamente', style: TextStyle(color: Theme.of(context).errorColor)),
+              Text(
+                MyAppLocalizations.of(context).defaultErrorMessage,
+                style: TextStyle(color: Theme.of(context).errorColor)
+              ),
               SizedBox(height: 8),
             ],
             ElevatedButton(
               onPressed: canSave ? submit : null,
-              child: Text('Salvar'.toUpperCase())
+              child: Text(MyAppLocalizations.of(context).save.toUpperCase())
             )
           ],
         ),

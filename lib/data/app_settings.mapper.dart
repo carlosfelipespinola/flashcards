@@ -21,13 +21,23 @@ class AppSettingsMapper {
     } else {
       themeMode = standard.themeMode;
     }
-    return AppSettings(themeMode: themeMode);
+    String? languageCode;
+    if (map.containsKey(_AppSettingsJsonKeys.languageCode)) {
+      languageCode = map[_AppSettingsJsonKeys.languageCode] as String;
+    }
+    return AppSettings(
+      themeMode: themeMode,
+      languageCode: languageCode
+    );
   }
 
   
   static String toJson(AppSettings settings) {
     return jsonEncode({
-      _AppSettingsJsonKeys.themeMode: _themeModeStringMapping[settings.themeMode]
+      _AppSettingsJsonKeys.themeMode: _themeModeStringMapping[settings.themeMode],
+      if (settings.languageCode != null) ...{
+        _AppSettingsJsonKeys.languageCode: settings.languageCode
+      }
     });
   }
 }
@@ -39,4 +49,5 @@ class AppSettingsMapper {
 
 class _AppSettingsJsonKeys {
   static String themeMode = 'themeMode';
+  static String languageCode = 'languageCode';
 }

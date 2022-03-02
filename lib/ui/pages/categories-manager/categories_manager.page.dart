@@ -1,5 +1,6 @@
 
 import 'package:flashcards/domain/usecases/delete_category.usecase.dart';
+import 'package:flashcards/my_app_localizations.dart';
 import 'package:flashcards/ui/widgets/bottom_sheet_dialog.dart';
 import 'package:flashcards/ui/widgets/category_list.dart';
 import 'package:flashcards/ui/widgets/confirm_bottom_dialog.dart';
@@ -27,7 +28,7 @@ class _CategoriesManagerPageState extends State<CategoriesManagerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Categorias'),),
+      appBar: AppBar(title: Text(MyAppLocalizations.of(context).categories),),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: CategoryList(
@@ -63,7 +64,10 @@ class _CategoriesManagerPageState extends State<CategoriesManagerPage> {
                       showCategoryDeleteConfirmDialog(category);
                     }, 
                     icon: Icon(Icons.delete, color: Theme.of(context).errorColor),
-                    label: Text('Deletar'.toUpperCase(), style: TextStyle(color: Theme.of(context).errorColor),)
+                    label: Text(
+                      MyAppLocalizations.of(context).delete.toUpperCase(),
+                      style: TextStyle(color: Theme.of(context).errorColor),
+                    )
                   ),
                   SizedBox(width: 12,),
                   ElevatedButton.icon(
@@ -72,7 +76,8 @@ class _CategoriesManagerPageState extends State<CategoriesManagerPage> {
                       Navigator.of(context).pop();
                       showCategoryFormBottomDialog(category);
                     }, 
-                    icon: Icon(Icons.edit), label: Text('Editar'.toUpperCase())
+                    icon: Icon(Icons.edit),
+                    label: Text(MyAppLocalizations.of(context).edit.toUpperCase())
                   )
                 ],
               )
@@ -90,8 +95,8 @@ class _CategoriesManagerPageState extends State<CategoriesManagerPage> {
       context: context,
       builder: (context) {
         return ConfirmBottomDialog(
-          title: 'Deletar categoria',
-          text: 'Você tem certeza que deseja deletar a categoria ${category.name}?',
+          title: MyAppLocalizations.of(context).delete + ' ' + MyAppLocalizations.of(context).category.toLowerCase(),
+          text: MyAppLocalizations.of(context).deleteCategoryConfirmMessage(category.name),
           onConfirm: () => Navigator.of(context).pop(true),
           onCancel: () => Navigator.of(context).pop(false)
         );
@@ -111,9 +116,9 @@ class _CategoriesManagerPageState extends State<CategoriesManagerPage> {
     try {
       categoriesBeingDeleted.add(category);
       await deleteCategoryUseCase(category);
-      showMessage('Categoria "${category.name}" deletada com secesso');
+      showMessage(MyAppLocalizations.of(context).deleteCategorySuccessMessage(category.name));
     } catch (_) {
-      showMessage('Ocorreu um erro ao deletar "${category.name}"');
+      showMessage(MyAppLocalizations.of(context).deleteCategoryErrorMessage(category.name));
     } finally {
       categoriesBeingDeleted.remove(category);
     }

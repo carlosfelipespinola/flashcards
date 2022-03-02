@@ -1,3 +1,4 @@
+import 'package:flashcards/my_app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -45,14 +46,14 @@ class CategoryListState extends State<CategoryList> {
         if (snapshot.hasError) {
           return Center(
             child: TryAgain(
-              message: 'Ocorreu um erro, tente novamente!',
+              message: MyAppLocalizations.of(context).defaultErrorMessage,
               onPressed: fetchCategories
             ),
           );
         }
         if (snapshot.requireData.isEmpty) {
           return Center(
-            child: Text('Você ainda não tem nenhuma categoria cadastrada'),
+            child: Text(MyAppLocalizations.of(context).noCategoryRegisteredMessage),
           );
         }
         return ListView.builder(
