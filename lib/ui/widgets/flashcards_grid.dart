@@ -268,8 +268,8 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
       context: context,
       builder: (context) {
         return ConfirmBottomDialog(
-          title: 'Deletar Flashcard',
-          text: 'Você tem certeza que deseja deletar esse flashcard?',
+          title: "${MyAppLocalizations.of(context).delete} ${MyAppLocalizations.of(context).flashcard}",
+          text: MyAppLocalizations.of(context).deleteFlashcardConfirmMessage,
           onConfirm: () => Navigator.of(context).pop(true),
           onCancel: () => Navigator.of(context).pop(false)
         );
@@ -293,9 +293,9 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
       if (wasScrollAtBottomButThereIsNoMoreScroll) {
         _notifyBottomExit();
       }
-      showMessage('Flashcard deletado com sucesso');
+      showMessage(MyAppLocalizations.of(context).deleteFlashcardSuccessMessage);
     } catch(_) {
-      showMessage('Erro ao deletar flashcard');
+      showMessage(MyAppLocalizations.of(context).deleteFlashcardSuccessMessage);
     } finally {
       _flashcardsBeingDeleted.remove(flashcard);
     }
