@@ -35,8 +35,11 @@
       }
     }
   },
+  "deleteFlashcardConfirmMessage": "¿Está seguro de que desea eliminar este flashcard?",
+  "deleteFlashcardSuccessMessage": "Flashcard eliminado con éxito",
   "edit": "Editar",
   "finish": "Finalizar",
+  "flashcard": "Flashcard",
   "flashcardsQuantity": "Número de flashcards",
   "frontSide": "Lado frontal",
   "lessonGenerationErrorMessage": "Algo salió mal al elegir flashcards para practicar",
