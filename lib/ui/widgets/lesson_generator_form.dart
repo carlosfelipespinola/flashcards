@@ -3,6 +3,7 @@ import 'package:flashcards/domain/models/fashcard.dart';
 import 'package:flashcards/domain/models/lesson_settings.dart';
 import 'package:flashcards/domain/usecases/find_categories_couting_flashcards.usecase.dart';
 import 'package:flashcards/domain/usecases/generate_lesson.usecase.dart';
+import 'package:flashcards/my_app_localizations.dart';
 import 'package:flashcards/ui/widgets/try_again.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -63,7 +64,7 @@ class _LessonGeneratorFormState extends State<LessonGeneratorForm> {
   Widget get tryAgainFetchFlashcards {
     return Center(
       child: TryAgain(
-        message: 'Ocorreu um erro, tente novamente.',
+        message: MyAppLocalizations.of(context).defaultErrorMessage,
         onPressed: () {
           setState(() {
             categoriesFlashcards = findCategoriesCountingFlashcards();
@@ -76,7 +77,7 @@ class _LessonGeneratorFormState extends State<LessonGeneratorForm> {
   Widget get noFlashcardsWarningText {
     return Center(
       child: Text(
-        'Não é possível praticar porque você ainda não tem flashcards cadastrado.',
+        MyAppLocalizations.of(context).practiceNeedsFlashcardsMessage,
         textAlign: TextAlign.center,
       )
     );
@@ -90,7 +91,7 @@ class _LessonGeneratorFormState extends State<LessonGeneratorForm> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            'Selecione uma categoria',
+            MyAppLocalizations.of(context).selectCategory,
             style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
@@ -100,7 +101,10 @@ class _LessonGeneratorFormState extends State<LessonGeneratorForm> {
             itemBuilder: (context, index) {
               final item = categoriesCoutingFlashcards.elementAt(index);
               return ListTile(
-                title: Text(item.category?.name ?? 'Sem categoria', style: Theme.of(context).textTheme.subtitle2),
+                title: Text(
+                  item.category?.name ?? MyAppLocalizations.of(context).uncategorized,
+                  style: Theme.of(context).textTheme.subtitle2
+                ),
                 trailing: chosenCategory != null && chosenCategory!.category == item.category ? Icon(Icons.check) : null,
                 onTap: () {
                   setState(() {
@@ -112,13 +116,16 @@ class _LessonGeneratorFormState extends State<LessonGeneratorForm> {
           )
         ),
         SizedBox(height: 8),
-        ElevatedButton(
-          onPressed: chosenCategory != null ? () {
-            setState(() {
-              step = _LessonGeneratorSteps.selectQuantity;
-            });
-          } : null,
-          child: Text('Próximo Passo'.toUpperCase())
+        Container(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: chosenCategory != null ? () {
+              setState(() {
+                step = _LessonGeneratorSteps.selectQuantity;
+              });
+            } : null,
+            child: Text(MyAppLocalizations.of(context).nextStep.toUpperCase())
+          ),
         )
       ],
     );
@@ -130,8 +137,8 @@ class _LessonGeneratorFormState extends State<LessonGeneratorForm> {
         TextFormField(
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
-            labelText: 'Quantidade de flashcards',
-            counterText: 'Digite um número de 1 até ${chosenCategory!.flashcardsCount}'
+            labelText: MyAppLocalizations.of(context).flashcardsQuantity,
+            counterText: MyAppLocalizations.of(context).typeNumberBetween(1, chosenCategory!.flashcardsCount)
           ),
           onChanged: (value) {
             setState(() {
@@ -144,14 +151,17 @@ class _LessonGeneratorFormState extends State<LessonGeneratorForm> {
           },
         ),
         Spacer(),
-        ElevatedButton(
-          onPressed: count > 0 && count <= chosenCategory!.flashcardsCount ? () {
-            generateLesson(LessonSettings(
-              category: chosenCategory!.category,
-              flashcardsCount: count
-            ));
-          } : null,
-          child: Text('Começar'.toUpperCase())
+        Container(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: count > 0 && count <= chosenCategory!.flashcardsCount ? () {
+              generateLesson(LessonSettings(
+                category: chosenCategory!.category,
+                flashcardsCount: count
+              ));
+            } : null,
+            child: Text(MyAppLocalizations.of(context).start.toUpperCase())
+          ),
         )
       ],
     );
@@ -159,7 +169,7 @@ class _LessonGeneratorFormState extends State<LessonGeneratorForm> {
 
   Widget get tryAgainGenerateLesson {
     return TryAgain(
-      message: 'Ocorreu um erro ao filtrar flashcards para prática, tente novamente.',
+      message: MyAppLocalizations.of(context).lessonGenerationErrorMessage,
       onPressed: () {
         generateLesson(LessonSettings(
           category: chosenCategory!.category,

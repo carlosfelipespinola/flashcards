@@ -3,6 +3,7 @@ import 'package:flashcards/domain/models/category.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
 import 'package:flashcards/domain/usecases/delete_flashcard.usecase.dart';
 import 'package:flashcards/domain/usecases/find_flashcards.usecase.dart';
+import 'package:flashcards/my_app_localizations.dart';
 import 'package:flashcards/router.dart';
 import 'package:flashcards/ui/pages/flashcard-editor/flashcard_editor.page.arguments.dart';
 import 'package:flashcards/ui/widgets/confirm_bottom_dialog.dart';
@@ -143,18 +144,18 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
     if (_fetchState == _FlashcardFetchState.error) {
       return Center(
         child: TryAgain(
-          message: 'Algo deu errado, tente novamente.',
+          message: MyAppLocalizations.of(context).defaultErrorMessage,
           onPressed: fetchFlashcards
         ),
       );
     }
     if (_flashcards.isEmpty && widget.searchFilter != null && widget.searchFilter!.isNotEmpty) {
       return Center(
-        child: Text('Nenhum flashcard foi encontrado para a sua pesquisa'),
+        child: Text(MyAppLocalizations.of(context).noFlashcardForSearchMessage),
       );
     } else if (_flashcards.isEmpty) {
       return Center(
-        child: Text('Você ainda não tem nenhum flashcard cadastrado'),
+        child: Text(MyAppLocalizations.of(context).noFlashcardCreatedMessage),
       );
     }
     if (widget.groupByCategory) {
@@ -176,7 +177,11 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
                     child: AppBar(
                       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                       elevation: factor == 1 ? 0.0 : 0.5,
-                      title: Text(category?.name ?? 'Sem categoria', style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.center,),
+                      title: Text(
+                        category?.name ?? MyAppLocalizations.of(context).uncategorized,
+                        style: Theme.of(context).textTheme.headline6,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                 );
@@ -263,8 +268,8 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
       context: context,
       builder: (context) {
         return ConfirmBottomDialog(
-          title: 'Deletar Flashcard',
-          text: 'Você tem certeza que deseja deletar esse flashcard?',
+          title: "${MyAppLocalizations.of(context).delete} ${MyAppLocalizations.of(context).flashcard}",
+          text: MyAppLocalizations.of(context).deleteFlashcardConfirmMessage,
           onConfirm: () => Navigator.of(context).pop(true),
           onCancel: () => Navigator.of(context).pop(false)
         );
@@ -288,9 +293,9 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
       if (wasScrollAtBottomButThereIsNoMoreScroll) {
         _notifyBottomExit();
       }
-      showMessage('Flashcard deletado com sucesso');
+      showMessage(MyAppLocalizations.of(context).deleteFlashcardSuccessMessage);
     } catch(_) {
-      showMessage('Erro ao deletar flashcard');
+      showMessage(MyAppLocalizations.of(context).deleteFlashcardSuccessMessage);
     } finally {
       _flashcardsBeingDeleted.remove(flashcard);
     }

@@ -1,3 +1,4 @@
+import 'package:flashcards/my_app_localizations.dart';
 import 'package:flutter/material.dart';
 
 
@@ -20,7 +21,7 @@ class TryAgain extends StatelessWidget {
           Text(message, textAlign: TextAlign.center,),
           SizedBox(height: 12,),
           ElevatedButton.icon(
-            label: Text('Tente novamente'),
+            label: Text(MyAppLocalizations.of(context).tryAgain),
             icon: Icon(Icons.refresh),
             onPressed: onPressed,
           )

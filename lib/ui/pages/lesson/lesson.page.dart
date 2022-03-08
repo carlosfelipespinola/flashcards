@@ -1,6 +1,7 @@
 
 import 'package:flashcards/domain/models/fashcard.dart';
 import 'package:flashcards/domain/usecases/answer_flashcard.dart';
+import 'package:flashcards/my_app_localizations.dart';
 import 'package:flashcards/themes.dart';
 import 'package:flashcards/ui/pages/lesson/lesson.page.arguments.dart';
 import 'package:flashcards/ui/widgets/flashcard.dart';
@@ -50,7 +51,11 @@ class _LessonPageState extends State<LessonPage> {
       appBar: ProgressAppBar(progress: progress,),
       body: Builder(
         builder: (context) {
-          if (flashcards.length == 0) return Center(child: Text('Nenhum flashcard foi encontrado'),);
+          if (flashcards.length == 0) {
+            return Center(
+              child: Text(MyAppLocalizations.of(context).noFlashcardsFoundMessage)
+            );
+          }
           if (hasFinished) return buildResultBody();
           else return buildCurrentFlashcard();
         }
@@ -79,7 +84,7 @@ class _LessonPageState extends State<LessonPage> {
 
   Widget buildResultBody() {
     return Theme(
-      data: greenTheme,
+      data: ThemeUtils.isDarkTheme(Theme.of(context)) ? generateDarkTheme(Colors.green) : generateLightTheme(Colors.green),
       child: Builder(
         builder: (context) {
           return Center(
@@ -119,8 +124,9 @@ class _LessonPageState extends State<LessonPage> {
   }
 
   Widget buildAnswerOptions () {
+    
     return Theme(
-      data: greenTheme,
+      data: ThemeUtils.isDarkTheme(Theme.of(context)) ? generateDarkTheme(Colors.green) : generateLightTheme(Colors.green),
       child: Builder(
         builder: (context) {
           return ButtonBar(
@@ -163,7 +169,7 @@ class _LessonPageState extends State<LessonPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
         child: FloatingActionButton.extended(
           onPressed: () => Navigator.of(context).pop(),
-          label: Text('Finalizar')
+          label: Text(MyAppLocalizations.of(context).finish)
         ),
       ),
     );

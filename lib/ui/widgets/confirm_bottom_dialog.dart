@@ -1,4 +1,5 @@
 
+import 'package:flashcards/my_app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmBottomDialog extends StatelessWidget {
@@ -32,13 +33,19 @@ class ConfirmBottomDialog extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextButton(
-                child: Text('Cancelar'.toUpperCase(), style: TextStyle(color: Theme.of(context).errorColor),),
+                child: Text(
+                  MyAppLocalizations.of(context).cancel.toUpperCase(),
+                  style: TextStyle(color: Theme.of(context).errorColor)
+                ),
                 onPressed: onCancel
               ),
               SizedBox(width: 12),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(elevation: 0),
-                child: Text('Confirmar'.toUpperCase(), textAlign: TextAlign.center,),
+                child: Text(
+                  MyAppLocalizations.of(context).confirm.toUpperCase(),
+                  textAlign: TextAlign.center
+                ),
                 onPressed: onConfirm,
               ),
             ],

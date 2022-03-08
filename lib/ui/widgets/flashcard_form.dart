@@ -1,6 +1,7 @@
 import 'package:flashcards/domain/models/category.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
 import 'package:flashcards/domain/usecases/save_flashcard.usecase.dart';
+import 'package:flashcards/my_app_localizations.dart';
 import 'package:flashcards/ui/widgets/category_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flashcards/ui/widgets/text_area_card.dart';
@@ -65,7 +66,7 @@ class _FlashcardFormState extends State<FlashcardForm> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             TextAreaCard(
-              label: 'Frente',
+              label: MyAppLocalizations.of(context).frontSide,
               focusNode: _frontFocusNode,
               textInputAction: _definitionController.text.isNotEmpty ? TextInputAction.done : TextInputAction.next,
               controller: _termController,
@@ -77,7 +78,7 @@ class _FlashcardFormState extends State<FlashcardForm> {
             ),
             SizedBox(height: 12,),
             TextAreaCard(
-              label: 'Trás',
+              label: MyAppLocalizations.of(context).backSide,
               textInputAction: TextInputAction.done,
               controller: _definitionController,
               onChange: (_) => validate(),
@@ -93,7 +94,7 @@ class _FlashcardFormState extends State<FlashcardForm> {
             if ( state == FlashcardFormSaveState.error ) ... [
               SizedBox(height: 12,),
               Text(
-                'Ocorreu um erro ao salvar flashcard',
+                MyAppLocalizations.of(context).defaultErrorMessage,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Theme.of(context).errorColor)
               ),
@@ -102,7 +103,7 @@ class _FlashcardFormState extends State<FlashcardForm> {
             ElevatedButton.icon(
               onPressed: canSave ? save : null,
               icon: Icon(Icons.save),
-              label: Text('Salvar'.toUpperCase())
+              label: Text(MyAppLocalizations.of(context).save.toUpperCase())
             )
           ],
         )  

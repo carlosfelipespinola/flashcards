@@ -1,31 +1,61 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-ThemeData get indigoTheme => generateLightTheme(Colors.indigo);
-
-ThemeData get greenTheme => generateLightTheme(Colors.green);
 
 ThemeData generateLightTheme(MaterialColor color) {
-  final primaryColor = color[400];
-  final backgroundColor = color[50];
+  return _generateBaseTheme(
+    colorScheme: ColorScheme.light(
+      primary: color,
+      secondary: color,
+      background: color[50]!,
+    )
+  );
+}
+
+ThemeData generateDarkTheme(MaterialColor color) {
+  return _generateBaseTheme(
+    colorScheme: ColorScheme.dark(
+      primary: color,
+      secondary: color,
+    )
+  );
+}
+
+ThemeData _generateBaseTheme({
+  required ColorScheme colorScheme,
+}) {
   return ThemeData(
-    scaffoldBackgroundColor: backgroundColor,
+    scaffoldBackgroundColor: colorScheme.background,
+    colorScheme: colorScheme,
+    primaryColor: colorScheme.primary,
+    primaryColorBrightness: ThemeData.estimateBrightnessForColor(colorScheme.primary),
+    accentColor: colorScheme.secondary,
+    accentColorBrightness: ThemeData.estimateBrightnessForColor(colorScheme.secondary),
+    buttonColor: colorScheme.primary,
+    elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(
+      primary: colorScheme.primary,
+      onPrimary: ThemeData.estimateBrightnessForColor(colorScheme.primary) == Brightness.dark ? Colors.white : Colors.black,
+      minimumSize: Size(40, 40)
+    )),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: colorScheme.primary, foregroundColor: Colors.white),
     appBarTheme: AppBarTheme(
-      brightness: Brightness.light,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarBrightness: colorScheme.brightness,
+        statusBarIconBrightness: colorScheme.brightness,
+      ),
       centerTitle: true,
-      iconTheme: IconThemeData(color: Colors.black),
-      color: Colors.white,
       elevation: 1,
+      brightness: colorScheme.brightness,
+      color: colorScheme.brightness == Brightness.light ? Colors.white : Colors.black,
+      iconTheme: IconThemeData(color: colorScheme.brightness == Brightness.light ? Colors.black : Colors.white),
       textTheme: TextTheme(
         headline6: TextStyle(
           fontSize: 24,
-          color: Colors.black,
+          color: colorScheme.brightness == Brightness.light ? Colors.black : null,
           fontWeight: FontWeight.w900
         )
       ),
-    ),
-    tabBarTheme: TabBarTheme(
-      labelColor: Colors.black
     ),
     cardTheme: CardTheme(
       elevation: 0.6,
@@ -40,11 +70,14 @@ ThemeData generateLightTheme(MaterialColor color) {
         borderRadius: BorderRadius.only(topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0))
       ),
     ),
-    elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(primary: primaryColor)),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: primaryColor),
-    buttonColor: primaryColor,
-    primarySwatch: color,
-    primaryColor: primaryColor,
-    accentColor: color
+    inputDecorationTheme: InputDecorationTheme(
+      border: OutlineInputBorder()
+    )
   );
+}
+
+class ThemeUtils {
+  static bool isDarkTheme(ThemeData theme) {
+    return theme.brightness == Brightness.dark;
+  }
 }

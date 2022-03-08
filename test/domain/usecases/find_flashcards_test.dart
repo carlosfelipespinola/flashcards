@@ -47,7 +47,7 @@ void main() async {
         )
       ];
       for (var flashcard in flashcards) { await flashcardRepository.save(flashcard); }
-      var flashcardsFound = await flashcardRepository.findAll();
+      var flashcardsFound = await flashcardRepository.query();
       expect(flashcardsFound.length, 2);
       for (var flashcard in flashcards) {
         expect(flashcard.category != null, true);

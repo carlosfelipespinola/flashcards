@@ -1,5 +1,6 @@
 import 'package:flashcards/domain/models/category.dart';
 import 'package:flashcards/domain/usecases/find_categories.usecase.dart';
+import 'package:flashcards/my_app_localizations.dart';
 import 'package:flashcards/ui/widgets/bottom_sheet_dialog.dart';
 import 'package:flashcards/ui/widgets/category_form.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class _CategoryPickerDialogState extends State<CategoryPickerDialog> {
           return Center(child: CircularProgressIndicator(),);
         }
         if (snapshot.hasError) {
-          return Center(child: Text('Algo deu errado, tente novamente mais tarde!'),);
+          return Center(child: Text(MyAppLocalizations.of(context).defaultErrorMessage),);
         }
         if (!snapshot.hasData) {
           return Container();
@@ -46,7 +47,7 @@ class _CategoryPickerDialogState extends State<CategoryPickerDialog> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Center(child: Text('Você ainda não tem nenhuma categoria cadastrada'),),
+                Center(child: Text(MyAppLocalizations.of(context).noCategoryRegisteredMessage),),
                 SizedBox(height: 12,),
                 buildCreateCategoryButton()
               ],
@@ -122,7 +123,7 @@ class _CategoryPickerDialogState extends State<CategoryPickerDialog> {
           });
         },
         icon: Icon(Icons.add), 
-        label: Text('Criar Nova categoria'.toUpperCase())
+        label: Text(MyAppLocalizations.of(context).createCategory.toUpperCase())
       ),
     );
   }
