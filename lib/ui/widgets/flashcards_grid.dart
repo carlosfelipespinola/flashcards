@@ -216,7 +216,7 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
           builder: (context, constraints) {
             return Container(
               decoration: _hightLightedFlashcard == flashcard ? BoxDecoration(
-                border: Border.all(color: Theme.of(context).accentColor),
+                border: Border.all(color: Theme.of(context).colorScheme.secondary),
                 borderRadius: cardShape is RoundedRectangleBorder ? cardShape.borderRadius : null
               ) : null,
               child: FlashcardTile(
