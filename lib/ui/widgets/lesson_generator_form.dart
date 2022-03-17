@@ -6,7 +6,6 @@ import 'package:flashcards/domain/usecases/generate_lesson.usecase.dart';
 import 'package:flashcards/my_app_localizations.dart';
 import 'package:flashcards/ui/widgets/try_again.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
 class LessonGeneratorForm extends StatefulWidget {

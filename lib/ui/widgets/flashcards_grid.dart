@@ -9,7 +9,6 @@ import 'package:flashcards/ui/pages/flashcard-editor/flashcard_editor.page.argum
 import 'package:flashcards/ui/widgets/confirm_bottom_dialog.dart';
 import 'package:flashcards/ui/widgets/flashcard.dart';
 import 'package:flashcards/ui/widgets/try_again.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sticky_headers/sticky_headers.dart';
