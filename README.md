@@ -13,7 +13,7 @@ run ```flutter run lib/main.dart``` to start the application
 # Architecture  
 
 ### Flutter
-  version: 2.2.3
+  version: 2.10.x
 
 ### Layers and dependencies  
 / domain - defines the business logic of the application.  
