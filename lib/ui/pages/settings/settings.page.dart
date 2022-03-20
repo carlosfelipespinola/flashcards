@@ -5,7 +5,6 @@ import 'package:flashcards/main.store.dart';
 import 'package:flashcards/my_app_localizations.dart';
 import 'package:flashcards/services/app_info/app_info.dart';
 import 'package:flashcards/ui/widgets/language_picker_dialog.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 

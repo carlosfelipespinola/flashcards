@@ -4,20 +4,26 @@ import 'package:flutter/services.dart';
 
 
 ThemeData generateLightTheme(MaterialColor color) {
+  final onColor = ThemeData.estimateBrightnessForColor(color).contrastColor;
   return _generateBaseTheme(
     colorScheme: ColorScheme.light(
       primary: color,
+      onPrimary: onColor,
       secondary: color,
+      onSecondary: onColor,
       background: color[50]!,
     )
   );
 }
 
 ThemeData generateDarkTheme(MaterialColor color) {
+  final onColor = ThemeData.estimateBrightnessForColor(color).contrastColor;
   return _generateBaseTheme(
     colorScheme: ColorScheme.dark(
       primary: color,
+      onPrimary: onColor,
       secondary: color,
+      onSecondary: onColor
     )
   );
 }
@@ -29,10 +35,6 @@ ThemeData _generateBaseTheme({
     scaffoldBackgroundColor: colorScheme.background,
     colorScheme: colorScheme,
     primaryColor: colorScheme.primary,
-    primaryColorBrightness: ThemeData.estimateBrightnessForColor(colorScheme.primary),
-    accentColor: colorScheme.secondary,
-    accentColorBrightness: ThemeData.estimateBrightnessForColor(colorScheme.secondary),
-    buttonColor: colorScheme.primary,
     elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(
       primary: colorScheme.primary,
       onPrimary: ThemeData.estimateBrightnessForColor(colorScheme.primary) == Brightness.dark ? Colors.white : Colors.black,
@@ -41,20 +43,17 @@ ThemeData _generateBaseTheme({
     floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: colorScheme.primary, foregroundColor: Colors.white),
     appBarTheme: AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarBrightness: colorScheme.brightness,
-        statusBarIconBrightness: colorScheme.brightness,
+        statusBarBrightness: colorScheme.brightness.inverse,
+        statusBarIconBrightness: colorScheme.brightness.inverse,
       ),
       centerTitle: true,
       elevation: 1,
-      brightness: colorScheme.brightness,
       color: colorScheme.brightness == Brightness.light ? Colors.white : Colors.black,
       iconTheme: IconThemeData(color: colorScheme.brightness == Brightness.light ? Colors.black : Colors.white),
-      textTheme: TextTheme(
-        headline6: TextStyle(
-          fontSize: 24,
-          color: colorScheme.brightness == Brightness.light ? Colors.black : null,
-          fontWeight: FontWeight.w900
-        )
+      toolbarTextStyle: TextStyle(
+        fontSize: 24,
+        color: colorScheme.brightness == Brightness.light ? Colors.black : null,
+        fontWeight: FontWeight.w900
       ),
     ),
     cardTheme: CardTheme(
@@ -79,5 +78,18 @@ ThemeData _generateBaseTheme({
 class ThemeUtils {
   static bool isDarkTheme(ThemeData theme) {
     return theme.brightness == Brightness.dark;
+  }
+}
+
+
+extension _BrightnessThemeUtils on Brightness {
+  Brightness get inverse {
+    if (this == Brightness.dark) return Brightness.light;
+    return Brightness.dark;
+  }
+
+  Color get contrastColor {
+    if (this == Brightness.dark) return Colors.white;
+    return Colors.black;
   }
 }

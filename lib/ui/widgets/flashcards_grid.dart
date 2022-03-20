@@ -9,7 +9,6 @@ import 'package:flashcards/ui/pages/flashcard-editor/flashcard_editor.page.argum
 import 'package:flashcards/ui/widgets/confirm_bottom_dialog.dart';
 import 'package:flashcards/ui/widgets/flashcard.dart';
 import 'package:flashcards/ui/widgets/try_again.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sticky_headers/sticky_headers.dart';
@@ -217,7 +216,7 @@ class FlashcardsGridState extends State<FlashcardsGrid> {
           builder: (context, constraints) {
             return Container(
               decoration: _hightLightedFlashcard == flashcard ? BoxDecoration(
-                border: Border.all(color: Theme.of(context).accentColor),
+                border: Border.all(color: Theme.of(context).colorScheme.secondary),
                 borderRadius: cardShape is RoundedRectangleBorder ? cardShape.borderRadius : null
               ) : null,
               child: FlashcardTile(
