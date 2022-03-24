@@ -19,6 +19,7 @@ ThemeData generateLightTheme(MaterialColor color) {
 ThemeData generateDarkTheme(MaterialColor color) {
   final onColor = ThemeData.estimateBrightnessForColor(color).contrastColor;
   return _generateBaseTheme(
+    cursorColor: color.shade200,
     colorScheme: ColorScheme.dark(
       primary: color,
       onPrimary: onColor,
@@ -30,10 +31,14 @@ ThemeData generateDarkTheme(MaterialColor color) {
 
 ThemeData _generateBaseTheme({
   required ColorScheme colorScheme,
+  Color? cursorColor
 }) {
   return ThemeData(
     scaffoldBackgroundColor: colorScheme.background,
     colorScheme: colorScheme,
+    textSelectionTheme: TextSelectionThemeData(
+      cursorColor: cursorColor
+    ),
     primaryColor: colorScheme.primary,
     elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(
       primary: colorScheme.primary,
