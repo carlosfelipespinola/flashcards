@@ -4,6 +4,7 @@ import 'package:flashcards/main.dart';
 import 'package:flashcards/main.store.dart';
 import 'package:flashcards/my_app_localizations.dart';
 import 'package:flashcards/services/app_info/app_info.dart';
+import 'package:flashcards/themes.dart';
 import 'package:flashcards/ui/widgets/language_picker_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -31,9 +32,9 @@ class SettingsPage extends StatelessWidget {
                     leading: Icon(Icons.dark_mode),
                     title: Text(MyAppLocalizations.of(context).darkMode),
                     trailing: Switch.adaptive(
-                      value: state.settings.themeMode == AppThemeMode.dark,
-                      onChanged: (value) {
-                        if (value) {
+                      value: ThemeUtils.isDarkTheme(Theme.of(context)),
+                      onChanged: (isDark) {
+                        if (isDark) {
                           store.updateSettings(store.value.settings.copyWith(themeMode: AppThemeMode.dark));
                         } else {
                           store.updateSettings(store.value.settings.copyWith(themeMode: AppThemeMode.light));

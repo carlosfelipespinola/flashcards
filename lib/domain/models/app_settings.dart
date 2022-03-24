@@ -11,7 +11,7 @@ class AppSettings {
 
   factory AppSettings.standard() {
     return AppSettings(
-      themeMode: AppThemeMode.light,
+      themeMode: AppThemeMode.system,
       languageCode: null
     );
   }

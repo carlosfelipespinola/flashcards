@@ -62,7 +62,7 @@ class MyApp extends InheritedWidget {
           debugShowCheckedModeBanner: false,
           theme: generateLightTheme(Colors.indigo),
           darkTheme: generateDarkTheme(Colors.indigo),
-          themeMode: _appThemeModeMapping[state.settings.themeMode] ?? ThemeMode.light,
+          themeMode: _appThemeModeMapping[state.settings.themeMode] ?? ThemeMode.system,
           onGenerateRoute: (settings) => generateRoutes(settings),
           initialRoute: RoutesPaths.flashcards,
           localizationsDelegates: MyAppLocalizations.localizationsDelegates,
