@@ -7,7 +7,6 @@ import 'package:flashcards/domain/models/fashcard.dart';
 import 'package:flashcards/domain/usecases/save_flashcard.usecase.dart';
 import 'package:flashcards/data/database.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'dart:math' as math;
 
 void main() async {
   var dbProvider = DatabaseProvider(test: true);
