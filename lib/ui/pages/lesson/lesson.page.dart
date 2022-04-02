@@ -37,7 +37,7 @@ class _LessonPageState extends State<LessonPage> {
   @override
   void initState() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    flashcards = widget.arguments.flashcards;
+    flashcards = widget.arguments.flashcards..shuffle();
     super.initState();
   }
 
