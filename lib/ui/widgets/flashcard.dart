@@ -28,6 +28,10 @@ class FlashcardTile extends StatefulWidget {
 class FlashcardTileState extends State<FlashcardTile> {
 
   final GlobalKey<TurnableCardState> _turnableCardKey = GlobalKey();
+
+  static double _minFontSize = 10.0;
+
+  static double _initialFontSize = 18.0;
   
   @override
   Widget build(BuildContext context) {
@@ -42,7 +46,8 @@ class FlashcardTileState extends State<FlashcardTile> {
           return Center(
               child: AutoSizeText(
                 widget.flashcard.term,
-                style: TextStyle(fontSize: 18.0),
+                minFontSize: _minFontSize,
+                style: TextStyle(fontSize: _initialFontSize),
                 textAlign: TextAlign.center,
               )
           );
@@ -50,7 +55,8 @@ class FlashcardTileState extends State<FlashcardTile> {
           return Center(
               child: AutoSizeText(
                 widget.flashcard.definition,
-                style: TextStyle(fontSize: 18.0),
+                minFontSize: _minFontSize,
+                style: TextStyle(fontSize: _initialFontSize),
                 textAlign: TextAlign.center,
               )
           );
