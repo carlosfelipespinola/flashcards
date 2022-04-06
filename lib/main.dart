@@ -7,14 +7,22 @@ import 'package:flashcards/my_app_localizations.dart';
 import 'package:flashcards/router.dart';
 import 'package:flashcards/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get_it/get_it.dart';
 
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await setupDependencies();
   final mainStore = await setUpMainStore();
-  runApp(MyApp(mainStore, await MyAppLocalizations.findSystemLocaleOrDefault()));
+  runApp(MyApp(
+    store: mainStore,
+    defaultLocale: await MyAppLocalizations.findSystemLocaleOrDefault(),
+    onAfterFirstBuild: () {
+      FlutterNativeSplash.remove();
+    },
+  ));
 }
 
 Future<MainStore> setUpMainStore() async {
@@ -37,16 +45,24 @@ class MyApp extends InheritedWidget {
     AppThemeMode.system: ThemeMode.system
   };
 
-  MyApp(this.store, this.defaultLocale) : super(
+  static bool _wasBuildCalledAtLeastOnce = false;
+
+  MyApp({required this.store, required this.defaultLocale, VoidCallback? onAfterFirstBuild}) : super(
     child: ValueListenableBuilder<MainStoreState>(
       valueListenable: store,
       builder: (context, state, _) {
+        if (!_wasBuildCalledAtLeastOnce) {
+          _wasBuildCalledAtLeastOnce = true;
+          WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+            onAfterFirstBuild?.call();
+          });
+        }
         return MaterialApp(
           title: 'MyFlashcards',
           debugShowCheckedModeBanner: false,
           theme: generateLightTheme(Colors.indigo),
           darkTheme: generateDarkTheme(Colors.indigo),
-          themeMode: _appThemeModeMapping[state.settings.themeMode] ?? ThemeMode.light,
+          themeMode: _appThemeModeMapping[state.settings.themeMode] ?? ThemeMode.system,
           onGenerateRoute: (settings) => generateRoutes(settings),
           initialRoute: RoutesPaths.flashcards,
           localizationsDelegates: MyAppLocalizations.localizationsDelegates,

@@ -3,6 +3,9 @@ import 'package:flashcards/domain/models/category.dart';
 enum FlashcardSortableFields { lastSeentAt, strength }
 
 class Flashcard {
+  static int maxCharactersLength = 200;
+  static int minCharactersLength = 1;
+
   int? id;
   String term;
   String definition;
@@ -49,7 +52,10 @@ class Flashcard {
   bool isValid() {
     if (_strength < 1 || _strength > 5)
       return false;
-    if (term.length < 1 || definition.length < 1) {
+    if (term.length < minCharactersLength || definition.length < minCharactersLength) {
+      return false;
+    }
+    if (term.length > maxCharactersLength || definition.length > maxCharactersLength) {
       return false;
     }
     return true;

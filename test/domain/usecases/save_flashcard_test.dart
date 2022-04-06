@@ -125,6 +125,96 @@ void main() async {
       expect(flashcardSaved.id == null, false);
     });
 
+    test('create flashcard should fail because term length is not between (minCharactersLength and maxCharactersLength)', () async {
+      final flashcards = [
+        Flashcard(
+          term: List<String>.generate(Flashcard.maxCharactersLength + 1, (_) => 'a').join(),
+          definition: 'definition',
+          lastSeenAt: DateTime.now(),
+          strength: 1,
+          category: null,
+          id: null
+        ),
+        Flashcard(
+          term: '',
+          definition: 'definition',
+          lastSeenAt: DateTime.now(),
+          strength: 1,
+          category: null,
+          id: null
+        ),
+      ];
+      for (var flashcard in flashcards) {
+        bool hasFailed = false;
+        try {
+          await saveFlashcard(flashcard);
+        } catch (_) {
+          hasFailed = true;
+        }
+        expect(hasFailed, true);
+      }
+    });
+
+    test('create flashcard should fail because definition length is not between (minCharactersLength and maxCharactersLength)', () async {
+      final flashcards = [
+        Flashcard(
+          term: 'term',
+          definition: List<String>.generate(Flashcard.maxCharactersLength + 1, (_) => 'a').join(),
+          lastSeenAt: DateTime.now(),
+          strength: 1,
+          category: null,
+          id: null
+        ),
+        Flashcard(
+          term: 'term',
+          definition: '',
+          lastSeenAt: DateTime.now(),
+          strength: 1,
+          category: null,
+          id: null
+        ),
+      ];
+      for (var flashcard in flashcards) {
+        bool hasFailed = false;
+        try {
+          await saveFlashcard(flashcard);
+        } catch (_) {
+          hasFailed = true;
+        }
+        expect(hasFailed, true);
+      }
+    });
+
+    test("create flashcard should work having term's length or definition's length equals to maxCharactersLength", () async {
+      final flashcards = [
+        Flashcard(
+          term: 'term',
+          definition: List<String>.generate(Flashcard.maxCharactersLength, (_) => 'a').join(),
+          lastSeenAt: DateTime.now(),
+          strength: 1,
+          category: null,
+          id: null
+        ),
+        Flashcard(
+          term: List<String>.generate(Flashcard.maxCharactersLength, (_) => 'a').join(),
+          definition: 'definition',
+          lastSeenAt: DateTime.now(),
+          strength: 1,
+          category: null,
+          id: null
+        ),
+      ];
+      for (var flashcard in flashcards) {
+        bool hasFailed = false;
+        try {
+          await saveFlashcard(flashcard);
+        } catch (_) {
+          hasFailed = true;
+        }
+        expect(hasFailed, false);
+      }
+    });
+
   });
 
 }

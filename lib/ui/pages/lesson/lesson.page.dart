@@ -32,16 +32,27 @@ class _LessonPageState extends State<LessonPage> {
 
   bool hasSeenCurrentCard = false;
 
+  SystemUiOverlayStyle? initialOverlayStyle;
+
   @override
   void initState() {
-    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
-    flashcards = widget.arguments.flashcards;
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    flashcards = widget.arguments.flashcards..shuffle();
     super.initState();
   }
 
   @override
+  void didChangeDependencies() {
+    initialOverlayStyle = Theme.of(context).appBarTheme.systemOverlayStyle;
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
-    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    if (initialOverlayStyle != null) {
+      SystemChrome.setSystemUIOverlayStyle(initialOverlayStyle!);
+    }
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     super.dispose();
   }
 

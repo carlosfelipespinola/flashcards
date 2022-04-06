@@ -36,7 +36,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
         animatedIconTheme: IconThemeData(size: 22.0),
         visible: !shouldHideFloatingActionButton,
         backgroundColor: Theme.of(context).primaryColor,
-        foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         overlayColor: Colors.black,
         children: [
           SpeedDialChild(
@@ -47,7 +47,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
               _flashcardsGridKey.currentState?.fetchFlashcards();
             },
             backgroundColor: Theme.of(context).primaryColor,
-            foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
               child: Text(
@@ -61,7 +61,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
             child: Icon(Icons.play_arrow),
             onTap: showLessonGeneratorForm,
             backgroundColor: Theme.of(context).primaryColor,
-            foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
               child: Text(
@@ -78,7 +78,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
               _flashcardsGridKey.currentState?.fetchFlashcards();
             },
             backgroundColor: Theme.of(context).primaryColor,
-            foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
               child: Text(
@@ -95,7 +95,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
               _flashcardsGridKey.currentState?.fetchFlashcards();
             },
             backgroundColor: Theme.of(context).primaryColor,
-            foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
               child: Text(
@@ -109,7 +109,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
             child: Icon(Icons.settings),
             onTap: () => Navigator.of(context).pushNamed(RoutesPaths.settings),
             backgroundColor: Theme.of(context).primaryColor,
-            foregroundColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white : Colors.black,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
             labelWidget: Container(
               margin: EdgeInsets.only(right: 12),
               child: Text(

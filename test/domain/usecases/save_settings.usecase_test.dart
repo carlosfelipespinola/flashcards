@@ -26,4 +26,12 @@ void main() {
     expect(loadedSettings.themeMode, settingsToSave.themeMode);
     expect(loadedSettings.languageCode, settingsToSave.languageCode);
   });
+
+  test('save settings usecase with AppThemeMode.system theme ...', () async {
+    final settingsToSave = AppSettings(themeMode: AppThemeMode.system, languageCode: null);
+    await saveSettingsUseCase(settingsToSave);
+    final loadedSettings = await loadSettingsUseCase();
+    expect(loadedSettings.themeMode, settingsToSave.themeMode);
+    expect(loadedSettings.languageCode, settingsToSave.languageCode);
+  });
 }
