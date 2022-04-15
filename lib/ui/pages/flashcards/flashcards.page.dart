@@ -29,6 +29,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
           key: _flashcardsGridKey,
           onScrollBottomEnter: () => setState(() { shouldHideFloatingActionButton = true; }),
           onScrollBottomExit: () => setState(() { shouldHideFloatingActionButton = false; }),
+          numberOfRowsPerCategory: 2,
         )
       ),
       floatingActionButton: SpeedDial(
