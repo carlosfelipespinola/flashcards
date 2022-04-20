@@ -41,7 +41,13 @@ class Migrations {
           ' ${SharedPreferencesSchema.value} TEXT NOT NULL'
         ');'
       ]
-    )
+    ),
+    Migration(
+      version: 4,
+      scripts: [
+        'ALTER TABLE ${FlashcardSchema.tableName} ADD COLUMN ${FlashcardSchema.lowPriorityStrength} INTEGER;'
+      ]
+    ),
   ];
 
   static int get lastVersion {

@@ -9,4 +9,5 @@ class FlashcardSchema {
   static String category = 'flashcard_category';
   static String enteredLowAt = 'flashcard_entered_low_at';
   static String exitsLowAt = 'flashcard_exits_low_at';
+  static String lowPriorityStrength = 'flashcard_low_priority_strength';
 }

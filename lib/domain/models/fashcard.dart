@@ -1,7 +1,5 @@
 import 'package:flashcards/domain/models/category.dart';
 
-enum FlashcardSortableFields { lastSeentAt, strength }
-
 class Flashcard {
   static int maxCharactersLength = 200;
   static int minCharactersLength = 1;

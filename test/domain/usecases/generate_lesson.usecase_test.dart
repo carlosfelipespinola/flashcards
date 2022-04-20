@@ -40,6 +40,7 @@ void main() async {
             id: null
           )),
           ...List.generate(5, (index) => LowPriorityFlashcard(
+            lowPriorityStrength: 2,
             base: Flashcard(
               term: 'term $index',
               definition: 'definition $index',
@@ -51,11 +52,36 @@ void main() async {
             )
           )),
           ...List.generate(2, (index) => LowPriorityFlashcard(
+            lowPriorityStrength: 3,
             base: Flashcard(
               term: 'term $index',
               definition: 'definition $index',
               lastSeenAt: DateTime.now().subtract(Duration(minutes: index)),
               strength: 3,
+              id: null,
+            ),
+            lowPriorityInfo: LowPriorityInfo(enterDateTime: DateTime.now().subtract(Duration(seconds: 1)), duration: Duration(hours: 4)
+            )
+          )),
+          ...List.generate(2, (index) => LowPriorityFlashcard(
+            lowPriorityStrength: 5,
+            base: Flashcard(
+              term: 'term $index',
+              definition: 'definition $index',
+              lastSeenAt: DateTime.now().subtract(Duration(minutes: index)),
+              strength: 2,
+              id: null,
+            ),
+            lowPriorityInfo: LowPriorityInfo(enterDateTime: DateTime.now().subtract(Duration(seconds: 1)), duration: Duration(hours: 4)
+            )
+          )),
+          ...List.generate(1, (index) => LowPriorityFlashcard(
+            lowPriorityStrength: 2,
+            base: Flashcard(
+              term: 'term $index',
+              definition: 'definition $index',
+              lastSeenAt: DateTime.now().subtract(Duration(minutes: index)),
+              strength: 5,
               id: null,
             ),
             lowPriorityInfo: LowPriorityInfo(enterDateTime: DateTime.now().subtract(Duration(seconds: 1)), duration: Duration(hours: 4)
@@ -88,25 +114,23 @@ void main() async {
       expect(selectedFlashcards.where((f) => f is LowPriorityFlashcard).length, 5, reason: 'because it should have 5 low priority flashcards');
     });
 
-    test('when selecting all flashcards the following order should match: high priority ordered by (strenght asc, last seen asc), low priority (last seen asc)', () {
+    test('when selecting all flashcards the following order should match: high priority ordered by (strenght asc, last seen asc), low priority (lowPriorityStrength asc, last seen asc)', () {
       return Future(() async {
-        List<Flashcard> selectedFlashcards = await generateLessonUseCase.call(LessonSettings(flashcardsCount: 27));
-        expect(selectedFlashcards.length, 27);
+        List<Flashcard> selectedFlashcards = await generateLessonUseCase.call(LessonSettings(flashcardsCount: 30));
+        expect(selectedFlashcards.length, 30);
         List<Flashcard> selectedFlashcardsOrdered = selectedFlashcards.toList()..sort((a, b) {
           int comparison = 0;
-          if (a is LowPriorityFlashcard && !(b is LowPriorityFlashcard)) {
+          if (a is LowPriorityFlashcard && b is! LowPriorityFlashcard) {
             comparison = 1;
-          } else if (!(a is LowPriorityFlashcard) && b is LowPriorityFlashcard) {
+          } else if (a is! LowPriorityFlashcard && b is LowPriorityFlashcard) {
             comparison = -1;
+          } else if (a is! LowPriorityFlashcard && b is! LowPriorityFlashcard) {
+            comparison = a.strength.compareTo(b.strength);
+          } else if (a is LowPriorityFlashcard && b is LowPriorityFlashcard) {
+            comparison = a.lowPriorityStrength.compareTo(b.lowPriorityStrength);
           }
           if (comparison != 0) {
             return comparison;
-          }
-          if (!(a is LowPriorityFlashcard)) {
-            comparison = a.strength.compareTo(b.strength);
-            if (comparison != 0) {
-              return comparison;
-            }
           }
           comparison = a.lastSeenAt.compareTo(b.lastSeenAt);
           return comparison;
