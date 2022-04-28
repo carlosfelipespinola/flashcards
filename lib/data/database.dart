@@ -94,7 +94,7 @@ class DatabaseProvider {
     bool migrationFilter(Migration migration) => migration.version > oldVersion && migration.version <= newVersion;
     final migrations = Migrations.items.where(migrationFilter).toList();
     _executeMigrations(migrations, batch);
-    await batch.commit();
+    await batch.commit(continueOnError: true);
   }
 
   void _executeMigrations(List<Migration> migrations, Batch batch) {
