@@ -2,6 +2,7 @@
 import 'package:flashcards/domain/interfaces/flashcard.repository.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
 import 'package:flashcards/domain/models/flashcard_filters.dart';
+import 'package:flashcards/domain/models/flashcard_sortable_fields.dart';
 import 'package:flashcards/domain/models/lesson_settings.dart';
 import 'package:flashcards/domain/models/sort.dart';
 
@@ -44,6 +45,7 @@ class GenerateLessonUseCase {
         FlashcardCategoryFilter(category: settings.category)
       ],
       sortBy: [
+        Sort(field: FlashcardSortableFields.lowPriorityStrength, type: SortType.asc),
         Sort(field: FlashcardSortableFields.lastSeentAt, type: SortType.asc)
       ],
       limit: quantity

@@ -115,6 +115,7 @@ void main() {
 
     test('3 hours and 59 seconds ago and its duration is 4 hours, it should be still in low priority', () {
       var flashcard = LowPriorityFlashcard(
+        lowPriorityStrength: 2,
         base: Flashcard(
           term: 'term 2',
           definition: 'definition 2',
@@ -132,6 +133,7 @@ void main() {
 
     test('4 hours and 1 seconds ago and its duration is 4 hours, it should not be in low priority', () {
       var flashcard = LowPriorityFlashcard(
+        lowPriorityStrength: 2,
         base: Flashcard(
           term: 'term 2',
           definition: 'definition 2',
@@ -149,6 +151,7 @@ void main() {
 
     test('any time in the future should not be considered in low priority (users can use the app while the clock is wrongly setted up)', () {
       var flashcard = LowPriorityFlashcard(
+        lowPriorityStrength: 2,
         base: Flashcard(
           term: 'term 2',
           definition: 'definition 2',

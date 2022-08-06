@@ -6,6 +6,7 @@ import 'package:flashcards/domain/interfaces/flashcard.repository.dart';
 import 'package:flashcards/domain/models/failure.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
 import 'package:flashcards/domain/models/flashcard_filters.dart';
+import 'package:flashcards/domain/models/flashcard_sortable_fields.dart';
 import 'package:flashcards/domain/models/sort.dart';
 import 'package:flashcards/data/database.dart';
 import 'package:sqflite/sqflite.dart';

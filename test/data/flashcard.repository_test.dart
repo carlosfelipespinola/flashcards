@@ -64,6 +64,7 @@ void main() async {
 
   test('save low priority flashcard must work...', () async {
     Flashcard flashcard = LowPriorityFlashcard(
+      lowPriorityStrength: 2,
       base: Flashcard(
         term: 'term',
         definition: 'definition',
@@ -101,6 +102,7 @@ void main() async {
     );
     flashcard = await flashcardRepository.save(flashcard);
     Flashcard lowPriorityFlashcard = LowPriorityFlashcard(
+      lowPriorityStrength: 2,
       base: flashcard,
       lowPriorityInfo: LowPriorityInfo(enterDateTime: DateTime.now(), duration: Duration(hours: 4))
     );
@@ -117,6 +119,7 @@ void main() async {
 
   test('update low priority flashcard into flashcard must work ...', () async {
     Flashcard lowPriorityFlashcard = LowPriorityFlashcard(
+      lowPriorityStrength: 2,
       base: Flashcard(
         term: 'term',
         definition: 'definition',
@@ -153,6 +156,7 @@ void main() async {
 
   test('expired low priority flashcards should be returned as flashcard ...', () async {
     Flashcard lowPriorityFlashcard = LowPriorityFlashcard(
+      lowPriorityStrength: 2,
       base: Flashcard(
         term: 'term',
         definition: 'definition',

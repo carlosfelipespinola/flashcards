@@ -57,6 +57,7 @@
   "searchFlashcard": "Buscar flashcard",
   "selectCategory": "Seleccione una categoría",
   "settings": "Ajustes",
+  "showAll": "Mostrar todo",
   "start": "Comenzar",
   "tryAgain": "Intentar nuevamente",
   "typeNumberBetween": "Introduzca un número entre {min} y {max}",

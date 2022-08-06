@@ -57,6 +57,7 @@
   "searchFlashcard": "Search flashcard",
   "selectCategory": "Select a category",
   "settings": "Settings",
+  "showAll": "Show all",
   "start": "Start",
   "tryAgain": "Try again",
   "typeNumberBetween": "Enter a number between {min} and {max}",
