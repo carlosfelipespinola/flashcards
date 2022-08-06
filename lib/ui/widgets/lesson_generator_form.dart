@@ -132,9 +132,11 @@ class _LessonGeneratorFormState extends State<LessonGeneratorForm> {
 
   Widget get selectQuantityStep {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         TextFormField(
           keyboardType: TextInputType.number,
+          autofocus: true,
           decoration: InputDecoration(
             labelText: MyAppLocalizations.of(context).flashcardsQuantity,
             counterText: MyAppLocalizations.of(context).typeNumberBetween(1, chosenCategory!.flashcardsCount)
@@ -149,7 +151,7 @@ class _LessonGeneratorFormState extends State<LessonGeneratorForm> {
             });
           },
         ),
-        Spacer(),
+        SizedBox(height: 8,),
         Container(
           width: double.infinity,
           child: ElevatedButton(

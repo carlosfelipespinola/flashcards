@@ -2,6 +2,7 @@ import 'package:flashcards/my_app_localizations.dart';
 import 'package:flashcards/router.dart';
 import 'package:flashcards/ui/pages/flashcard-search/flashcard_search.dart';
 import 'package:flashcards/ui/pages/lesson/lesson.page.arguments.dart';
+import 'package:flashcards/ui/widgets/bottom_sheet_dialog.dart';
 import 'package:flashcards/ui/widgets/flashcards_grid.dart';
 import 'package:flashcards/ui/widgets/lesson_generator_form.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +61,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
           SpeedDialChild(
             elevation: 2,
             child: Icon(Icons.play_arrow),
-            onTap: showLessonGeneratorForm,
+            onTap: () => showLessonGeneratorForm(context),
             backgroundColor: Theme.of(context).primaryColor,
             foregroundColor: Theme.of(context).colorScheme.onPrimary,
             labelWidget: Container(
@@ -126,12 +127,20 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
 
   TextStyle get speedDialChildTextStyle => TextStyle(fontWeight: FontWeight.bold, color: Colors.white);
 
-  void showLessonGeneratorForm() async {
+  void showLessonGeneratorForm(BuildContext context) async {
+    final height = MediaQuery.of(context).size.height;
+    final padding = MediaQuery.of(context).padding;
+    final safeHeight = height - padding.top - padding.bottom;
     await showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      constraints: BoxConstraints(
+        maxHeight: safeHeight,
+        minHeight: MediaQuery.of(context).size.height / 2
+      ),
       builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
+        return BottomSheetDialog(
+          padding: EdgeInsets.all(12.0),
           child: LessonGeneratorForm(
             onGenerate: (flashcards) async {
               if (ModalRoute.of(context)!.isCurrent) {
