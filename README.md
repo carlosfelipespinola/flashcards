@@ -10,10 +10,12 @@ run ```flutter gen-l10n``` to generate internationalization files
 run ```flutter run lib/main.dart``` to start the application  
 
 
+# Technologies
+  Flutter: 2.10.x  
+  JDK: 17
+
 # Architecture  
 
-### Flutter
-  version: 2.10.x
 
 ### Layers and dependencies  
 / domain - defines the business logic of the application.  
