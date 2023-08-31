@@ -84,11 +84,13 @@ class _LessonGeneratorFormState extends State<LessonGeneratorForm> {
   }
 
   Widget get noFlashcardsWarningText {
-    return Center(
-        child: Text(
-      MyAppLocalizations.of(context).practiceNeedsFlashcardsMessage,
-      textAlign: TextAlign.center,
-    ));
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 32, horizontal: 8.0),
+      child: Text(
+        MyAppLocalizations.of(context).practiceNeedsFlashcardsMessage,
+        textAlign: TextAlign.center,
+      ),
+    );
   }
 
   Widget buildSelectCategoryStep(
