@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flashcards/domain/models/category.dart';
+import 'package:flashcards/domain/models/failure.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
 
 class _FlashcardJsonKeys {
@@ -15,7 +16,13 @@ class _FlashcardJsonKeys {
 class FlashcardJsonMapper {
   static String toJson(Flashcard flashcard) => jsonEncode(_toMap(flashcard));
 
-  static Flashcard fromJson(String json) => _fromMap(jsonDecode(json));
+  static Flashcard fromJson(String json) {
+    try {
+      return _fromMap(jsonDecode(json));
+    } catch (_) {
+      throw CorruptedDataFailure();
+    }
+  }
 
   static Flashcard _fromMap(Map<String, dynamic> map) {
     return Flashcard(
@@ -25,9 +32,7 @@ class FlashcardJsonMapper {
         lastSeenAt: DateTime.parse(map[_FlashcardJsonKeys.lastSeenAt]),
         strength: map[_FlashcardJsonKeys.strength] as int,
         category: map[_FlashcardJsonKeys.categoryId] != null
-            ? Category(
-                id: map[_FlashcardJsonKeys.categoryId],
-                name: map[_FlashcardJsonKeys.categoryName])
+            ? Category(id: map[_FlashcardJsonKeys.categoryId], name: map[_FlashcardJsonKeys.categoryName])
             : null);
   }
 

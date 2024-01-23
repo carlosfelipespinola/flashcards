@@ -21,17 +21,26 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import java.io.BufferedReader
 import java.io.BufferedWriter
+import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.util.Objects
 
+object BackupRestoreErrorCodes {
+    val UNKNOWN_ERROR_CODE = "unknown-error";
+    val FILE_NOT_FOUND_ERROR_CODE = "file-not-found-error";
+    val USER_CANCELED_ACTION_ERROR_CODE = "user-canceled-action-error";
+    val IO_ERROR_CODE = "io-error";
+}
 
 class MainActivity: FlutterActivity() {
     private val CHANNEL = "carlosfelipe.dev/flashcards"
 
+
+
     private val BACKUP_DATA_CODE = 1
-    private lateinit var _pickFolderResult: MethodChannel.Result
+    private lateinit var _backupDataResult: MethodChannel.Result
     private var _linesOfFileToBackup: ArrayList<String>? = null
 
     private val RESTORE_DATA_CODE = 2
@@ -85,7 +94,7 @@ class MainActivity: FlutterActivity() {
 
     private fun onDataRestoreActivityResult(resultCode: Int, data: Intent?) {
         if(resultCode !== Activity.RESULT_OK) {
-            return _restoreResult.error("error", "error", null)
+            return _restoreResult.error(BackupRestoreErrorCodes.USER_CANCELED_ACTION_ERROR_CODE, null, null)
         }
 
         try {
@@ -96,11 +105,14 @@ class MainActivity: FlutterActivity() {
         }
         catch (e: NullPointerException) {
             e.printStackTrace()
-            return _restoreResult.error("error", "error", null)
+            return _restoreResult.error(BackupRestoreErrorCodes.UNKNOWN_ERROR_CODE, null, e.stackTrace)
+        }
+        catch (e: FileNotFoundException) {
+            _backupDataResult.error(BackupRestoreErrorCodes.FILE_NOT_FOUND_ERROR_CODE, null, e.stackTrace)
         }
         catch (e: IOException) {
             e.printStackTrace()
-            return _restoreResult.error("error", "error", null)
+            return _restoreResult.error(BackupRestoreErrorCodes.IO_ERROR_CODE, null, e.stackTrace)
         }
     }
 
@@ -117,7 +129,7 @@ class MainActivity: FlutterActivity() {
     }
 
     private fun startBackupDataActivity(result: MethodChannel.Result) {
-        _pickFolderResult = result
+        _backupDataResult = result
 
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             type = "text/plain"
@@ -129,22 +141,25 @@ class MainActivity: FlutterActivity() {
 
     private fun onDataBackupActivityResult(resultCode: Int, data: Intent?) {
         if(resultCode !== Activity.RESULT_OK) {
-            return _pickFolderResult.error("error", "error", null)
+            return _backupDataResult.error(BackupRestoreErrorCodes.USER_CANCELED_ACTION_ERROR_CODE, null, null)
         }
         try {
             val uri = data!!.data!!
 
             writeLinesToFile(uri, _linesOfFileToBackup!!)
 
-            _pickFolderResult.success("SUCCESS")
+            _backupDataResult.success("SUCCESS")
         }
         catch (e: NullPointerException) {
             e.printStackTrace()
-            _pickFolderResult.error("error", "error", null)
+            _backupDataResult.error(BackupRestoreErrorCodes.UNKNOWN_ERROR_CODE, null, e.stackTrace)
+        }
+        catch (e: FileNotFoundException) {
+            _backupDataResult.error(BackupRestoreErrorCodes.FILE_NOT_FOUND_ERROR_CODE, null, e.stackTrace)
         }
         catch (e: IOException) {
             e.printStackTrace()
-            _pickFolderResult.error("error", "error", null)
+            _backupDataResult.error(BackupRestoreErrorCodes.IO_ERROR_CODE, null, null)
         }
     }
 

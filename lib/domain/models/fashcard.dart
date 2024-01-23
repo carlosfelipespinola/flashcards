@@ -21,18 +21,11 @@ class Flashcard {
     required DateTime lastSeenAt,
     required int strength,
     this.category,
-  }) :
-    _lastSeenAt = lastSeenAt, _strength = strength;
+  })  : _lastSeenAt = lastSeenAt,
+        _strength = strength;
 
   factory Flashcard.create() {
-    return Flashcard(
-      term: '',
-      definition: '',
-      lastSeenAt: DateTime.now(),
-      strength: 1,
-      category: null,
-      id: null
-    );
+    return Flashcard(term: '', definition: '', lastSeenAt: DateTime.now(), strength: 1, category: null, id: null);
   }
 
   void increaseStrength() {
@@ -43,13 +36,14 @@ class Flashcard {
     _strength = 1;
   }
 
+  void resetStrength() => decreaseStrength();
+
   void markAsSeenNow() {
     _lastSeenAt = DateTime.now();
   }
 
   bool isValid() {
-    if (_strength < 1 || _strength > 5)
-      return false;
+    if (_strength < 1 || _strength > 5) return false;
     if (term.length < minCharactersLength || definition.length < minCharactersLength) {
       return false;
     }
