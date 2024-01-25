@@ -164,8 +164,9 @@ class MainActivity: FlutterActivity() {
     }
 
     private fun writeLinesToFile(uri: Uri, lines: ArrayList<String>) {
-        activity.contentResolver.openOutputStream(uri, "w").use { outputStream ->
+        activity.contentResolver.openOutputStream(uri, "wt").use { outputStream ->
             BufferedWriter(OutputStreamWriter(Objects.requireNonNull(outputStream))).use { writer ->
+
                 for (line in lines) {
                     writer.write(line)
                     writer.newLine()
