@@ -22,7 +22,7 @@ class FlashcardsJsonlBackupRepository implements IFlashcardBackupService {
   @override
   Future<void> backup(List<Flashcard> flashcards) async {
     try {
-      var jsonLines = await compute<List<Flashcard>, List<String>>((x) async {
+      var jsonLines = await compute<List<Flashcard>, List<String>>((x) {
         return x.map((e) => FlashcardJsonMapper.toJson(e)).toList();
       }, flashcards);
       await platform.invokeMethod<dynamic>('backupData', <String, dynamic>{"fileLines": jsonLines});
@@ -46,6 +46,12 @@ class FlashcardsJsonlBackupRepository implements IFlashcardBackupService {
       var failure = _handlerPlatformException(platformException);
       throw failure;
     } on Failure catch (_) {
+      rethrow;
+    } on Exception catch (e) {
+      // when compute fails it throws an Exception containing the error type in its message
+      if (e.toString().contains(CorruptedDataFailure().runtimeType.toString())) {
+        throw CorruptedDataFailure();
+      }
       rethrow;
     }
   }

@@ -16,6 +16,7 @@ class _FlashcardJsonKeys {
 class FlashcardJsonMapper {
   static String toJson(Flashcard flashcard) => jsonEncode(_toMap(flashcard));
 
+  // may throw CorruptedDataFailure
   static Flashcard fromJson(String json) {
     try {
       return _fromMap(jsonDecode(json));
