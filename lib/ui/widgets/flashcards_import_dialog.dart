@@ -126,6 +126,9 @@ class _FlashcardsImportDialogState extends State<FlashcardsImportDialog> {
   }
 
   Widget _buildImportInProgress(BuildContext context, ImportFlashcardsProgressTracker progressTracker) {
+    if (progressTracker.progress == 0) {
+      return _buildWaiting();
+    }
     return WillPopScope(
       onWillPop: () async => false,
       child: Column(
