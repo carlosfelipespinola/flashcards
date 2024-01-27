@@ -176,5 +176,50 @@ void main() async {
       var categories = await categoryRepository.findAll();
       expect(categories.length, 1);
     });
+
+    test('When importing flashcards... Invalid flashcards should not be imported', () async {
+      stringOfLength(int length) {
+        var str = '';
+        for (var i = 0; i < length; i++) {
+          str += "a";
+        }
+        return str;
+      }
+
+      var backupService = FlashcardBackupServiceTest(flashcards: [
+        Flashcard(term: 'term1', definition: 'definition1', lastSeenAt: DateTime.now(), strength: 10),
+        Flashcard(term: 'term2', definition: 'definition2', lastSeenAt: DateTime.now(), strength: 0),
+        Flashcard(
+            term: stringOfLength(Flashcard.maxCharactersLength + 1),
+            definition: 'definition2',
+            lastSeenAt: DateTime.now(),
+            strength: 0),
+        Flashcard(
+            term: stringOfLength(Flashcard.minCharactersLength - 1),
+            definition: 'definition2',
+            lastSeenAt: DateTime.now(),
+            strength: 0),
+        Flashcard(
+            term: 'term',
+            definition: stringOfLength(Flashcard.maxCharactersLength + 1),
+            lastSeenAt: DateTime.now(),
+            strength: 0),
+        Flashcard(
+            term: 'term',
+            definition: stringOfLength(Flashcard.maxCharactersLength + 1),
+            lastSeenAt: DateTime.now(),
+            strength: 0),
+      ]);
+
+      var importFlashcards = ImportFlashcardsUseCase(
+          flashcardRepository: flashcardRepository,
+          categoryRepository: categoryRepository,
+          flashcardBackupService: backupService);
+
+      await importFlashcards.call(resetFlashcadsStrength: false).last;
+
+      var flashcards = await flashcardRepository.query();
+      expect(flashcards.length, 0);
+    });
   });
 }

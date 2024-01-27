@@ -3,6 +3,7 @@ import 'package:flashcards/domain/interfaces/category.repository.dart';
 import 'package:flashcards/domain/interfaces/flashcard.repository.dart';
 import 'package:flashcards/domain/interfaces/flashcard_backup_service.dart';
 import 'package:flashcards/domain/models/category.dart';
+import 'package:flashcards/domain/models/failure.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
 
 class ImportFlashcardsProgressTracker {
@@ -66,6 +67,8 @@ class ImportFlashcardsUseCase {
         _progressTracker.duplicatedFlashcards += 1;
         return;
       }
+
+      if (!flashcard.isValid()) throw Failure();
 
       flashcard.id = null;
 
