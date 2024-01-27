@@ -86,6 +86,7 @@ class ImportFlashcardsUseCase {
     var foundCategory = _categories[flashcard.category!.name];
 
     if (foundCategory == null) {
+      flashcard.category?.id = null;
       var createdCategory = await categoryRepository.save(flashcard.category!);
       _categories[createdCategory.name] = createdCategory;
       return createdCategory;
