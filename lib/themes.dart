@@ -13,10 +13,11 @@ ThemeData generateLightTheme(MaterialColor color) {
   ));
 }
 
-ThemeData generateDarkTheme(MaterialColor color) {
+ThemeData generateDarkTheme(MaterialColor materialColor) {
+  Color color = materialColor.shade200;
   final onColor = ThemeData.estimateBrightnessForColor(color).contrastColor;
   return _generateBaseTheme(
-      cursorColor: color.shade200,
+      cursorColor: materialColor.shade200,
       colorScheme: ColorScheme.dark(primary: color, onPrimary: onColor, secondary: color, onSecondary: onColor));
 }
 
@@ -28,13 +29,9 @@ ThemeData _generateBaseTheme({required ColorScheme colorScheme, Color? cursorCol
       primaryColor: colorScheme.primary,
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-              primary: colorScheme.primary,
-              onPrimary: ThemeData.estimateBrightnessForColor(colorScheme.primary) == Brightness.dark
-                  ? Colors.white
-                  : Colors.black,
-              minimumSize: Size(40, 40))),
+              primary: colorScheme.primary, onPrimary: colorScheme.onPrimary, minimumSize: Size(40, 40))),
       floatingActionButtonTheme:
-          FloatingActionButtonThemeData(backgroundColor: colorScheme.primary, foregroundColor: Colors.white),
+          FloatingActionButtonThemeData(backgroundColor: colorScheme.primary, foregroundColor: colorScheme.onPrimary),
       appBarTheme: AppBarTheme(
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarBrightness: colorScheme.brightness.inverse,
