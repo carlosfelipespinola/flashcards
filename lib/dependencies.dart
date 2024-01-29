@@ -61,7 +61,8 @@ Future<void> _setUpAppSettingsUseCasesAndRepositories() async {
       () => ExportFlashcardsUseCase(flashcardRepository: GetIt.I(), flashcardBackupService: GetIt.I()));
   GetIt.I.registerLazySingleton<ImportFlashcardsUseCase>(() => ImportFlashcardsUseCase(
       categoryRepository: GetIt.I(), flashcardRepository: GetIt.I(), flashcardBackupService: GetIt.I()));
-  GetIt.I.registerLazySingleton<IFlashcardBackupService>(() => FlashcardsJsonlBackupRepository());
+  GetIt.I
+      .registerLazySingleton<IFlashcardBackupService>(() => FlashcardsBackupServiceFactory.createJsonlBackupService());
 }
 
 Future<void> _setupServices() async {

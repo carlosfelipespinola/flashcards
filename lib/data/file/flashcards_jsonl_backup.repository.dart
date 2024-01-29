@@ -1,11 +1,26 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flashcards/data/file/flashcard_json.mapper.dart';
-import 'package:flashcards/domain/models/failure.dart';
-import 'package:flashcards/domain/models/fashcard.dart';
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+import 'package:flashcards/data/file/flashcard_json.mapper.dart';
+import 'package:flashcards/domain/models/failure.dart';
+import 'package:flashcards/domain/models/fashcard.dart';
+
 import '../../domain/interfaces/flashcard_backup_service.dart';
+
+class FlashcardsBackupServiceFactory {
+  static IFlashcardBackupService createJsonlBackupService() {
+    if (Platform.isAndroid) {
+      return _AndroidFlashcardsJsonlBackupRepository();
+    } else if (Platform.isIOS) {
+      return _IosJsonlBackupService();
+    } else {
+      throw UnsupportedError("Service unsupported on platform ${Platform.operatingSystem}");
+    }
+  }
+}
 
 class _BackupRestoreErrorCodes {
   static const String UNKNOWN_ERROR_CODE = "unknown-error";
@@ -14,10 +29,10 @@ class _BackupRestoreErrorCodes {
   static const String IO_ERROR_CODE = "io-error";
 }
 
-class FlashcardsJsonlBackupRepository implements IFlashcardBackupService {
+class _AndroidFlashcardsJsonlBackupRepository implements IFlashcardBackupService {
   static const platform = MethodChannel('carlosfelipe.dev/flashcards');
 
-  FlashcardsJsonlBackupRepository();
+  _AndroidFlashcardsJsonlBackupRepository();
 
   @override
   Future<void> backup(List<Flashcard> flashcards) async {
@@ -68,5 +83,17 @@ class FlashcardsJsonlBackupRepository implements IFlashcardBackupService {
       default:
         throw exception;
     }
+  }
+}
+
+class _IosJsonlBackupService implements IFlashcardBackupService {
+  @override
+  Future<void> backup(List<Flashcard> flashcards) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Flashcard>> restore() {
+    throw UnimplementedError();
   }
 }
