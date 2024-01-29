@@ -4,6 +4,7 @@
   "categories": "Categories",
   "category": "Category",
   "categoryName": "Category name",
+  "close": "Close",
   "confirm": "Confirm",
   "createCategory": "Create category",
   "createFlashcard": "Create flashcard",
@@ -75,5 +76,42 @@
   },
   "uncategorized": "Uncategorized",
   "updateFlashcard": "Update flashcard",
-  "updateFlashcardSuccessMessage": "Flashcard successfully updated"
+  "updateFlashcardSuccessMessage": "Flashcard successfully updated",
+  "exportFlashcardsTitle": "Export flashcards",
+  "exportFlashcardsExplanationMessage": "During the flashcards export process you will be asked to create a file somewhere in your device's storage in which the data will be saved.",
+  "exportFlashcardActionText": "Export",
+  "exportFlashcardInProgressTitle": "Export in progress",
+  "exportFlashcardsErrorTitle": "Flashcards exportation failed",
+  "exportFlashcardsUserCanceledErrorMessage": "Flashcards was not exported because the backup file where the data would be saved was not created",
+  "exportFlashcardsInvalidBackupLocationErrorMessage": "Make sure the file you have selected to export the data to still exists",
+  "exportFlashcardsFinishedTitle": "Exportation finished",
+  "exportFlashcardsFinishedMessage": "All flashcards were successfully exported.",
+  "importFlashcardsTitle": "Import flashcards",
+  "importFlashcardsResetProgressQuestion": "Reset learning progress?",
+  "importFlashcardsResetProgressAdvice": "It is recommended to enable this option if you are importing flashcards exported by someone else",
+  "importFlashcardsActionText": "Pick file and import",
+  "importFlashcardsErrorTitle": "Flashcards importation failed",
+  "importFlashcardsUserCanceledErrorMessage": "Unable to import data because no backup file was selected",
+  "importFlashcardsInvalidBackupLocationErrorMessage": "Make sure the file you selected still exists",
+  "importFlashcardsCorruptedDataErrorMessage": "The data that you have selected to restore is corrupted or is not recognized by this app",
+  "importFlashcardsInProgressTitle": "Importation in progress",
+  "importFlashcardsWarningMessage": "Do not close the app while importing flashcards",
+  "importFlashcardsProgressTracker": "Importing {current} of {max} flashcards",
+  "@importFlashcardsProgressTracker": {
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "max": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "importFlashcardsFinishedTitle": "Importation finished",
+  "importedFlashcards": "Imported flashcards",
+  "duplicatedFlashcards": "Skipped Duplicated flashcards",
+  "importErrors": "Errors",
+  "processedFlashcards": "Processed flashcards"
 }

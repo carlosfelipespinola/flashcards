@@ -6,6 +6,7 @@ import 'package:flashcards/data/flashcard.schema.dart';
 import 'package:flashcards/domain/models/fashcard.dart';
 import 'package:flashcards/domain/models/flashcard_low_priority.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 class FlashcardTestRepository extends FlashcardRepository {
   FlashcardTestRepository({required DatabaseProvider databaseProvider}) : super(databaseProvider: databaseProvider);
 
@@ -15,7 +16,6 @@ class FlashcardTestRepository extends FlashcardRepository {
     final map = result.first;
     return FlashcardMapper.fromMap(map);
   }
-
 }
 
 void main() async {
@@ -29,12 +29,7 @@ void main() async {
   });
 
   test('save flashcard must work ...', () async {
-    var flashcard = Flashcard(
-      term: 'term',
-      definition: 'definition',
-      lastSeenAt: DateTime.now(),
-      strength: 2
-    );
+    var flashcard = Flashcard(term: 'term', definition: 'definition', lastSeenAt: DateTime.now(), strength: 2);
     flashcard = await flashcardRepository.save(flashcard);
     final foundFlashcard = await flashcardRepository.findById(flashcard.id!);
     expect(flashcard.category, foundFlashcard.category);
@@ -50,12 +45,7 @@ void main() async {
   });
 
   test('save without category must set category null ...', () async {
-    var flashcard = Flashcard(
-      term: 'term',
-      definition: 'definition',
-      lastSeenAt: DateTime.now(),
-      strength: 2
-    );
+    var flashcard = Flashcard(term: 'term', definition: 'definition', lastSeenAt: DateTime.now(), strength: 2);
     flashcard = await flashcardRepository.save(flashcard);
     final foundFlashcard = await flashcardRepository.findById(flashcard.id!);
     expect(flashcard.category, null);
@@ -64,15 +54,9 @@ void main() async {
 
   test('save low priority flashcard must work...', () async {
     Flashcard flashcard = LowPriorityFlashcard(
-      lowPriorityStrength: 2,
-      base: Flashcard(
-        term: 'term',
-        definition: 'definition',
-        lastSeenAt: DateTime.now(),
-        strength: 2
-      ),
-      lowPriorityInfo: LowPriorityInfo(enterDateTime: DateTime.now(), duration: Duration(hours: 4))
-    );
+        lowPriorityStrength: 2,
+        base: Flashcard(term: 'term', definition: 'definition', lastSeenAt: DateTime.now(), strength: 2),
+        lowPriorityInfo: LowPriorityInfo(enterDateTime: DateTime.now(), duration: Duration(hours: 4)));
     flashcard = await flashcardRepository.save(flashcard);
     final foundFlashcard = await flashcardRepository.findById(flashcard.id!);
     expect(flashcard.category, foundFlashcard.category);
@@ -83,29 +67,18 @@ void main() async {
     expect(flashcard.strength, foundFlashcard.strength);
     expect(flashcard, isA<LowPriorityFlashcard>());
     expect(foundFlashcard, isA<LowPriorityFlashcard>());
-    expect(
-      (foundFlashcard as LowPriorityFlashcard).lowPriorityInfo.enterDateTime,
-      (flashcard as LowPriorityFlashcard).lowPriorityInfo.enterDateTime
-    );
-    expect(
-      foundFlashcard.lowPriorityInfo.expiresAt,
-      flashcard.lowPriorityInfo.expiresAt
-    );
+    expect((foundFlashcard as LowPriorityFlashcard).lowPriorityInfo.enterDateTime,
+        (flashcard as LowPriorityFlashcard).lowPriorityInfo.enterDateTime);
+    expect(foundFlashcard.lowPriorityInfo.expiresAt, flashcard.lowPriorityInfo.expiresAt);
   });
 
   test('update flashcard into low priority flashcard must work ...', () async {
-    var flashcard = Flashcard(
-      term: 'term',
-      definition: 'definition',
-      lastSeenAt: DateTime.now(),
-      strength: 2
-    );
+    var flashcard = Flashcard(term: 'term', definition: 'definition', lastSeenAt: DateTime.now(), strength: 2);
     flashcard = await flashcardRepository.save(flashcard);
     Flashcard lowPriorityFlashcard = LowPriorityFlashcard(
-      lowPriorityStrength: 2,
-      base: flashcard,
-      lowPriorityInfo: LowPriorityInfo(enterDateTime: DateTime.now(), duration: Duration(hours: 4))
-    );
+        lowPriorityStrength: 2,
+        base: flashcard,
+        lowPriorityInfo: LowPriorityInfo(enterDateTime: DateTime.now(), duration: Duration(hours: 4)));
     await flashcardRepository.save(lowPriorityFlashcard);
     final foundLowPriorityFlashcard = await flashcardRepository.findById(flashcard.id!);
     expect(flashcard.category, foundLowPriorityFlashcard.category);
@@ -119,15 +92,9 @@ void main() async {
 
   test('update low priority flashcard into flashcard must work ...', () async {
     Flashcard lowPriorityFlashcard = LowPriorityFlashcard(
-      lowPriorityStrength: 2,
-      base: Flashcard(
-        term: 'term',
-        definition: 'definition',
-        lastSeenAt: DateTime.now(),
-        strength: 2
-      ),
-      lowPriorityInfo: LowPriorityInfo(enterDateTime: DateTime.now(), duration: Duration(hours: 4))
-    );
+        lowPriorityStrength: 2,
+        base: Flashcard(term: 'term', definition: 'definition', lastSeenAt: DateTime.now(), strength: 2),
+        lowPriorityInfo: LowPriorityInfo(enterDateTime: DateTime.now(), duration: Duration(hours: 4)));
     lowPriorityFlashcard = await flashcardRepository.save(lowPriorityFlashcard);
     await flashcardRepository.save((lowPriorityFlashcard as LowPriorityFlashcard).toNonLowPriority());
     final foundFlashcard = await flashcardRepository.findById(lowPriorityFlashcard.id!);
@@ -142,12 +109,7 @@ void main() async {
   });
 
   test('save non low priority flashcards must set null low priority info null ...', () async {
-    var flashcard = Flashcard(
-      term: 'term',
-      definition: 'definition',
-      lastSeenAt: DateTime.now(),
-      strength: 2
-    );
+    var flashcard = Flashcard(term: 'term', definition: 'definition', lastSeenAt: DateTime.now(), strength: 2);
     flashcard = await flashcardRepository.save(flashcard);
     final foundFlashcard = await flashcardRepository.findById(flashcard.id!);
     expect(flashcard.category, null);
@@ -156,19 +118,63 @@ void main() async {
 
   test('expired low priority flashcards should be returned as flashcard ...', () async {
     Flashcard lowPriorityFlashcard = LowPriorityFlashcard(
-      lowPriorityStrength: 2,
-      base: Flashcard(
-        term: 'term',
-        definition: 'definition',
-        lastSeenAt: DateTime.now(),
-        strength: 2
-      ),
-      lowPriorityInfo: LowPriorityInfo(enterDateTime: DateTime.now().subtract(Duration(hours: 8)), duration: Duration(hours: 4))
-    );
+        lowPriorityStrength: 2,
+        base: Flashcard(term: 'term', definition: 'definition', lastSeenAt: DateTime.now(), strength: 2),
+        lowPriorityInfo:
+            LowPriorityInfo(enterDateTime: DateTime.now().subtract(Duration(hours: 8)), duration: Duration(hours: 4)));
     lowPriorityFlashcard = await flashcardRepository.save(lowPriorityFlashcard);
     final foundFlashcard = await flashcardRepository.findById(lowPriorityFlashcard.id!);
     expect(foundFlashcard, isA<Flashcard>());
     expect(foundFlashcard, isNot(isA<LowPriorityFlashcard>()));
   });
 
+  test(
+      'FlashcardRepository.exists should return true when a lowPriorityFlashcard with same term and definition specified in arguments exists in the database...',
+      () async {
+    Flashcard lowPriorityFlashcard = LowPriorityFlashcard(
+        lowPriorityStrength: 2,
+        base: Flashcard(term: 'term test', definition: 'definition test', lastSeenAt: DateTime.now(), strength: 2),
+        lowPriorityInfo:
+            LowPriorityInfo(enterDateTime: DateTime.now().subtract(Duration(hours: 8)), duration: Duration(hours: 4)));
+    lowPriorityFlashcard = await flashcardRepository.save(lowPriorityFlashcard);
+    final exists = await flashcardRepository.exists(term: 'term test', definition: 'definition test');
+    expect(exists, true);
+  });
+
+  test(
+      'FlashcardRepository.exists should return true when a flashcard with same term and definition specified in arguments exists in the database...',
+      () async {
+    Flashcard flashcard =
+        Flashcard(term: 'term test', definition: 'definition test', lastSeenAt: DateTime.now(), strength: 2);
+    flashcard = await flashcardRepository.save(flashcard);
+    final exists = await flashcardRepository.exists(term: 'term test', definition: 'definition test');
+    expect(exists, true);
+  });
+
+  test(
+      'FlashcardRepository.exists should return false when a flashcard with same term and definition specified in arguments does not exists in the database...',
+      () async {
+    var flashcards = [
+      Flashcard(term: 'term', definition: 'definition', lastSeenAt: DateTime.now(), strength: 2),
+      Flashcard(term: 'term2', definition: 'definition', lastSeenAt: DateTime.now(), strength: 2),
+    ];
+
+    for (var flashcard in flashcards) {
+      await flashcardRepository.save(flashcard);
+    }
+
+    var testArguments = [
+      ['term 2', 'definition test'],
+      ['ter', 'def'],
+      ['definition', 'term'],
+      ['definition', 'defintion'],
+      ['term', 'term'],
+      ['term2', 'term2']
+    ];
+
+    for (var arguments in testArguments) {
+      final exists = await flashcardRepository.exists(term: arguments[0], definition: arguments[1]);
+      expect(exists, false);
+    }
+  });
 }

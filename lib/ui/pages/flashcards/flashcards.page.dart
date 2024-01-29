@@ -47,19 +47,15 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
               elevation: 2,
               child: Icon(Icons.add),
               onTap: () async {
-                await Navigator.of(context)
-                    .pushNamed(RoutesPaths.flashcardEditor);
+                await Navigator.of(context).pushNamed(RoutesPaths.flashcardEditor);
                 _flashcardsGridKey.currentState?.fetchFlashcards();
               },
               backgroundColor: Theme.of(context).primaryColor,
               foregroundColor: Theme.of(context).colorScheme.onPrimary,
               labelWidget: Container(
                 margin: EdgeInsets.only(right: 12),
-                child: Text(
-                    MyAppLocalizations.of(context)
-                        .createFlashcard
-                        .toUpperCase(),
-                    style: speedDialChildTextStyle),
+                child:
+                    Text(MyAppLocalizations.of(context).createFlashcard.toUpperCase(), style: speedDialChildTextStyle),
               )),
           SpeedDialChild(
               elevation: 2,
@@ -69,27 +65,21 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
               foregroundColor: Theme.of(context).colorScheme.onPrimary,
               labelWidget: Container(
                 margin: EdgeInsets.only(right: 12),
-                child: Text(
-                    MyAppLocalizations.of(context).practice.toUpperCase(),
-                    style: speedDialChildTextStyle),
+                child: Text(MyAppLocalizations.of(context).practice.toUpperCase(), style: speedDialChildTextStyle),
               )),
           SpeedDialChild(
               elevation: 2,
               child: Icon(Icons.label),
               onTap: () async {
-                await Navigator.of(context)
-                    .pushNamed(RoutesPaths.categoryManager);
+                await Navigator.of(context).pushNamed(RoutesPaths.categoryManager);
                 _flashcardsGridKey.currentState?.fetchFlashcards();
               },
               backgroundColor: Theme.of(context).primaryColor,
               foregroundColor: Theme.of(context).colorScheme.onPrimary,
               labelWidget: Container(
                 margin: EdgeInsets.only(right: 12),
-                child: Text(
-                    MyAppLocalizations.of(context)
-                        .manageCategories
-                        .toUpperCase(),
-                    style: speedDialChildTextStyle),
+                child:
+                    Text(MyAppLocalizations.of(context).manageCategories.toUpperCase(), style: speedDialChildTextStyle),
               )),
           SpeedDialChild(
               elevation: 2,
@@ -102,32 +92,28 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
               foregroundColor: Theme.of(context).colorScheme.onPrimary,
               labelWidget: Container(
                 margin: EdgeInsets.only(right: 12),
-                child: Text(
-                    MyAppLocalizations.of(context)
-                        .searchFlashcard
-                        .toUpperCase(),
-                    style: speedDialChildTextStyle),
+                child:
+                    Text(MyAppLocalizations.of(context).searchFlashcard.toUpperCase(), style: speedDialChildTextStyle),
               )),
           SpeedDialChild(
               elevation: 2,
               child: Icon(Icons.settings),
-              onTap: () =>
-                  Navigator.of(context).pushNamed(RoutesPaths.settings),
+              onTap: () async {
+                await Navigator.of(context).pushNamed(RoutesPaths.settings);
+                _flashcardsGridKey.currentState?.fetchFlashcards();
+              },
               backgroundColor: Theme.of(context).primaryColor,
               foregroundColor: Theme.of(context).colorScheme.onPrimary,
               labelWidget: Container(
                 margin: EdgeInsets.only(right: 12),
-                child: Text(
-                    MyAppLocalizations.of(context).settings.toUpperCase(),
-                    style: speedDialChildTextStyle),
+                child: Text(MyAppLocalizations.of(context).settings.toUpperCase(), style: speedDialChildTextStyle),
               )),
         ],
       ),
     );
   }
 
-  TextStyle get speedDialChildTextStyle =>
-      TextStyle(fontWeight: FontWeight.bold, color: Colors.white);
+  TextStyle get speedDialChildTextStyle => TextStyle(fontWeight: FontWeight.bold, color: Colors.white);
 
   void showLessonGeneratorForm(BuildContext context) async {
     final height = MediaQuery.of(context).size.height;
@@ -152,9 +138,8 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
                     onGenerate: (flashcards) async {
                       if (ModalRoute.of(context)!.isCurrent) {
                         Navigator.of(context).pop();
-                        await Navigator.of(context).pushNamed(
-                            RoutesPaths.lesson,
-                            arguments: LessonPageArguments(flashcards));
+                        await Navigator.of(context)
+                            .pushNamed(RoutesPaths.lesson, arguments: LessonPageArguments(flashcards));
                         _flashcardsGridKey.currentState?.fetchFlashcards();
                       }
                     },
