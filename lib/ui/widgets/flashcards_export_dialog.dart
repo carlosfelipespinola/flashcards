@@ -113,10 +113,8 @@ class _FlashcardsExportDialogState extends State<FlashcardsExportDialog> {
         return MyAppLocalizations.of(context).exportFlashcardsUserCanceledErrorMessage;
       case InvalidBackupLocationFailure:
         return MyAppLocalizations.of(context).exportFlashcardsInvalidBackupLocationErrorMessage;
-      case Failure:
-        return MyAppLocalizations.of(context).defaultErrorMessage;
       default:
-        throw error;
+        return MyAppLocalizations.of(context).defaultErrorMessage;
     }
   }
 

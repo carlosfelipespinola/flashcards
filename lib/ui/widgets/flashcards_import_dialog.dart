@@ -110,10 +110,8 @@ class _FlashcardsImportDialogState extends State<FlashcardsImportDialog> {
         return MyAppLocalizations.of(context).importFlashcardsInvalidBackupLocationErrorMessage;
       case CorruptedDataFailure:
         return MyAppLocalizations.of(context).importFlashcardsCorruptedDataErrorMessage;
-      case Failure:
-        return MyAppLocalizations.of(context).defaultErrorMessage;
       default:
-        throw error;
+        return MyAppLocalizations.of(context).defaultErrorMessage;
     }
   }
 
