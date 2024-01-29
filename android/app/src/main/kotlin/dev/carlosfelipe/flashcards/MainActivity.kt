@@ -86,7 +86,7 @@ class MainActivity: FlutterActivity() {
 
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = "*/*"
+            type = "application/octet-stream"
         }
 
         startActivityForResult(intent, RESTORE_DATA_CODE)
@@ -120,7 +120,7 @@ class MainActivity: FlutterActivity() {
         val lines: ArrayList<String>
 
         return activity.contentResolver.openInputStream(uri).use { inputStream ->
-            BufferedReader(InputStreamReader(Objects.requireNonNull(inputStream))).use { reader ->
+            BufferedReader(InputStreamReader(Objects.requireNonNull(inputStream), Charsets.UTF_8)).use { reader ->
                 lines = ArrayList(reader.readLines())
                 reader.close()
                 return lines
@@ -132,8 +132,8 @@ class MainActivity: FlutterActivity() {
         _backupDataResult = result
 
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-            type = "text/plain"
-            putExtra(Intent.EXTRA_TITLE, "backup.jsonl.txt")
+            type = "application/octet-stream"
+            putExtra(Intent.EXTRA_TITLE, "backup")
         }
 
         startActivityForResult(intent, BACKUP_DATA_CODE)
@@ -165,7 +165,7 @@ class MainActivity: FlutterActivity() {
 
     private fun writeLinesToFile(uri: Uri, lines: ArrayList<String>) {
         activity.contentResolver.openOutputStream(uri, "wt").use { outputStream ->
-            BufferedWriter(OutputStreamWriter(Objects.requireNonNull(outputStream))).use { writer ->
+            BufferedWriter(OutputStreamWriter(Objects.requireNonNull(outputStream), Charsets.UTF_8)).use { writer ->
 
                 for (line in lines) {
                     writer.write(line)
