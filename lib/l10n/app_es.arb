@@ -89,7 +89,8 @@
   "importFlashcardsTitle": "Importar flashcards",
   "importFlashcardsResetProgressQuestion": "Reiniciar el progreso de aprendizaje?",
   "importFlashcardsResetProgressAdvice": "Se recomienda activar esta opción si va a importar flashcards exportadas por otra persona.",
-  "importFlashcardsActionText": "Elegir archivo e importar",
+  "importFlashcardsActionText": "Importar",
+  "pickFileAndImportFlashcardsActionText": "Elegir archivo e importar",
   "importFlashcardsErrorTitle": "Error al importar flashcards",
   "importFlashcardsUserCanceledErrorMessage": "No se pueden importar datos porque no se ha seleccionado ningún archivo de copia de seguridad.",
   "importFlashcardsInvalidBackupLocationErrorMessage": "Asegúrese de que el archivo seleccionado para exportar los datos sigue existiendo.",
@@ -113,5 +114,6 @@
   "importedFlashcards": "Flashcards importados",
   "duplicatedFlashcards": "Flashcards duplicados omitidos",
   "importErrors": "Errores",
-  "processedFlashcards": "Flashcards Procesados"
+  "processedFlashcards": "Flashcards Procesados",
+  "unsopportedFileFormat": "El formato de archivo abierto no es compatible con la aplicación"
 }

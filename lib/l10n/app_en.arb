@@ -89,7 +89,8 @@
   "importFlashcardsTitle": "Import flashcards",
   "importFlashcardsResetProgressQuestion": "Reset learning progress?",
   "importFlashcardsResetProgressAdvice": "It is recommended to enable this option if you are importing flashcards exported by someone else",
-  "importFlashcardsActionText": "Pick file and import",
+  "importFlashcardsActionText": "Import",
+  "pickFileAndImportFlashcardsActionText": "Pick file and import",
   "importFlashcardsErrorTitle": "Flashcards importation failed",
   "importFlashcardsUserCanceledErrorMessage": "Unable to import data because no backup file was selected",
   "importFlashcardsInvalidBackupLocationErrorMessage": "Make sure the file you selected still exists",
@@ -113,5 +114,6 @@
   "importedFlashcards": "Imported flashcards",
   "duplicatedFlashcards": "Skipped Duplicated flashcards",
   "importErrors": "Errors",
-  "processedFlashcards": "Processed flashcards"
+  "processedFlashcards": "Processed flashcards",
+  "unsopportedFileFormat": "The opened's file format is not supported by the application"
 }

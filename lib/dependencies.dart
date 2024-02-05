@@ -1,6 +1,5 @@
 import 'package:flashcards/data/app_settings.repository.dart';
 import 'package:flashcards/data/category.repository.dart';
-import 'package:flashcards/data/file/flashcards_jsonl_backup.repository.dart';
 import 'package:flashcards/data/flashcard.repository.dart';
 import 'package:flashcards/domain/interfaces/app_settings.repository.dart';
 import 'package:flashcards/domain/interfaces/category.repository.dart';
@@ -22,6 +21,8 @@ import 'package:flashcards/data/database.dart';
 import 'package:flashcards/domain/usecases/save_settings.usecase.dart';
 import 'package:flashcards/services/app_info/app_info.dart';
 import 'package:flashcards/services/app_info/app_info_impl.dart';
+import 'package:flashcards/services/file_backup_service/file_backup_service.dart';
+import 'package:flashcards/services/shared_data_receiver/shared_data_receiver.dart';
 import 'package:get_it/get_it.dart';
 
 Future<void> setupDependencies() async {
@@ -61,8 +62,7 @@ Future<void> _setUpAppSettingsUseCasesAndRepositories() async {
       () => ExportFlashcardsUseCase(flashcardRepository: GetIt.I(), flashcardBackupService: GetIt.I()));
   GetIt.I.registerLazySingleton<ImportFlashcardsUseCase>(() => ImportFlashcardsUseCase(
       categoryRepository: GetIt.I(), flashcardRepository: GetIt.I(), flashcardBackupService: GetIt.I()));
-  GetIt.I
-      .registerLazySingleton<IFlashcardBackupService>(() => FlashcardsBackupServiceFactory.createJsonlBackupService());
+  GetIt.I.registerLazySingleton<IFlashcardBackupService>(() => FileBackupService.create());
 }
 
 Future<void> _setupServices() async {
@@ -70,4 +70,5 @@ Future<void> _setupServices() async {
   await appInfo.loadInfos();
   GetIt.I.registerLazySingleton<AppInfo>(() => appInfo);
   GetIt.I.registerSingleton(DatabaseProvider(test: false));
+  GetIt.I.registerLazySingleton<SharedDataReceiver>(() => SharedDataReceiver.create());
 }

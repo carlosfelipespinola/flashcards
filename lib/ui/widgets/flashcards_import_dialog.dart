@@ -1,21 +1,38 @@
 import 'package:flashcards/domain/models/failure.dart';
 import 'package:flashcards/domain/usecases/import_flashcards.usecase.dart';
 import 'package:flashcards/my_app_localizations.dart';
+import 'package:flashcards/services/file_backup_service/file_backup_service.dart';
+import 'package:flashcards/services/shared_data_receiver/shared_data_receiver.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 class FlashcardsImportDialog extends StatefulWidget {
-  const FlashcardsImportDialog({Key? key}) : super(key: key);
+  final SharedDataReceiver? dataReceiver;
+
+  const FlashcardsImportDialog({Key? key, this.dataReceiver}) : super(key: key);
 
   @override
   State<FlashcardsImportDialog> createState() => _FlashcardsImportDialogState();
 }
 
 class _FlashcardsImportDialogState extends State<FlashcardsImportDialog> {
-  ImportFlashcardsUseCase importFlashcards = GetIt.I();
-
   Stream<ImportFlashcardsProgressTracker>? importStream;
   bool resetFlashcardsStrength = false;
+
+  late ImportFlashcardsUseCase importFlashcards;
+
+  @override
+  void initState() {
+    if (widget.dataReceiver == null) {
+      importFlashcards = GetIt.I();
+    } else {
+      importFlashcards = ImportFlashcardsUseCase(
+          categoryRepository: GetIt.I(),
+          flashcardRepository: GetIt.I(),
+          flashcardBackupService: SharedDataReceiverToBackupAdapter(dataReceiver: widget.dataReceiver!));
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +90,9 @@ class _FlashcardsImportDialogState extends State<FlashcardsImportDialog> {
               importStream = importFlashcards(resetFlashcadsStrength: resetFlashcardsStrength);
             });
           },
-          child: Text(MyAppLocalizations.of(context).importFlashcardsActionText.toUpperCase())),
+          child: Text(widget.dataReceiver == null
+              ? MyAppLocalizations.of(context).pickFileAndImportFlashcardsActionText.toUpperCase()
+              : MyAppLocalizations.of(context).importFlashcardsActionText.toUpperCase())),
       OutlinedButton(
           onPressed: () => Navigator.of(context).pop(),
           child: Text(MyAppLocalizations.of(context).cancel.toUpperCase()))
@@ -108,6 +127,8 @@ class _FlashcardsImportDialogState extends State<FlashcardsImportDialog> {
         return MyAppLocalizations.of(context).importFlashcardsUserCanceledErrorMessage;
       case InvalidBackupLocationFailure:
         return MyAppLocalizations.of(context).importFlashcardsInvalidBackupLocationErrorMessage;
+      case UnsupportedFileFormatFailure:
+        return MyAppLocalizations.of(context).unsopportedFileFormat;
       case CorruptedDataFailure:
         return MyAppLocalizations.of(context).importFlashcardsCorruptedDataErrorMessage;
       default:

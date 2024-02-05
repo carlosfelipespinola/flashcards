@@ -1,7 +1,4 @@
-import 'dart:convert';
-import 'package:flashcards/domain/models/category.dart';
-import 'package:flashcards/domain/models/failure.dart';
-import 'package:flashcards/domain/models/fashcard.dart';
+part of 'file_backup_service.dart';
 
 class _FlashcardJsonKeys {
   static String id = 'id';
@@ -13,13 +10,32 @@ class _FlashcardJsonKeys {
   static String categoryId = 'categoryId';
 }
 
-class FlashcardJsonMapper {
+class _FlashcardJsonMapper {
   static String toJson(Flashcard flashcard) => jsonEncode(_toMap(flashcard));
 
   // may throw CorruptedDataFailure
   static Flashcard fromJson(String json) {
     try {
       return _fromMap(jsonDecode(json));
+    } catch (_) {
+      throw CorruptedDataFailure();
+    }
+  }
+
+  static Future<List<String>> toJsonLines(List<Flashcard> flashcards) async {
+    var jsonLines = await foundation.compute<List<Flashcard>, List<String>>((x) {
+      return x.map((e) => toJson(e)).toList();
+    }, flashcards);
+    return jsonLines;
+  }
+
+  // may throw CorruptedDataFailure
+  static Future<List<Flashcard>> fromJsonLines(List jsonLines) async {
+    try {
+      var flashcards = await foundation.compute<List, List<Flashcard>>((x) async {
+        return x.map<Flashcard>((e) => fromJson(e as String)).toList();
+      }, jsonLines);
+      return flashcards;
     } catch (_) {
       throw CorruptedDataFailure();
     }
