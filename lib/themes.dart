@@ -14,10 +14,10 @@ ThemeData generateLightTheme(MaterialColor color) {
 }
 
 ThemeData generateDarkTheme(MaterialColor materialColor) {
-  Color color = materialColor.shade200;
+  Color color = materialColor.shade300;
   final onColor = ThemeData.estimateBrightnessForColor(color).contrastColor;
   return _generateBaseTheme(
-      cursorColor: materialColor.shade200,
+      cursorColor: materialColor.shade300,
       colorScheme: ColorScheme.dark(primary: color, onPrimary: onColor, secondary: color, onSecondary: onColor));
 }
 
