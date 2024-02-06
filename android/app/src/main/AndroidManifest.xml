@@ -33,7 +33,7 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
-                <data android:mimeType="application/octet-stream" />
+                <data android:mimeType="application/octet-stream" android:scheme="content" />
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
             
