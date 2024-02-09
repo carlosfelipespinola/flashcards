@@ -1,6 +1,7 @@
 import 'package:flashcards/ui/pages/categories-manager/categories_manager.page.dart';
 import 'package:flashcards/ui/pages/flashcard-editor/flashcard_editor.page.arguments.dart';
 import 'package:flashcards/ui/pages/flashcard-editor/flashcard_editor.page.dart';
+import 'package:flashcards/ui/pages/flashcards-of-category/flashcards_of_category.page.dart';
 import 'package:flashcards/ui/pages/flashcards/flashcards.page.dart';
 import 'package:flashcards/ui/pages/lesson/lesson.page.arguments.dart';
 import 'package:flashcards/ui/pages/lesson/lesson.page.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 
 class RoutesPaths {
   static const flashcards = 'flashcards';
+  static const flashcardsOfCategory = 'flashcards-of-category';
   static const flashcardEditor = 'flashcard-editor';
   static const categoryManager = 'category-manager';
   static const lesson = 'lesson';
@@ -27,6 +29,14 @@ Route<dynamic> generateRoutes(RouteSettings settings) {
         fullscreenDialog: false,
         settings: RouteSettings(name: RoutesPaths.flashcards),
         builder: (context) => FlashcardsPage());
+  }
+  if (settings.name == RoutesPaths.flashcardsOfCategory) {
+    return MaterialPageRoute(
+        fullscreenDialog: true,
+        settings: RouteSettings(name: RoutesPaths.flashcardsOfCategory),
+        builder: (context) => FlashcardsOfCategory(
+              arguments: settings.arguments as FlashcardsOfCategoryPageArguments,
+            ));
   }
   if (settings.name == RoutesPaths.flashcardEditor) {
     late FlashcardEditorPageArguments arguments;

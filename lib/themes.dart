@@ -41,9 +41,13 @@ ThemeData _generateBaseTheme({required ColorScheme colorScheme, Color? cursorCol
         elevation: 1,
         color: colorScheme.brightness == Brightness.light ? Colors.white : Colors.black,
         iconTheme: IconThemeData(color: colorScheme.brightness == Brightness.light ? Colors.black : Colors.white),
+        titleTextStyle: TextStyle(
+            color: colorScheme.brightness == Brightness.light ? Colors.black : Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w600),
         toolbarTextStyle: TextStyle(
             fontSize: 24,
-            color: colorScheme.brightness == Brightness.light ? Colors.black : null,
+            color: colorScheme.brightness == Brightness.light ? Colors.black : Colors.white,
             fontWeight: FontWeight.w900),
       ),
       cardTheme: CardTheme(

@@ -1,6 +1,7 @@
 import 'package:flashcards/my_app_localizations.dart';
 import 'package:flashcards/router.dart';
 import 'package:flashcards/ui/pages/flashcard-search/flashcard_search.dart';
+import 'package:flashcards/ui/pages/flashcards-of-category/flashcards_of_category.page.dart';
 import 'package:flashcards/ui/pages/lesson/lesson.page.arguments.dart';
 import 'package:flashcards/ui/widgets/bottom_sheet_dialog.dart';
 import 'package:flashcards/ui/widgets/flashcards_grid.dart';
@@ -35,6 +36,11 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
         body: SafeArea(
             child: FlashcardsGrid(
           key: _flashcardsGridKey,
+          showAllOfCategoryTap: (category) async {
+            await Navigator.of(context).pushNamed(RoutesPaths.flashcardsOfCategory,
+                arguments: FlashcardsOfCategoryPageArguments(category: category));
+            _flashcardsGridKey.currentState?.fetchFlashcards();
+          },
           onScrollBottomEnter: () => setState(() {
             shouldHideFloatingActionButton = true;
           }),
