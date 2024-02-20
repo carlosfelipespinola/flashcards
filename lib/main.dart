@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get_it/get_it.dart';
 
-
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -29,10 +28,7 @@ Future<MainStore> setUpMainStore() async {
   final loadSettingsUseCase = GetIt.I.get<LoadSettingsUseCase>();
   final saveSettingsUseCase = GetIt.I.get<SaveSettingsUseCase>();
   final settings = await loadSettingsUseCase.call();
-  return MainStore(
-    MainStoreState(settings: settings),
-    saveSettingsUseCase: saveSettingsUseCase
-  );
+  return MainStore(MainStoreState(settings: settings), saveSettingsUseCase: saveSettingsUseCase);
 }
 
 class MyApp extends InheritedWidget {
@@ -47,35 +43,34 @@ class MyApp extends InheritedWidget {
 
   static bool _wasBuildCalledAtLeastOnce = false;
 
-  MyApp({required this.store, required this.defaultLocale, VoidCallback? onAfterFirstBuild}) : super(
-    child: ValueListenableBuilder<MainStoreState>(
-      valueListenable: store,
-      builder: (context, state, _) {
-        if (!_wasBuildCalledAtLeastOnce) {
-          _wasBuildCalledAtLeastOnce = true;
-          WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-            onAfterFirstBuild?.call();
-          });
-        }
-        return MaterialApp(
-          title: 'MyFlashcards',
-          debugShowCheckedModeBanner: false,
-          theme: generateLightTheme(Colors.indigo),
-          darkTheme: generateDarkTheme(Colors.indigo),
-          themeMode: _appThemeModeMapping[state.settings.themeMode] ?? ThemeMode.system,
-          onGenerateRoute: (settings) => generateRoutes(settings),
-          initialRoute: RoutesPaths.flashcards,
-          localizationsDelegates: MyAppLocalizations.localizationsDelegates,
-          supportedLocales: MyAppLocalizations.supportedLocales,
-          locale: MyAppLocalizations.supportedLocales.firstWhere(
-            (candidateLocale) => candidateLocale.languageCode == state.settings.languageCode,
-            orElse: () => defaultLocale
-          ),
-        );
-      },
-    )
-  );
-  
+  MyApp({required this.store, required this.defaultLocale, VoidCallback? onAfterFirstBuild})
+      : super(
+            child: ValueListenableBuilder<MainStoreState>(
+          valueListenable: store,
+          builder: (context, state, _) {
+            if (!_wasBuildCalledAtLeastOnce) {
+              _wasBuildCalledAtLeastOnce = true;
+              WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+                onAfterFirstBuild?.call();
+              });
+            }
+            return MaterialApp(
+              title: 'MyFlashcards',
+              debugShowCheckedModeBanner: false,
+              theme: generateLightTheme(Colors.indigo),
+              darkTheme: generateDarkTheme(Colors.indigo),
+              themeMode: _appThemeModeMapping[state.settings.themeMode] ?? ThemeMode.system,
+              onGenerateRoute: (settings) => generateRoutes(settings),
+              initialRoute: RoutesPaths.flashcards,
+              localizationsDelegates: MyAppLocalizations.localizationsDelegates,
+              supportedLocales: MyAppLocalizations.supportedLocales,
+              locale: MyAppLocalizations.supportedLocales.firstWhere(
+                  (candidateLocale) => candidateLocale.languageCode == state.settings.languageCode,
+                  orElse: () => defaultLocale),
+            );
+          },
+        ));
+
   static MyApp of(BuildContext context) {
     final MyApp? result = context.dependOnInheritedWidgetOfExactType<MyApp>();
     return result!;

@@ -1,6 +1,7 @@
 import 'package:flashcards/ui/pages/categories-manager/categories_manager.page.dart';
 import 'package:flashcards/ui/pages/flashcard-editor/flashcard_editor.page.arguments.dart';
 import 'package:flashcards/ui/pages/flashcard-editor/flashcard_editor.page.dart';
+import 'package:flashcards/ui/pages/flashcards-of-category/flashcards_of_category.page.dart';
 import 'package:flashcards/ui/pages/flashcards/flashcards.page.dart';
 import 'package:flashcards/ui/pages/lesson/lesson.page.arguments.dart';
 import 'package:flashcards/ui/pages/lesson/lesson.page.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 
 class RoutesPaths {
   static const flashcards = 'flashcards';
+  static const flashcardsOfCategory = 'flashcards-of-category';
   static const flashcardEditor = 'flashcard-editor';
   static const categoryManager = 'category-manager';
   static const lesson = 'lesson';
@@ -16,19 +18,27 @@ class RoutesPaths {
 }
 
 Route<dynamic> generateRoutes(RouteSettings settings) {
-  if ( settings.name == RoutesPaths.settings ) {
+  if (settings.name == RoutesPaths.settings) {
     return MaterialPageRoute(
-      fullscreenDialog: false,
-      builder: (context) => SettingsPage()
-    );
+        settings: RouteSettings(name: RoutesPaths.settings),
+        fullscreenDialog: false,
+        builder: (context) => SettingsPage());
   }
-  if ( settings.name == RoutesPaths.flashcards ) {
+  if (settings.name == RoutesPaths.flashcards) {
     return MaterialPageRoute(
-      fullscreenDialog: false,
-      builder: (context) => FlashcardsPage()
-    );
+        fullscreenDialog: false,
+        settings: RouteSettings(name: RoutesPaths.flashcards),
+        builder: (context) => FlashcardsPage());
   }
-  if ( settings.name == RoutesPaths.flashcardEditor ) {
+  if (settings.name == RoutesPaths.flashcardsOfCategory) {
+    return MaterialPageRoute(
+        fullscreenDialog: true,
+        settings: RouteSettings(name: RoutesPaths.flashcardsOfCategory),
+        builder: (context) => FlashcardsOfCategory(
+              arguments: settings.arguments as FlashcardsOfCategoryPageArguments,
+            ));
+  }
+  if (settings.name == RoutesPaths.flashcardEditor) {
     late FlashcardEditorPageArguments arguments;
     if (settings.arguments is FlashcardEditorPageArguments) {
       arguments = settings.arguments as FlashcardEditorPageArguments;
@@ -36,15 +46,17 @@ Route<dynamic> generateRoutes(RouteSettings settings) {
       arguments = FlashcardEditorPageArguments();
     }
     return MaterialPageRoute(
-      fullscreenDialog: false,
-      builder: (context) => FlashcardEditorPage(arguments: arguments,)
-    ); 
+        settings: RouteSettings(name: RoutesPaths.flashcardEditor),
+        fullscreenDialog: false,
+        builder: (context) => FlashcardEditorPage(
+              arguments: arguments,
+            ));
   }
-  if ( settings.name == RoutesPaths.categoryManager ) {
+  if (settings.name == RoutesPaths.categoryManager) {
     return MaterialPageRoute(
-      fullscreenDialog: false,
-      builder: (context) => CategoriesManagerPage()
-    );
+        settings: RouteSettings(name: RoutesPaths.categoryManager),
+        fullscreenDialog: false,
+        builder: (context) => CategoriesManagerPage());
   }
   if (settings.name == RoutesPaths.lesson) {
     late LessonPageArguments arguments;
@@ -54,12 +66,16 @@ Route<dynamic> generateRoutes(RouteSettings settings) {
       arguments = LessonPageArguments([]);
     }
     return MaterialPageRoute(
-      fullscreenDialog: false,
-      builder: (context) => LessonPage(arguments: arguments,)
-    ); 
+        settings: RouteSettings(name: RoutesPaths.lesson),
+        fullscreenDialog: false,
+        builder: (context) => LessonPage(
+              arguments: arguments,
+            ));
   }
-  return MaterialPageRoute(builder: (context) => Scaffold(
-    appBar: AppBar(),
-    body: Center(child: Text('not implemented yet'),))
-  );
+  return MaterialPageRoute(
+      builder: (context) => Scaffold(
+          appBar: AppBar(),
+          body: Center(
+            child: Text('not implemented yet'),
+          )));
 }

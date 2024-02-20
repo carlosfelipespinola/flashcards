@@ -1,4 +1,3 @@
-
 import 'package:flashcards/data/category.schema.dart';
 import 'package:flashcards/data/flashcard.mapper.dart';
 import 'package:flashcards/data/flashcard.schema.dart';
@@ -12,10 +11,9 @@ import 'package:flashcards/data/database.dart';
 import 'package:sqflite/sqflite.dart';
 
 class FlashcardRepository implements IFlashcardRepository {
-
   DatabaseProvider databaseProvider;
 
-  FlashcardRepository({required this.databaseProvider});  
+  FlashcardRepository({required this.databaseProvider});
 
   Future<DatabaseExecutor> get dbe async {
     return await databaseProvider.db;
@@ -24,11 +22,8 @@ class FlashcardRepository implements IFlashcardRepository {
   @override
   Future<Flashcard> delete(Flashcard flashcard) async {
     try {
-      int deletedRows = await (await dbe).delete(
-        FlashcardSchema.tableName,
-        where: '${FlashcardSchema.id} = ?',
-        whereArgs: [flashcard.id]
-      );
+      int deletedRows = await (await dbe)
+          .delete(FlashcardSchema.tableName, where: '${FlashcardSchema.id} = ?', whereArgs: [flashcard.id]);
       if (deletedRows == 0) {
         throw Failure();
       }
@@ -46,7 +41,7 @@ class FlashcardRepository implements IFlashcardRepository {
   }) async {
     var query = _findAllFlashcardsQuery;
     final arguments = [];
-    
+
     for (final filter in filters) {
       if (filter is FlashcardCategoryFilter) {
         if (filter.category == null) {
@@ -58,32 +53,32 @@ class FlashcardRepository implements IFlashcardRepository {
       if (filter is FlashcardSearchFilter) {
         final searchTerm = filter.search;
         query += ' AND ('
-          '${FlashcardSchema.term} LIKE ?'
-          ' OR '
-          '${FlashcardSchema.definition} LIKE ?'
-        ')';
+            '${FlashcardSchema.term} LIKE ?'
+            ' OR '
+            '${FlashcardSchema.definition} LIKE ?'
+            ')';
         arguments.addAll(["%$searchTerm%", "%$searchTerm%"]);
       }
       if (filter is OnlyLowPriorityFlashcardsFilter) {
         query += ' AND ('
-          'datetime(${FlashcardSchema.exitsLowAt}) > datetime(\'now\', \'localtime\')'
-          ' AND '
-          'datetime(${FlashcardSchema.enteredLowAt}) < datetime(\'now\', \'localtime\')'
-        ')';
+            'datetime(${FlashcardSchema.exitsLowAt}) > datetime(\'now\', \'localtime\')'
+            ' AND '
+            'datetime(${FlashcardSchema.enteredLowAt}) < datetime(\'now\', \'localtime\')'
+            ')';
       }
       if (filter is ExceptLowPriorityFlashcardsFilter) {
         query += ' AND ('
-          'datetime(${FlashcardSchema.exitsLowAt}) <= datetime(\'now\', \'localtime\')'
-          ' OR '
-          'datetime(${FlashcardSchema.enteredLowAt}) > datetime(\'now\', \'localtime\')'
-          ' OR '
-          '${FlashcardSchema.exitsLowAt} IS NULL'
-          ' OR '
-          '${FlashcardSchema.enteredLowAt} IS NULL'
-        ')';
+            'datetime(${FlashcardSchema.exitsLowAt}) <= datetime(\'now\', \'localtime\')'
+            ' OR '
+            'datetime(${FlashcardSchema.enteredLowAt}) > datetime(\'now\', \'localtime\')'
+            ' OR '
+            '${FlashcardSchema.exitsLowAt} IS NULL'
+            ' OR '
+            '${FlashcardSchema.enteredLowAt} IS NULL'
+            ')';
       }
     }
-    
+
     if (sortBy != null && sortBy.length > 0) {
       query = _concatOrderBy(query, sortBy);
     }
@@ -96,10 +91,9 @@ class FlashcardRepository implements IFlashcardRepository {
 
   String get _findAllFlashcardsQuery {
     return 'SELECT * FROM ${FlashcardSchema.tableName}'
-      ' LEFT JOIN ${CategorySchema.tableName}'
-      ' ON ${FlashcardSchema.category} = ${CategorySchema.id}'
-      ' WHERE 1'
-    ;
+        ' LEFT JOIN ${CategorySchema.tableName}'
+        ' ON ${FlashcardSchema.category} = ${CategorySchema.id}'
+        ' WHERE 1';
   }
 
   String _concatOrderBy(String query, List<Sort<FlashcardSortableFields>> sortBy) {
@@ -111,7 +105,7 @@ class FlashcardRepository implements IFlashcardRepository {
   Future<Flashcard> save(Flashcard flashcard) async {
     try {
       bool shouldCreate = flashcard.id == null;
-      return shouldCreate ? await _insertFlashcard(flashcard) :  await _updateFlashcard(flashcard);
+      return shouldCreate ? await _insertFlashcard(flashcard) : await _updateFlashcard(flashcard);
     } catch (_) {
       throw Failure();
     }
@@ -119,11 +113,8 @@ class FlashcardRepository implements IFlashcardRepository {
 
   Future<Flashcard> _insertFlashcard(Flashcard flashcard) async {
     try {
-      final id = await (await dbe).insert(
-        FlashcardSchema.tableName,
-        FlashcardMapper.toMap(flashcard),
-        conflictAlgorithm: ConflictAlgorithm.abort
-      );
+      final id = await (await dbe).insert(FlashcardSchema.tableName, FlashcardMapper.toMap(flashcard),
+          conflictAlgorithm: ConflictAlgorithm.abort);
       if (id == 0) {
         throw Failure();
       }
@@ -136,12 +127,8 @@ class FlashcardRepository implements IFlashcardRepository {
 
   Future<Flashcard> _updateFlashcard(Flashcard flashcard) async {
     try {
-      int rowsUpdated = await (await dbe).update(
-        FlashcardSchema.tableName,
-        FlashcardMapper.toMap(flashcard),
-        where: '${FlashcardSchema.id} = ?',
-        whereArgs: [flashcard.id]
-      );
+      int rowsUpdated = await (await dbe).update(FlashcardSchema.tableName, FlashcardMapper.toMap(flashcard),
+          where: '${FlashcardSchema.id} = ?', whereArgs: [flashcard.id]);
       if (rowsUpdated == 0) {
         throw Failure();
       }
@@ -151,4 +138,18 @@ class FlashcardRepository implements IFlashcardRepository {
     }
   }
 
+  @override
+  Future<bool> exists({required String term, required String definition}) async {
+    try {
+      var databaseExecutor = await dbe;
+      var result = await databaseExecutor.rawQuery(
+          'SELECT COUNT(*) FROM ${FlashcardSchema.tableName} WHERE ${FlashcardSchema.term} = ? AND ${FlashcardSchema.definition} = ?',
+          [term, definition]);
+      int count = Sqflite.firstIntValue(result) ?? 0;
+
+      return count > 0;
+    } catch (_) {
+      throw Failure();
+    }
+  }
 }

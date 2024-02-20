@@ -4,6 +4,7 @@
   "categories": "Categorias",
   "category": "Categoria",
   "categoryName": "Nome da categoria",
+  "close": "Fechar",
   "confirm": "Confirmar",
   "createCategory": "Criar categoria",
   "createFlashcard": "Criar flashcard",
@@ -75,5 +76,44 @@
   },
   "uncategorized": "Sem categoria",
   "updateFlashcard": "Atualizar flashcard",
-  "updateFlashcardSuccessMessage": "Flashcard atualizado com sucesso"
+  "updateFlashcardSuccessMessage": "Flashcard atualizado com sucesso",
+  "exportFlashcardsTitle": "Exportar flashcards",
+  "exportFlashcardsExplanationMessage": "Durante o processo de exportação de flashcards será solicitado que você crie um arquivo em algum lugar do armazenamento do seu dispositivo no qual os dados serão salvos.",
+  "exportFlashcardActionText": "Exportar",
+  "exportFlashcardInProgressTitle": "Exportação em progresso",
+  "exportFlashcardsErrorTitle": "Falha ao exportar flashcards",
+  "exportFlashcardsUserCanceledErrorMessage": "Os flashcards não foram exportados, pois o arquivo de backup solicitado durante o processo não foi criado.",
+  "exportFlashcardsInvalidBackupLocationErrorMessage": "Certifique-se de que o arquivo que você escolheu para salvar os dados ainda existe",
+  "exportFlashcardsFinishedTitle": "Exportação finalizada",
+  "exportFlashcardsFinishedMessage": "Todos os flashcards foram exportados com sucesso.",
+  "importFlashcardsTitle": "Importar flashcards",
+  "importFlashcardsResetProgressQuestion": "Resetar progresso de aprendizado?",
+  "importFlashcardsResetProgressAdvice": "É recomendado ativar essa opção se você estiver importando flashcards que foram exportados por outra pessoa",
+  "importFlashcardsActionText": "Importar",
+  "pickFileAndImportFlashcardsActionText": "Escolher arquivo e importar",
+  "importFlashcardsErrorTitle": "Falha ao importar flashcards",
+  "importFlashcardsUserCanceledErrorMessage": "Não foi possível importar flashcards, pois nenhum arquivo de backup foi escolhido",
+  "importFlashcardsInvalidBackupLocationErrorMessage": "Certifique-se de que o arquivo que você escolheu ainda existe",
+  "importFlashcardsCorruptedDataErrorMessage": "Os dados que você escolheu para restaurar estão corrompidos ou não são reconhecidos por este aplicativo",
+  "importFlashcardsInProgressTitle": "Importação em progresso",
+  "importFlashcardsWarningMessage": "Não feche o aplicativo enquanto a importação estiver em progresso",
+  "importFlashcardsProgressTracker": "Importando {current} de {max} flashcards",
+  "@importFlashcardsProgressTracker": {
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "max": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "importFlashcardsFinishedTitle": "Importação finalizada",
+  "importedFlashcards": "Flashcards importados",
+  "duplicatedFlashcards": "Flashcards duplicados ignorados",
+  "importErrors": "Erros",
+  "processedFlashcards": "Flashcards processados",
+  "unsopportedFileFormat": "O formato do arquivo aberto não é suportado pela aplicação"
 }
